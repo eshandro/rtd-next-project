@@ -1,0 +1,94 @@
+RTD has 2 feeds available: GTFS and GTFS-Realtime. Currently the realtime feed is only available for buses.
+http://www.rtd-denver.com/gtfs-developer-guide.shtml
+
+
+Info about static feeds: https://developers.google.com/transit/gtfs/reference/
+RTD's static feed files are here: http://www.rtd-denver.com/GoogleFeeder/google_transit.zip
+You get a zip file with several .txt files. Need to parse and store as JSON/JS object. Also need to figure out how to set up CRON job to the zip file, unzip, parse, and update as needed.
+
+
+http://transitfeeds.com/
+API Key: 57bb1de8-eb41-418c-a681-ecf0c7ac0498
+You can get a list of transit feeds here: http://transitfeeds.com/api/swagger/ ... api that gets you URL etc.
+https://api.transitfeeds.com/v1/getLocations?key=57bb1de8-eb41-418c-a681-ecf0c7ac0498
+      {
+        "id": 108,
+        "pid": 107,
+        "t": "Denver, CO, USA",
+        "n": "Denver",
+        "lat": 39.737567,
+        "lng": -104.984718
+      }
+https://api.transitfeeds.com/v1/getFeeds?key=57bb1de8-eb41-418c-a681-ecf0c7ac0498&location=108&descendants=1&page=1&limit=10&type=gtfs
+{
+  "status": "OK",
+  "ts": 1508619948,
+  "results": {
+    "total": 2,
+    "limit": 10,
+    "page": 1,
+    "numPages": 1,
+    "feeds": [
+      {
+        "id": "bustang/770",
+        "ty": "gtfs",
+        "t": "Bustang GTFS",
+        "l": {
+          "id": 108,
+          "pid": 107,
+          "t": "Denver, CO, USA",
+          "n": "Denver",
+          "lat": 39.737567,
+          "lng": -104.984718
+        },
+        "u": {
+          "i": "http://data.trilliumtransit.com/gtfs/bustang-co-us/bustang-co-us.zip",
+          "d": "http://data.trilliumtransit.com/gtfs/bustang-co-us/bustang-co-us.zip"
+        },
+        "latest": {
+          "ts": 1508424028
+        }
+      },
+      {
+        "id": "rtd-denver/188",
+        "ty": "gtfs",
+        "t": "RTD Denver GTFS",
+        "l": {
+          "id": 108,
+          "pid": 107,
+          "t": "Denver, CO, USA",
+          "n": "Denver",
+          "lat": 39.737567,
+          "lng": -104.984718
+        },
+        "u": {
+          "i": "http://www.rtd-denver.com/gtfs-developer-guide.shtml",
+          "d": "http://www.rtd-denver.com/GoogleFeeder/google_transit.zip"
+        },
+        "latest": {
+          "ts": 1508010087
+        }
+      }
+    ]
+  }
+}
+
+
+You have to request access to the realtime feed urls:http://www.rtd-denver.com/gtfs-developer-guide.shtml#realtime-feeds
+
+The realtime feed urls are:
+1. Trip Updates - http://www.rtd-denver.com/google_sync/TripUpdate.pb
+2. Vehicle positions - http://www.rtd-denver.com/google_sync/VehiclePosition.pb
+
+Help on realtime feeds: https://developers.google.com/transit/gtfs-realtime/
+
+
+
+
+Google Maps API has a Transit layer where you could display local routes etc: https://developers.google.com/maps/documentation/javascript/examples/layer-transit, https://developers.google.com/maps/documentation/javascript/trafficlayer
+In theory, user could click on a line to get info about it or add it to their list of lines/routes.
+
+Google API key: AIzaSyCdPo0NlySC7bII5rSgFOdCjZUGSy_NYmE
+project name = rtd-project
+
+*NOTE: Denver and RTD are listed as available on Google Transit, but Transit is greyed out on Google map of Denver? (https://www.google.com/landing/transit/cities/index.html)
