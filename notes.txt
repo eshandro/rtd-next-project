@@ -92,3 +92,15 @@ Google API key: AIzaSyCdPo0NlySC7bII5rSgFOdCjZUGSy_NYmE
 project name = rtd-project
 
 *NOTE: Denver and RTD are listed as available on Google Transit, but Transit is greyed out on Google map of Denver? (https://www.google.com/landing/transit/cities/index.html)
+
+RTD Realtime login info:
+You can access the gtfs-rt files from http://www.rtd-denver.com/google_sync using the following HTTP basic authentication credentials.
+username: RTDgtfsRT
+password: realT!m3Feed
+
+Please use this link below for information about the file formats and content.
+http://www.rtd-denver.com/gtfs-developer-guide.shtml#realtime-feeds
+ 
+Let us know if you have issues accessing the link with the credentials.
+Also please make sure you remove the credentials when replying to this email.
+
