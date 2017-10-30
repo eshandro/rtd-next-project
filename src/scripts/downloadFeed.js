@@ -1,4 +1,4 @@
-var	fs = require('fs'), 
+const	fs = require('fs'), 
 	url = require('url'),
 	http = require('http'),
 	feedUrl = "http://www.rtd-denver.com/GoogleFeeder/google_transit.zip",
@@ -8,16 +8,16 @@ var	fs = require('fs'),
 
 function downloadFile(fileUrl, apiPath, encoding, callback) {
 
-	var p = url.parse(fileUrl),           
+	let p = url.parse(fileUrl),           
 		timeout = 10000; 
 	console.log("p ",p);
 	file_name = p.pathname.substring(p.pathname.lastIndexOf('/')+1);
 	console.log("file_name ",file_name);
 
-	var file = fs.createWriteStream(apiPath+file_name);
+	let file = fs.createWriteStream(apiPath+file_name);
 	console.log("file ",file);
 	
-	var timeout_wrapper = function( req ) {
+	let timeout_wrapper = function( req ) {
 		return function() {
 			 console.log('abort');
 			 req.abort();
@@ -26,9 +26,9 @@ function downloadFile(fileUrl, apiPath, encoding, callback) {
 	};
 
 
-	var request = http.get(fileUrl).on('response', function(res) { 
+	let request = http.get(fileUrl).on('response', function(res) { 
 
-		var len = parseInt(res.headers['content-length'], 10);
+		let len = parseInt(res.headers['content-length'], 10);
 		if (!len) {
 			callback("No data received");
 			clearTimeout( timeoutId );
@@ -37,7 +37,7 @@ function downloadFile(fileUrl, apiPath, encoding, callback) {
 			return;
 		}
 
-		var downloaded = 0;
+		let downloaded = 0;
 		
 		res.on('data', function(chunk) {
 			file.write(chunk);
@@ -63,10 +63,10 @@ function downloadFile(fileUrl, apiPath, encoding, callback) {
 	});
 
 	// generate timeout handler
-	var fn = timeout_wrapper( request );
+	let fn = timeout_wrapper( request );
 
 	// set initial timeout
-	var timeoutId = setTimeout( fn, timeout );
+	let timeoutId = setTimeout( fn, timeout );
 }
 
 downloadFile(feedUrl,downloadFolder, 'utf-8', (data) => console.log('data', data) );

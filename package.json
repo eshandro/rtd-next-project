@@ -1,0 +1,16 @@
+{
+  "name": "rtd-project",
+  "version": "0.0.1",
+  "description": "RTD Next Ride finder",
+  "main": "application.js",
+  "repository": "https://github.com/eshandro/rtd-next-project.git",
+  "author": "eshandro <erik843@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "testing": "src/scripts/checkLastModified.js"
+  },
+  "devDependencies": {
+    "extract-zip": "^1.6.5",
+    "node-fetch": "^1.7.3"
+  }
+}
