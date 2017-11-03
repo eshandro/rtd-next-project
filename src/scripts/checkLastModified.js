@@ -10,19 +10,27 @@ function handleFetchErrors(res) {
 	return res;
 }
 
-function checkLastModified(mainFeedUrl) {
-	fetch(mainFeedUrl)
+function fetchHTML(url) {
+	fetch(url)
 		.then(handleFetchErrors)
 		.then((res) => {
 			console.log("res.status ",res.status);
-			console.log("res ",res);
 			return res.text();
 		})
 		.then((body) => {
-			// console.log("body ",body);
+			return body;
 		})
 		.catch((err) => {
-			console.log("err ",err);
+			return err;
 		});
+}
+
+function checkLastModified(mainFeedUrl) {
+	let body;
+	let data = fetchHTML(mainFeedUrl);
+	data.then((res) => {console.log("res ",res);});
+			// .then((res) => {
+		// 	console.log("res in checkLastModified ",res);
+		// })
 }
 checkLastModified(mainFeedUrl);
