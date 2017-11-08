@@ -21,7 +21,7 @@ function downloadFile(fileUrl, apiPath, encoding, callback) {
 		return function() {
 			 console.log('abort');
 			 req.abort();
-			 callback("File transfer timeout!");
+			 callback("File download timeout!");
 		};
 	};
 
