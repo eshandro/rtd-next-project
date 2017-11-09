@@ -8,6 +8,7 @@ function getLastModified() {
 			return "Error getting last modified date";
 		}
 		let obj = JSON.parse(data);
+		console.log("obj.lastModified.date ",obj.lastModified.date);
 		return obj.lastModified.date;
 	});
 }
@@ -17,12 +18,13 @@ function updateLastModified(newDate) {
 	obj = JSON.stringify(obj);
 	fs.writeFile(file,obj,'utf8', (err) => {
 		if (err) {
-			console.log("Err updating last modified file");
+			console.log("Error updating last modified file: " + err);
 			return;
 		}
 		console.log("lastModified.json updated");
 	});
 }
-
-// getLastModified();
-// updateLastModified("");
+module.exports = {
+	getLastModified: getLastModified,
+	updateLastModified: updateLastModified
+}

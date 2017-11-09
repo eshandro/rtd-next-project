@@ -10,7 +10,6 @@ function downloadFile(fileUrl, apiPath, encoding, callback) {
 
 	let p = url.parse(fileUrl),           
 		timeout = 10000; 
-	console.log("p ",p);
 	file_name = p.pathname.substring(p.pathname.lastIndexOf('/')+1);
 	console.log("file_name ",file_name);
 
