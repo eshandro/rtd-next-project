@@ -1,5 +1,6 @@
 const fetch = require('node-fetch'),
 	mainFeedUrl = "http://www.rtd-denver.com/GoogleFeeder/",
+	lastModifiedFile = "./lastModified.json",
 	lastModifiedDate = require('./lastModifiedDate');
 
 function handleFetchErrors(res) {
@@ -29,18 +30,18 @@ function parseDateFromHTML(html) {
 }
 
 function getFeedDate(url) {
-	fetch(url)
+	return fetch(url)
 		.then(handleFetchErrors)
 		.then((res) => {
 			console.log("res.status ",res.status);
 			return res.text();
 		})
-		.then((body) => {
-			// console.log("body ",body);
-			let feedDate = parseDateFromHTML(body);
-			console.log("feedDate ",feedDate);
-			return feedDate;
-		})
+		// .then((body) => {
+		// 	// console.log("body ",body);
+		// 	let feedDate = parseDateFromHTML(body);
+		// 	console.log("feedDate ",feedDate);
+		// 	return feedDate;
+		// })
 		.catch((err) => {
 			console.log("fetch err", err);
 			return err;
@@ -48,9 +49,14 @@ function getFeedDate(url) {
 }
 
 function checkFeed(url) {
-	let lastModified, feedDate;
-	getFeedDate(url);
-	lastModifiedDate.getLastModified();
+	let lastModified, feedDate, needUpdate;
+	let file = lastModifiedDate.getLastModified(lastModifiedFile);
+	let html = getFeedDate(url);
+	// html.then((body) => {
+	// 	feedDate = parseDateFromHTML(body)
+	// });
+	Promise.all([html, file])
+		.then(values => console.log("values ",values));
 }
 
 checkFeed(mainFeedUrl);

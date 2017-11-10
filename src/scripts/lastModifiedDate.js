@@ -1,7 +1,6 @@
-let 	file = "./lastModified.json",
-		fs = require('fs');
+let	fs = require('fs');
 
-function getLastModified() {
+function getLastModified(file) {
 	fs.readFile(file,'utf8', (err,data) => {
 		if (err) {
 			console.log("err ",err);
