@@ -12,7 +12,6 @@ function handleFetchErrors(res) {
 	return res;
 }
 
-
 function parseDateFromHTML(html) {
 	let 	test = /\d{2}.\w{3}.\d{4}\s*\d{2}\:\d{2}/,	
 			temp = html,
@@ -25,7 +24,6 @@ function parseDateFromHTML(html) {
 	} else {
 		throw Error("No date found in HTML");
 	}
-	console.log("date ",date);
 	return date;
 }
 
@@ -36,12 +34,11 @@ function getFeedDate(url) {
 			console.log("res.status ",res.status);
 			return res.text();
 		})
-		// .then((body) => {
-		// 	// console.log("body ",body);
-		// 	let feedDate = parseDateFromHTML(body);
-		// 	console.log("feedDate ",feedDate);
-		// 	return feedDate;
-		// })
+		.then((body) => {
+			// console.log("body ",body);
+			let feedDate = parseDateFromHTML(body);
+			return feedDate;
+		})
 		.catch((err) => {
 			console.log("fetch err", err);
 			return err;
@@ -50,13 +47,34 @@ function getFeedDate(url) {
 
 function checkFeed(url) {
 	let lastModified, feedDate, needUpdate;
-	let file = lastModifiedDate.getLastModified(lastModifiedFile);
-	let html = getFeedDate(url);
-	// html.then((body) => {
-	// 	feedDate = parseDateFromHTML(body)
-	// });
-	Promise.all([html, file])
-		.then(values => console.log("values ",values));
+	let fileDate = lastModifiedDate.getLastModified(lastModifiedFile);
+	let htmlDate = getFeedDate(url);
+
+	Promise.all([htmlDate, fileDate])
+		.then((values) => {
+			console.log("values ",values);
+			let checkFeedErr = '';
+			if (typeof values[0] === "object" || !values[0] || values[0] === '')
+				checkFeedErr += 'checkFeed error getting HTML Date';		
+			if (typeof values[1] !== 'string' || values[1].indexOf('Error') !== -1) {
+				if(checkFeedErr !== '') {
+					checkFeedErr += 'and error getting File Date';
+				} else {
+					checkFeedErr += 'checkFeed error getting File Date';
+				}
+			}
+			if (checkFeedErr) {
+				console.log("checkFeedErr ",checkFeedErr);
+				return {needUpdate: false, msg: checkFeedErr};
+			}
+			if (values[0] !== values[1]) {
+				lastModifiedDate.updateLastModified(lastModifiedFile, values[0]);
+				return {needUpdate: true, msg: "Feed has been updated"};
+			} else {
+				return {needUpdate: false, msg: "Feed has NOT been updated"}
+			}
+		})
+		.catch(reason => console.log('Error in checkFeed Promise.all', reason));
 }
 
 checkFeed(mainFeedUrl);

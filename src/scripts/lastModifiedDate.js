@@ -1,18 +1,20 @@
-let	fs = require('fs');
+const	fs = require('fs'),
+		readFile = require('fs-readfile-promise');
 
 function getLastModified(file) {
-	fs.readFile(file,'utf8', (err,data) => {
-		if (err) {
-			console.log("err ",err);
-			return "Error getting last modified date";
-		}
+	return readFile(file,'utf8')
+	.then((data) => {
 		let obj = JSON.parse(data);
 		console.log("obj.lastModified.date ",obj.lastModified.date);
 		return obj.lastModified.date;
+	})
+	.catch((err) => {
+		console.log("err in getLastModified",err);
+		return "Error getting last modified date";
 	});
 }
 
-function updateLastModified(newDate) {
+function updateLastModified(file,newDate) {
 	let obj = {"lastModified":{"date":newDate}};
 	obj = JSON.stringify(obj);
 	fs.writeFile(file,obj,'utf8', (err) => {
