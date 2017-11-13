@@ -47,16 +47,17 @@ function getFeedDate(url) {
 
 function checkFeed(url) {
 	let lastModified, feedDate, needUpdate;
-	let fileDate = lastModifiedDate.getLastModified(lastModifiedFile);
-	let htmlDate = getFeedDate(url);
+	let fileDatePromise = lastModifiedDate.getLastModified(lastModifiedFile);
+	let htmlDatePromise = getFeedDate(url);
 
-	Promise.all([htmlDate, fileDate])
+	Promise.all([htmlDatePromise, fileDatePromise])
 		.then((values) => {
 			console.log("values ",values);
+			let htmlDate = values[0], fileDate = values[1];
 			let checkFeedErr = '';
-			if (typeof values[0] === "object" || !values[0] || values[0] === '')
+			if (typeof htmlDate === "object" || !htmlDate || htmlDate === '')
 				checkFeedErr += 'checkFeed error getting HTML Date';		
-			if (typeof values[1] !== 'string' || values[1].indexOf('Error') !== -1) {
+			if (typeof fileDate !== 'string' || fileDate.indexOf('Error') !== -1) {
 				if(checkFeedErr !== '') {
 					checkFeedErr += 'and error getting File Date';
 				} else {
@@ -67,8 +68,8 @@ function checkFeed(url) {
 				console.log("checkFeedErr ",checkFeedErr);
 				return {needUpdate: false, msg: checkFeedErr};
 			}
-			if (values[0] !== values[1]) {
-				lastModifiedDate.updateLastModified(lastModifiedFile, values[0]);
+			if (htmlDate !== fileDate) {
+				lastModifiedDate.updateLastModified(lastModifiedFile, htmlDate);
 				return {needUpdate: true, msg: "Feed has been updated"};
 			} else {
 				return {needUpdate: false, msg: "Feed has NOT been updated"}
