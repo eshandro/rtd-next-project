@@ -1,8 +1,6 @@
 const	fs = require('fs'), 
 	url = require('url'),
 	http = require('http'),
-	feedUrl = "http://www.rtd-denver.com/GoogleFeeder/google_transit.zip",
-	downloadFolder = "./test-download/",
 	file_name = '';
 
 

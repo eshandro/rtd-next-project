@@ -1,5 +1,4 @@
 const fetch = require('node-fetch'),
-	mainFeedUrl = "http://www.rtd-denver.com/GoogleFeeder/",
 	lastModifiedFile = "./lastModified.json",
 	lastModifiedDate = require('./lastModifiedDate');
 
@@ -50,7 +49,7 @@ function checkFeed(url) {
 	let fileDatePromise = lastModifiedDate.getLastModified(lastModifiedFile);
 	let htmlDatePromise = getFeedDate(url);
 
-	Promise.all([htmlDatePromise, fileDatePromise])
+	return Promise.all([htmlDatePromise, fileDatePromise])
 		.then((values) => {
 			console.log("values ",values);
 			let htmlDate = values[0], fileDate = values[1];
@@ -78,4 +77,6 @@ function checkFeed(url) {
 		.catch(reason => console.log('Error in checkFeed Promise.all', reason));
 }
 
-checkFeed(mainFeedUrl);
+// checkFeed(mainFeedUrl);
+
+module.exports = checkFeed;
