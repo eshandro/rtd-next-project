@@ -9,10 +9,10 @@ function unzipFiles (unzip, msg) {
 	extract(msg, {dir:'./src/feed/'}, function(err){
 		if (err) {
 			console.log("err in extract ",err);
-			return {unzipSuccessful: false, msg: 'Error unzipping files: ' + err};
+			return Promise.resolve({unzipSuccessful: false, msg: 'Error unzipping files: ' + err});
 		}
-		console.log("extract successful ");
-		return {unzipSuccessful: true, msg:"./src/feed/"}
+		console.log("extract successful");
+		return Promise.resolve({unzipSuccessful: true, msg:"./src/feed/"});
 	});
 }
 

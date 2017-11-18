@@ -11,7 +11,7 @@
   },
   "devDependencies": {},
   "dependencies": {
-    "extract-zip": "^1.6.6",
+    "extract-zip": "1.6.0",
     "fs-readfile-promise": "^3.0.0",
     "node-fetch": "^1.7.3"
   }

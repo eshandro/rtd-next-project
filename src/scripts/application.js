@@ -10,7 +10,8 @@ checkFeed(mainFeedUrl)
 	console.log('data in checkFeed call:', data);
 	if (!data.needUpdate) {
 		console.log('no update needed on checkFeed: ', data.msg);
-	} else {
-		downloadFeed(feedUrl, downloadFolder, 'utf-8', unzipFiles);
-	}
+		return;
+	} 
+	downloadFeed(feedUrl, downloadFolder, 'utf-8', unzipFiles);
+
 });

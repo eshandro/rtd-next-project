@@ -4,7 +4,7 @@ const	fs = require('fs'),
 let 	file_name = '';
 
 
-function downloadFeed(fileUrl, apiPath, encoding, callback) {
+function downloadFeed(fileUrl, apiPath, encoding,callback) {
 
 	let p = url.parse(fileUrl),           
 		timeout = 10000; 
