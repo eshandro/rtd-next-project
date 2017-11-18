@@ -51,7 +51,7 @@ function checkFeed(url) {
 
 	return Promise.all([htmlDatePromise, fileDatePromise])
 		.then((values) => {
-			console.log("values ",values);
+			// console.log("values in checkFeed:",values);
 			let htmlDate = values[0], fileDate = values[1];
 			let checkFeedErr = '';
 			if (typeof htmlDate === "object" || !htmlDate || htmlDate === '')
@@ -68,7 +68,7 @@ function checkFeed(url) {
 				return {needUpdate: false, msg: checkFeedErr};
 			}
 			if (htmlDate !== fileDate) {
-				lastModifiedDate.updateLastModified(lastModifiedFile, htmlDate);
+				lastModifiedDate.updateLastModified(lastModifiedFile, htmlDate,fileDate);
 				return {needUpdate: true, msg: "Feed has been updated"};
 			} else {
 				return {needUpdate: false, msg: "Feed has NOT been updated"}

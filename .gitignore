@@ -56,3 +56,8 @@ typings/
 
 # dotenv environment variables file
 .env
+
+# feed files
+src/feed/
+src/temp-feed
+

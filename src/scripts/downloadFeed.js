@@ -1,18 +1,18 @@
 const	fs = require('fs'), 
-	url = require('url'),
-	http = require('http'),
-	file_name = '';
+		url = require('url'),
+		http = require('http');
+let 	file_name = '';
 
 
-function downloadFile(fileUrl, apiPath, encoding, callback) {
+function downloadFeed(fileUrl, apiPath, encoding, callback) {
 
 	let p = url.parse(fileUrl),           
 		timeout = 10000; 
 	file_name = p.pathname.substring(p.pathname.lastIndexOf('/')+1);
-	console.log("file_name ",file_name);
+	// console.log("file_name ",file_name);
 
 	let file = fs.createWriteStream(apiPath+file_name);
-	console.log("file ",file);
+	// console.log("file ",file);
 	
 	let timeout_wrapper = function( req ) {
 		return function() {
@@ -24,10 +24,9 @@ function downloadFile(fileUrl, apiPath, encoding, callback) {
 
 
 	let request = http.get(fileUrl).on('response', function(res) { 
-
 		let len = parseInt(res.headers['content-length'], 10);
 		if (!len) {
-			callback("No data received");
+			callback(false,"No data received");
 			clearTimeout( timeoutId );
 			// End stream and delete file
 			file.end(() => { fs.unlinkSync(apiPath+file_name)});
@@ -40,22 +39,23 @@ function downloadFile(fileUrl, apiPath, encoding, callback) {
 			file.write(chunk);
 			downloaded += chunk.length;
 			// process.stdout.write("Downloading " + (100.0 * downloaded / len).toFixed(2) + "% " + downloaded + " bytes" + isWin ? "\033[0G": "\r");
-			process.stdout.write("Downloading " + (100.0 * downloaded / len).toFixed(2) + "% " + downloaded + " bytes" + "\n\r");
+			// process.stdout.write("Downloading " + (100.0 * downloaded / len).toFixed(2) + "% " + downloaded + " bytes" + "\n\r");
 			// reset timeout
 			clearTimeout( timeoutId );
 			timeoutId = setTimeout( fn, timeout );
 		}).on('end', function () {
+			process.stdout.write("Downloaded " + (100.0 * downloaded / len).toFixed(2) + "% " + downloaded + " bytes" + "\n\r");
 			// clear timeout
 			clearTimeout( timeoutId );
 			file.end();
 			console.log(file_name + ' downloaded to: ' + apiPath);
-			callback(null);
+			callback(true,apiPath+file_name);
 		}).on('error', function (err) {
 			// clear timeout
 			clearTimeout( timeoutId );
 			// End stream and delete file                
 			file.end(() => { fs.unlinkSync(apiPath+file_name)});
-			callback(err.message);
+			callback(false,err.message);
 		});           
 	});
 
@@ -66,4 +66,5 @@ function downloadFile(fileUrl, apiPath, encoding, callback) {
 	let timeoutId = setTimeout( fn, timeout );
 }
 
-downloadFile(feedUrl,downloadFolder, 'utf-8', (data) => console.log('data', data) );
+// downloadFeed('http://www.rtd-denver.com/GoogleFeeder/google_transit.zip','./src/temp-feed/', 'utf-8', (data) => console.log('data', data) );
+module.exports = downloadFeed;

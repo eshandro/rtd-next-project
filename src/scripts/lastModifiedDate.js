@@ -5,7 +5,7 @@ function getLastModified(file) {
 	return readFile(file,'utf8')
 	.then((data) => {
 		let obj = JSON.parse(data);
-		console.log("obj.lastModified.date ",obj.lastModified.date);
+		// console.log("obj.lastModified.date ",obj.lastModified.date);
 		return obj.lastModified.date;
 	})
 	.catch((err) => {
@@ -14,8 +14,8 @@ function getLastModified(file) {
 	});
 }
 
-function updateLastModified(file,newDate) {
-	let obj = {"lastModified":{"date":newDate}};
+function updateLastModified(file,newDate,oldDate) {
+	let obj = {"lastModified":{"date":newDate,"lastDate":oldDate}};
 	obj = JSON.stringify(obj);
 	fs.writeFile(file,obj,'utf8', (err) => {
 		if (err) {

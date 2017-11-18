@@ -1,14 +1,16 @@
 const checkFeed = require('./checkFeed'),
+		downloadFeed = require('./downloadFeed'),
+		unzipFiles = require('./unzipFiles'),
 		mainFeedUrl = "http://www.rtd-denver.com/GoogleFeeder/",
 		feedUrl = "http://www.rtd-denver.com/GoogleFeeder/google_transit.zip",
-		downloadFolder = "./test-download/";
+		downloadFolder = "./src/temp-feed/";
 
 checkFeed(mainFeedUrl)
 .then((data) => {
-	console.log(data);
-	if (data.needUpdate) {
-
+	console.log('data in checkFeed call:', data);
+	if (!data.needUpdate) {
+		console.log('no update needed on checkFeed: ', data.msg);
 	} else {
-		console.log('data.msg returned from checkFeed', data.msg);
+		downloadFeed(feedUrl, downloadFolder, 'utf-8', unzipFiles);
 	}
 });

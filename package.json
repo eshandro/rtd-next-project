@@ -7,10 +7,11 @@
   "author": "eshandro <erik843@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "testing": "src/scripts/checkLastModified.js"
+    "test": "src/scripts/application.js"
   },
-  "devDependencies": {
-    "extract-zip": "^1.6.5",
+  "devDependencies": {},
+  "dependencies": {
+    "extract-zip": "^1.6.6",
     "fs-readfile-promise": "^3.0.0",
     "node-fetch": "^1.7.3"
   }
