@@ -60,4 +60,6 @@ typings/
 # feed files
 src/feed/
 src/temp-feed
+src/testing-files
+
 

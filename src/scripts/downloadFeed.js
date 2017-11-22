@@ -1,70 +1,44 @@
 const	fs = require('fs'), 
 		url = require('url'),
-		http = require('http');
+		http = require('http'),
+		fetch = require('node-fetch'),
+		handleFetchErrors = require('./handleFetchErrors');
 let 	file_name = '';
 
-
-function downloadFeed(fileUrl, apiPath, encoding,callback) {
-
-	let p = url.parse(fileUrl),           
-		timeout = 10000; 
+function downloadFeed(fileUrl, apiPath) {
+	let 	p = url.parse(fileUrl),
+			file,
+			timeout = 500;
 	file_name = p.pathname.substring(p.pathname.lastIndexOf('/')+1);
-	// console.log("file_name ",file_name);
-
-	let file = fs.createWriteStream(apiPath+file_name);
-	// console.log("file ",file);
 	
-	let timeout_wrapper = function( req ) {
-		return function() {
-			 console.log('abort');
-			 req.abort();
-			 callback("File download timeout!");
-		};
-	};
-
-
-	let request = http.get(fileUrl).on('response', function(res) { 
-		let len = parseInt(res.headers['content-length'], 10);
-		if (!len) {
-			callback(false,"No data received");
-			clearTimeout( timeoutId );
-			// End stream and delete file
-			file.end(() => { fs.unlinkSync(apiPath+file_name)});
-			return;
-		}
-
-		let downloaded = 0;
-		
-		res.on('data', function(chunk) {
-			file.write(chunk);
-			downloaded += chunk.length;
-			// process.stdout.write("Downloading " + (100.0 * downloaded / len).toFixed(2) + "% " + downloaded + " bytes" + isWin ? "\033[0G": "\r");
-			// process.stdout.write("Downloading " + (100.0 * downloaded / len).toFixed(2) + "% " + downloaded + " bytes" + "\n\r");
-			// reset timeout
-			clearTimeout( timeoutId );
-			timeoutId = setTimeout( fn, timeout );
-		}).on('end', function () {
-			process.stdout.write("Downloaded " + (100.0 * downloaded / len).toFixed(2) + "% " + downloaded + " bytes" + "\n\r");
-			// clear timeout
-			clearTimeout( timeoutId );
-			file.end();
-			console.log(file_name + ' downloaded to: ' + apiPath);
-			callback(true,apiPath+file_name);
-		}).on('error', function (err) {
-			// clear timeout
-			clearTimeout( timeoutId );
-			// End stream and delete file                
-			file.end(() => { fs.unlinkSync(apiPath+file_name)});
-			callback(false,err.message);
-		});           
-	});
-
-	// generate timeout handler
-	let fn = timeout_wrapper( request );
-
-	// set initial timeout
-	let timeoutId = setTimeout( fn, timeout );
+	return fetch(fileUrl, {timeout: timeout})
+		.then(handleFetchErrors)
+		.then((res) => {
+			console.log("res.status in downloadFeed fetch",res.status);
+			console.log("length in downloadFeed fetch", res.headers.get('content-length'));
+			let len = res.headers.get('content-length')
+			if (!len) {
+				return ({downloadFeedSuccess: false, msg: "No data received"})
+			}
+			file = fs.createWriteStream(apiPath+file_name);
+			// res.body.pipe(file);
+			return ({downloadFeedSuccess:true, msg:"Download successful"});
+		})
+		.catch((err) => {
+			console.log("fetch err in downloadFeed", err);
+			// End stream and delete file  
+			if(file) {
+				file.end(() => { fs.unlinkSync(apiPath+file_name)});
+			}
+			// check if error is Timout error
+			if (err.type && err.type === 'request-timeout') {
+				return ({downloadFeedSuccess: false, msg: err.message});
+			} else {
+				return ({downloadFeedSuccess: false, msg: err});
+			}         
+		});
 }
+// Testing only
+// downloadFeed("http://httpstat.us/200?sleep=1000", "./src/testing/");
 
-// downloadFeed('http://www.rtd-denver.com/GoogleFeeder/google_transit.zip','./src/temp-feed/', 'utf-8', (data) => console.log('data', data) );
 module.exports = downloadFeed;

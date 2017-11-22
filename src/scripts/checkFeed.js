@@ -1,15 +1,8 @@
 const fetch = require('node-fetch'),
-	lastModifiedFile = "./lastModified.json",
-	lastModifiedDate = require('./lastModifiedDate');
+		handleFetchErrors = require('./handleFetchErrors'),
+		lastModifiedFile = "./lastModified.json",
+		lastModifiedDate = require('./lastModifiedDate');
 
-function handleFetchErrors(res) {
-	let errMsg;
-	if (!res.ok) {
-		errMsg = `There was an error fetching ${res.url}. Error: ${res.status} ${res.statusText}`;
-		throw Error(errMsg);
-	}
-	return res;
-}
 
 function parseDateFromHTML(html) {
 	let 	test = /\d{2}.\w{3}.\d{4}\s*\d{2}\:\d{2}/,	
