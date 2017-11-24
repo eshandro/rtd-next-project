@@ -1,19 +1,21 @@
 const 	extract = require('extract-zip');
 
-function unzipFiles (unzip, msg) {
-	console.log("unzip ",unzip);
-	console.log("msg ",msg);
-	if (!unzip) {
-		return msg;
+function unzipFiles (zippedFile,outputPath) {
+	if (zippedFile.substring(zippedFile.lastIndexOf('.')+1) !== 'zip') {
+		return Promise.resolve({unzipSuccess: false, msg:"No zippedFile passed to unzip"});
 	}
-	extract(msg, {dir:'./src/feed/'}, function(err){
+	console.log("zippedFile ",zippedFile);
+	console.log("outputPath ",outputPath);
+	return extract(zippedFile, {dir:outputPath}, function(err){
 		if (err) {
 			console.log("err in extract ",err);
-			return Promise.resolve({unzipSuccessful: false, msg: 'Error unzipping files: ' + err});
+			return Promise.resolve({unzipSuccess: false, msg: 'Error unzipping files: ' + err});
 		}
 		console.log("extract successful");
-		return Promise.resolve({unzipSuccessful: true, msg:"./src/feed/"});
+		return Promise.resolve({unzipSuccess: true, msg:"Files unzipped successfully"});
 	});
 }
+
+unzipFiles('./src/testing-files/google_transit.zip', './src/feed/')
 
 module.exports = unzipFiles;

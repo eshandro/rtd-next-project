@@ -3,15 +3,27 @@ const checkFeed = require('./checkFeed'),
 		unzipFiles = require('./unzipFiles'),
 		mainFeedUrl = "http://www.rtd-denver.com/GoogleFeeder/",
 		feedUrl = "http://www.rtd-denver.com/GoogleFeeder/google_transit.zip",
-		downloadFolder = "./src/temp-feed/";
+		downloadFolder = "./src/temp-feed/",
+		extractedFolder = "./src/feed/";
 
 checkFeed(mainFeedUrl)
-.then((data) => {
-	console.log('data in checkFeed call:', data);
-	if (!data.needUpdate) {
-		console.log('no update needed on checkFeed: ', data.msg);
-		return;
-	} 
-	downloadFeed(feedUrl, downloadFolder, 'utf-8', unzipFiles);
+	.then((data) => {
+		console.log('data in checkFeed call:', data);
+		if (!data.needUpdate) {
+			console.log('no update needed on checkFeed: ', data.msg);
+			return ({downloadFeedSuccess: false, msg:data.msg});
+		} 
+		return downloadFeed(feedUrl, downloadFolder);
 
-});
+	})
+	.then((downloadData) => {
+		if(!downloadData.downloadFeedSuccess) {
+			console.log("Feed not downloaded: ", downloadData.msg);
+			return ({unzipSuccess:false, msg:downloadData.msg});
+		}
+		return unzipFiles(downloadData.msg, extractedFolder);
+	})
+	.then((unzipData) => console.log("unzipData: ",unzipData))
+	.catch((err) => {
+		console.log("error in checkFeed: ", err);
+	});
