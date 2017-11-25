@@ -2,7 +2,7 @@ function handleFetchErrors(res) {
 	let errMsg;
 	if (!res.ok) {
 		errMsg = `There was an error fetching ${res.url}. Error: ${res.status} ${res.statusText}`;
-		throw Error(errMsg);
+		return Promise.reject(errMsg);
 	}
 	return res;
 }

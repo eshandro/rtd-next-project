@@ -7,14 +7,14 @@ let 	file_name = '', destPath;
 function downloadFeed(fileUrl, apiPath) {
 	let 	p = url.parse(fileUrl),
 			file,
-			timeout = 300000;
+			timeout = 300000; // 300000 ms = 5 minutes
 	file_name = p.pathname.substring(p.pathname.lastIndexOf('/')+1);
 	destPath = apiPath + file_name;
 	
 	// You can pass options as a 2nd param, e.g. {timeout: #}
 	// NOTE: options only work on standard fetch api, i.e. not on res.buffer
-	// return fetch(fileUrl, {timeout:timeout})
-	return fetch(fileUrl)
+	return fetch(fileUrl, {timeout:timeout})
+	// return fetch(fileUrl)
 		.then(handleFetchErrors)
 		.then((res) => {
 			console.log("res.status in downloadFeed fetch",res.status);
@@ -65,9 +65,9 @@ function downloadFeed(fileUrl, apiPath) {
 				return Promise.reject(err)
 			})
 		})
-		.then((filewrite)=> {
-			console.log("filewrite ",filewrite);
-		}) 
+		// .then((filewrite)=> {
+		// 	console.log("filewrite ",filewrite);
+		// }) 
 		// .then((buffer) => {
 		// 	console.log("buffer ",buffer);
 		// 	return fs.writeFileSync(destPath, buffer, 'utf-8', (err) => {
@@ -81,19 +81,20 @@ function downloadFeed(fileUrl, apiPath) {
 			console.log("fetch err in downloadFeed", err);
 			// End stream and delete file  
 			if(file) {
-
-				file.end(() => { fs.unlinkSync(apiPath+file_name)});
+				file.end(() => { fs.unlinkSync(destPath)});
 			}
 			// check if error is fetch timeout error
 			if (err.type && (err.type === 'request-timeout' || err.type === 'body-timeout')) {
 				return ({downloadFeedSuccess: false, msg: err.message});
+			} else if (typeof err.downloadFeedSuccess === 'undefined') { // handle error thrown by handleFetchErrors
+				return ({downloadFeedSuccess: false, msg: err})
 			} else {
 				return err;
-			} 
+			}
 		});
 }
 // Testing only
 // downloadFeed("http://httpstat.us/200?sleep=1000", "./src/testing-files/");
-downloadFeed("http://www.rtd-denver.com/GoogleFeeder/google_transit.zip", "./src/testing-files/");
+// downloadFeed("http://www.rtd-denver.com/GoogleFeeder/google_transit.zip", "./src/testing-files/");
 
 module.exports = downloadFeed;
