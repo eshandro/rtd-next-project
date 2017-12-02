@@ -19,8 +19,7 @@ function downloadFeed(fileUrl, apiPath) {
 		.then((res) => {
 			console.log("res.status in downloadFeed fetch",res.status);
 			let len = res.headers.get('content-length');
-			// console.log("res.headers ",res.headers);
-			console.log("len ",len);
+			console.log("len feed download=",len);
 			if (!len) {
 				return Promise.reject({downloadFeedSuccess: false, msg: "No data received"})
 			}
@@ -39,7 +38,7 @@ function downloadFeed(fileUrl, apiPath) {
 
 				file
 			   	.on('open', () => {
-			   		console.log("file.on open");
+			   		console.log("open writestream in downloadFeed");
 			      	timer = setTimeout(() => {
 			      		console.log("timeout in fs promise ");
 			      		file.close();
@@ -48,12 +47,12 @@ function downloadFeed(fileUrl, apiPath) {
 			   	})
 			   	.on('error', errorHandler)
 			   	.on('finish', () => {
-			   		console.log("file.on finish")
+			   		console.log("finish writestream in downloadFeed")
 			    		resolve(destPath)
 			   	})
 			})
 			.then((dest) => {
-				console.log("dest ",dest);
+				// console.log("dest ",dest);
 				clearTimeout(timer);
 				return ({downloadFeedSuccess:true, msg:destPath});
 			}, (err) => {
@@ -65,9 +64,6 @@ function downloadFeed(fileUrl, apiPath) {
 				return Promise.reject(err)
 			})
 		})
-		// .then((filewrite)=> {
-		// 	console.log("filewrite ",filewrite);
-		// }) 
 		// .then((buffer) => {
 		// 	console.log("buffer ",buffer);
 		// 	return fs.writeFileSync(destPath, buffer, 'utf-8', (err) => {
