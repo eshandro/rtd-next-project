@@ -23,7 +23,10 @@ checkFeed(mainFeedUrl)
 		}
 		return unzipFiles(downloadData.msg, extractedFolder);
 	})
-	.then((unzipData) => console.log("unzipData: ",unzipData))
+	.then((unzipData) => {
+		console.log("unzipData: ",unzipData);
+		// Here we'll call function that updates feed data
+	})
 	.catch((err) => {
 		console.log("error in checkFeed: ", err);
 	});
