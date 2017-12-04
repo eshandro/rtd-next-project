@@ -1,6 +1,7 @@
 const checkFeed = require('./checkFeed'),
 		downloadFeed = require('./downloadFeed'),
 		unzipFiles = require('./unzipFiles'),
+		updateFeed = require('./updateFeed'),
 		mainFeedUrl = "http://www.rtd-denver.com/GoogleFeeder/",
 		feedUrl = "http://www.rtd-denver.com/GoogleFeeder/google_transit.zip",
 		downloadFolder = "./src/temp-feed/",
@@ -25,8 +26,10 @@ checkFeed(mainFeedUrl)
 	})
 	.then((unzipData) => {
 		console.log("unzipData: ",unzipData);
-		// Here we'll call function that updates feed data
+		console.log("unzipData.msg ",unzipData.msg);
+		updateFeed(unzipData.msg);
 	})
 	.catch((err) => {
 		console.log("error in checkFeed: ", err);
 	});
+

@@ -14,12 +14,12 @@ function unzipFiles (zippedFile,outputPath) {
 			entry.pipe(fs.createWriteStream(outputPath+entry.path))
 		})
 		.on('finish', () => {
-			console.log('finish fired');
+			// console.log('finish fired');
 			fs.unlinkSync(zippedFile);
 		})
 		.promise()
 		.then( () => {
-			return ({unzipSuccess: true, msg:"Files unzipped successfully"});
+			return ({unzipSuccess: true, msg:outputPath});
 		}, (err) => {
 			console.log('err in unzip ', err);
 			return ({unzipSuccess: false, msg: 'Error unzipping files: ' + err});

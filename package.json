@@ -13,6 +13,7 @@
   "dependencies": {
     "fs-readfile-promise": "^3.0.0",
     "node-fetch": "^1.7.3",
+    "path-reader": "^1.0.6",
     "unzipper": "^0.8.11"
   }
 }
