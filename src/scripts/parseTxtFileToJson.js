@@ -23,18 +23,19 @@ function parseTxtFileToJson (path) {
 				}
 			}
 			let json = convertLinesToJSON(lines,keys,dataName);
-			// console.log("json ",json); 
-			return ({parseTxtFileSuccess: true, data: convertLinesToJSON(lines,keys,dataName)});
+			return ({parseTxtFileSuccess: true, data: json});
 		})
 		.catch((err) => {
+			console.log(err);
 			let errMsg = `Error in parseTxtFileToJson readFile: err.code=${err.code} on file ${err.path}.`;
 			console.log("errMsg ",errMsg);
-			return ({parseTxtFileSuccess: false, data: errMsge});
+			return ({parseTxtFileSuccess: false, data: errMsg});
 		})
 }
 
 function convertLinesToJSON(lines,keys,dataName) {
 	var jsonObj = {[dataName]:[]};
+	console.log("convertLinesToJson called on dataName ",dataName);
 	if (lines && lines.length > 0) {
 		let 	len = lines.length, 
 				i = 1;
@@ -68,5 +69,6 @@ function convertLineToObj (line, keys) {
 // For testing only
 // let json = parseTxtFileToJson('google_transit/routes.txt');
 // console.log("type of json.then ",typeof json.then);
+// parseTxtFileToJson('google_transit/stop_times.txt');
 
 module.exports = parseTxtFileToJson;

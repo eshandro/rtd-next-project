@@ -20,7 +20,7 @@ function updateLastModified(file,newDate,oldDate) {
 	fs.writeFile(file,obj,'utf8', (err) => {
 		if (err) {
 			console.log("Error updating last modified file: " + err);
-			return;
+			throw "Error updating last modified file: " + err;
 		}
 		console.log("lastModified.json updated");
 	});

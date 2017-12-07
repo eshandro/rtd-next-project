@@ -25,9 +25,12 @@ checkFeed(mainFeedUrl)
 		return unzipFiles(downloadData.msg, extractedFolder);
 	})
 	.then((unzipData) => {
-		console.log("unzipData: ",unzipData);
-		console.log("unzipData.msg ",unzipData.msg);
-		updateFeed(unzipData.msg);
+		if (unzipData.unzipSuccess) {
+			console.log("unzipData.msg ",unzipData.msg);
+			updateFeed(unzipData.msg);
+		} else {
+			console.log('unzipFiles err: ', unzipData.msg);
+		}
 	})
 	.catch((err) => {
 		console.log("error in checkFeed: ", err);
