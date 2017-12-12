@@ -54,8 +54,8 @@ function updateFeed(path) {
 					if (data.parseTxtFileSuccess) {
 						let jsonPath = fullPath.substring(0,fullPath.lastIndexOf('/')+1) + 'json/' + fullPath.substring(fullPath.lastIndexOf('/')+1);
 						// let json = JSON.stringify(data.data);
-						let json = data.data;
-						writeJsonFile(jsonPath,json)
+						let jsonStream = data.data;
+						writeJsonFile(jsonPath,jsonStream)
 					}
 				}).catch((err) => {
 					console.log('Error in updateFeed:', err);
@@ -64,15 +64,24 @@ function updateFeed(path) {
 		})
 }
 
-function writeJsonFile(file, obj) {
-	file = convertFileExt(file,'json');
-	fs.writeFile(file, obj, 'utf-8', (err) => {
-		if (err) {
-			let errMsg = `Error writing json file ${path}: ${err}`;
-			throw errMsg
-		}
-		console.log(`${file} written successfully`);
-	});
+function writeJsonFile(filePath, jsonStream) {
+	filePath = convertFileExt(filePath,'json');
+	let file = fs.createWriteStream(filePath);
+	jsonStream.pipe(file);
+	file
+		.on('open', () => {
+			console.log("file open event -", filePath);
+		})
+		.on('finish', () => {
+			console.log("file finish event -", filePath);
+		})
+	// fs.writeFile(file, json, 'utf-8', (err) => {
+	// 	if (err) {
+	// 		let errMsg = `Error writing json file ${path}: ${err}`;
+	// 		throw errMsg
+	// 	}
+	// 	console.log(`${file} written successfully`);
+	// });
 }
 
 function convertFileExt(file, newExt) {
