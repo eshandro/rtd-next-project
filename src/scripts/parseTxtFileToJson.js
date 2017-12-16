@@ -1,5 +1,6 @@
 const fs = require('fs'),
 		readline = require('readline'),
+		sts = require('string-to-stream'),
 		Readable = require('stream').Readable;
 		// readFile = require('fs-readfile-promise');
 
@@ -12,21 +13,24 @@ const fs = require('fs'),
 function parseTxtFileToJson (path) {
 	let 	keys,
 			counter = 0,
-			json = "",
+			// json = "",
 			dataName = path.substring(path.lastIndexOf('/')+1);
 	
 	jsonPath = path.substring(0,path.lastIndexOf('/')+1) + "json/";
 	dataName = dataName.substring(0,dataName.lastIndexOf('.'));
 	
 	let	instream = fs.createReadStream(path),
-			outputStream = new Readable();
+			// outputStream = new Readable();
 			// outstream = new stream,
-			// file = fs.createWriteStream(jsonPath+dataName+".json"),
+			file = fs.createWriteStream(jsonPath+dataName+".json"),
 			// rl = readline.createInterface(instream, outstream);
 			rl = readline.createInterface(instream);
 
+	instream
+		.on('open',() => console.log("instream open event"))
+		.on('end', () => console.log("instream end event"))
 	
-	json = `{"${dataName}":[`;
+	// json = `{"${dataName}":[`;
 	return new Promise((resolve,reject) => {
 		const errorHandler = (error) => {
 			console.log("errorHandler in parseTxtFileToJson rl promise");
@@ -35,55 +39,98 @@ function parseTxtFileToJson (path) {
 		};
 		rl
 			.on('line', (line) => {
+				let currJson = "";
 				if(counter === 0) {
 					keys = convertLineToArray(line);		
-					counter++;
 					console.log("keys", keys);
-					outputStream.push(json);
+					currJson = `{\n\t"${dataName}":[`;
+					// outputStream.push(json);
+					// console.log('writing initial json to file');
+					// sts(json).pipe(file);
 				} else {
-					console.log("counter ",counter);
 					let currLine = convertLineToArray(line);
 					if (currLine && currLine.length > 0) {
 						if (keys.length === currLine.length) {
 							// lines[0] = keys
-							let currJson = counter > 1 ? ",{" : "{";
-							console.log("currJson",currJson)
+							// json = json + (counter > 1 ? ",{" : "{");
+							// currJson = (counter > 1 ? ",{" : "{");
+							// console.log("json",json);
+							if(counter > 1) {
+								currJson = ",\n";
+							} else {
+								currJson = "\n";
+							}
 							let len = keys.length,
-								 i = 1;
+								 i = 0;
 							for (; i < len; i++){
+								if (i === 0) {
+									currJson = `${currJson}\t\t{\n\t\t\t`;
+								}
+								// json = `${json}"${keys[i]}":"${currLine[i]}"`
 								currJson = `${currJson}"${keys[i]}":"${currLine[i]}"`
 								if (i !== len-1) {
-									currJson = currJson + ",";
+									// json = json + ",";
+									currJson = currJson + ",\n\t\t\t";
 								} else if (i === len-1) {
-									currJson = currJson + "}"
+									// json = json + "}"
+									currJson = currJson + "\n\t\t}"
 								}
 							}
-							outputStream.push(currJson);
+							// outputStream.push(currJson);
+							// console.log('writing currJson to file');
+							// sts(currJson).pipe(file);
+							
 						}
-					}				
+					}
 				}
+				file.write(currJson);
+				counter++;				
 			})
 			.on('error', errorHandler)
 			.on('close', () => {
-				json = "]}";
-				outputStream.push(json);
-				outputStream.push(null);
+				console.log("rl close event fired ");
+				// json = json + "]}";
+				file.write("\n\t]\n}");
+				file.end();
+				// json = "]}";
+				// sts(json).pipe(file);
+				// outputStream.push(json);
+				// outputStream.push(null);
 				// console.log("json ",json);
-				resolve(outputStream);
+				// sts(json).pipe(file);
+				// sts(json);
+				// let stringStream = sts(json);
+				// sts(json).pipe(file);
+				// stringStream
+				// 	.on('data', (chunk) => {
+				// 		file.write(chunk);
+				// 	})
+				// 	.on('error', (err) => {
+				// 		console.log("err in stringStream ",err);
+				// 		file.end();
+				// 	} )
+				// 	.on('end', () => {
+				// 		console.log("stringStream end event")
+				// 		file.end();
+				// 	})
+				resolve();
 			});
-		// file
-		// 	.on('open', () => {
-		// 		console.log("file open event")
-		// 	})
-		// 	.on('error', (err) => {
-		// 		console.log("err in file", err);
-		// 	})
-		// 	.on('close', () => {
-		// 		console.log("close in file")
-		// 	})
+	file
+		.on('open', () => {
+			console.log("file open event")
+		})
+		.on('error', (err) => {
+			console.log("err in file", err);
+		})
+		// .on('close', () => {
+		.on('finish', () => {
+			// console.log("close in file")
+			console.log("finish in file")
+		})
+	
 	})
-	.then((jsonStream) => {
-		return({parseTxtFileSuccess: true, data: jsonStream});
+	.then(() => {
+		return({parseTxtFileSuccess: true, data: ""});
 	}, (err) => {
 		return Promise.reject(err);
 	})
@@ -155,6 +202,7 @@ function convertLineToObj (line, keys) {
 // For testing only
 // let json = parseTxtFileToJson('./src/feed/routes.txt');
 // console.log("type of json.then ",typeof json.then);
-parseTxtFileToJson('./src/feed/agency.txt');
+// parseTxtFileToJson('./src/feed/calendar.txt');
+// parseTxtFileToJson('./src/feed/shapes.txt');
 
 module.exports = parseTxtFileToJson;

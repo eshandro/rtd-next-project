@@ -49,17 +49,18 @@ function updateFeed(path) {
 			for (; i < len; i++) {
 				let fullPath = './'+files[i];
 				// console.log("fullPath ",fullPath);
-				let json = parseTxtFileToJson(fullPath);
-				json.then((data) => {
-					if (data.parseTxtFileSuccess) {
-						let jsonPath = fullPath.substring(0,fullPath.lastIndexOf('/')+1) + 'json/' + fullPath.substring(fullPath.lastIndexOf('/')+1);
-						// let json = JSON.stringify(data.data);
-						let jsonStream = data.data;
-						writeJsonFile(jsonPath,jsonStream)
-					}
-				}).catch((err) => {
-					console.log('Error in updateFeed:', err);
-				})
+				parseTxtFileToJson(fullPath);
+				// let json = parseTxtFileToJson(fullPath);
+				// json.then((data) => {
+				// 	if (data.parseTxtFileSuccess) {
+				// 		let jsonPath = fullPath.substring(0,fullPath.lastIndexOf('/')+1) + 'json/' + fullPath.substring(fullPath.lastIndexOf('/')+1);
+				// 		// let json = JSON.stringify(data.data);
+				// 		let jsonStream = data.data;
+				// 		writeJsonFile(jsonPath,jsonStream)
+				// 	}
+				// }).catch((err) => {
+				// 	console.log('Error in updateFeed:', err);
+				// })
 			}
 		})
 }
