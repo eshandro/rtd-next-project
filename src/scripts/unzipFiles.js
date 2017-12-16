@@ -19,14 +19,14 @@ function unzipFiles (zippedFile,outputPath) {
 		})
 		.promise()
 		.then( () => {
-			return ({unzipSuccess: true, msg:outputPath});
+			return ({unzipSuccess: true, data:outputPath});
 		}, (err) => {
 			console.log('err in unzip ', err);
-			return ({unzipSuccess: false, msg: 'Error unzipping files: ' + err});
+			return ({unzipSuccess: false, data: 'Error unzipping files: ' + err});
 		})
 		.catch((err) => {
 			console.log("catch is working")
-			return ({unzipSuccess: false, msg: 'Error unzipping files: ' + err});
+			return ({unzipSuccess: false, data: 'Error unzipping files: ' + err});
 		})
 }
 

@@ -21,7 +21,7 @@ function downloadFeed(fileUrl, apiPath) {
 			let len = res.headers.get('content-length');
 			console.log("len feed download =",len);
 			if (!len) {
-				return Promise.reject({downloadFeedSuccess: false, msg: "No data received"})
+				return Promise.reject({downloadFeedSuccess: false, data: "No data received"})
 			}
 			// if you prefer to cache binary data in full, use buffer()
 			// note that buffer() is a node-fetch only API
@@ -33,7 +33,7 @@ function downloadFeed(fileUrl, apiPath) {
 				const errorHandler = (error) => {
 					console.log("errorHandler in fs promise");
 			   	let errMsg = "Unable to download file: " + error;
-			   	reject({downloadFeedSuccess: false, msg: errMsg})
+			   	reject({downloadFeedSuccess: false, data: errMsg})
 				};
 
 				file
@@ -42,7 +42,7 @@ function downloadFeed(fileUrl, apiPath) {
 			      	timer = setTimeout(() => {
 			      		console.log("timeout in fs promise");
 			      		file.close();
-			      		reject({downloadFeedSuccess: false, msg: 'Timeout writing file'})
+			      		reject({downloadFeedSuccess: false, data: 'Timeout writing file'})
 			      	}, timeout)
 			   	})
 			   	.on('error', errorHandler)
@@ -54,7 +54,7 @@ function downloadFeed(fileUrl, apiPath) {
 			.then((dest) => {
 				// console.log("dest ",dest);
 				clearTimeout(timer);
-				return ({downloadFeedSuccess:true, msg:destPath});
+				return ({downloadFeedSuccess:true, data:destPath});
 			}, (err) => {
 				clearTimeout(timer);
 				// End stream and delete file
@@ -81,9 +81,9 @@ function downloadFeed(fileUrl, apiPath) {
 			}
 			// check if error is fetch timeout error
 			if (err.type && (err.type === 'request-timeout' || err.type === 'body-timeout')) {
-				return ({downloadFeedSuccess: false, msg: err.message});
+				return ({downloadFeedSuccess: false, data: err.message});
 			} else if (typeof err.downloadFeedSuccess === 'undefined') { // handle error thrown by handleFetchErrors
-				return ({downloadFeedSuccess: false, msg: err})
+				return ({downloadFeedSuccess: false, data: err})
 			} else {
 				return err;
 			}

@@ -1,7 +1,7 @@
 const fetch = require('node-fetch'),
 		handleFetchErrors = require('./handleFetchErrors'),
-		lastModifiedFile = "./lastModified.json",
-		lastModifiedDate = require('./lastModifiedDate');
+		lastModifiedDate = require('./lastModifiedDate'),
+		lastModifiedFile = "./lastModified.json";
 
 
 function parseDateFromHTML(html) {
@@ -58,13 +58,13 @@ function checkFeed(url) {
 			}
 			if (checkFeedErr) {
 				console.log("checkFeedErr ",checkFeedErr);
-				return {needUpdate: false, msg: checkFeedErr};
+				return {needUpdate: false, data: checkFeedErr};
 			}
 			if (htmlDate !== fileDate) {
 				lastModifiedDate.updateLastModified(lastModifiedFile, htmlDate,fileDate);
-				return {needUpdate: true, msg: "Feed has been updated"};
+				return {needUpdate: true, data: "Feed has been updated"};
 			} else {
-				return {needUpdate: false, msg: "Feed has NOT been updated"}
+				return {needUpdate: false, data: "Feed has NOT been updated"}
 			}
 		})
 		.catch(reason => console.log('Error in checkFeed Promise.all', reason));
