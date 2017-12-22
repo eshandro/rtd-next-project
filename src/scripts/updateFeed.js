@@ -18,7 +18,7 @@ function updateFeed(path) {
 			// console.log("files ",files);
 			let i = 0, len = files.length;
 			for (; i < len; i++) {
-				let fullPath = './'+files[i];
+				let fullPath = files[i];
 				// console.log("fullPath ",fullPath);
 				parseTxtFileToJson(fullPath);
 			}

@@ -56,7 +56,7 @@ function parseTxtFileToJson (path) {
 			})
 			.on('error', errorHandler)
 			.on('close', () => {
-				console.log("rl close event fired ");
+				// console.log("rl close event fired ");
 				file.write("\n\t]\n}");
 				file.end();
 				resolve();
@@ -71,39 +71,10 @@ function parseTxtFileToJson (path) {
 }
 
 
-function convertLinesToJSON(lines,keys,dataName) {
-	let jsonObj = {[dataName]:[]};
-	console.log("convertLinesToJson called on dataName ",dataName);
-	if (lines && lines.length > 0) {
-		let 	len = lines.length, 
-				i = 1;
-		for (; i < len; i++) {
-			let temp = convertLineToObj(lines[i],keys);
-			jsonObj[dataName].push(temp);
-		}
-	}
-
-	return jsonObj;
-}
-
 function convertLineToArray (line) {
 	return line.split(',');
 }
 
-function convertLineToObj (line, keys) {
-	var obj = {};
-	if (line && line.length > 0) {
-		if (keys.length === line.length) {
-			// lines[0] = keys
-			let len = keys.length,
-				 i = 1;
-			for (; i < len; i++){
-				obj[keys[i]] = line[i];
-			}
-		}
-	}
-	return obj;
-}
 
 // For testing only
 // let json = parseTxtFileToJson('./src/feed/routes.txt');
