@@ -74,6 +74,17 @@ https://api.transitfeeds.com/v1/getFeeds?key=57bb1de8-eb41-418c-a681-ecf0c7ac049
 }
 
 
+Static Feed Light Rail Info:
+-route_id = 101 + rail line for C, D, E, F, H, e.g. 101C
+-route_id = 103W  for W line
+-route_id = A for A-line to airport
+-route_id = 113B for B Line
+-route_id = 107R for R Line
+
+- See 'updating denverrail tables' folder in the notes folder for more info from a previous person's use of static feed
+- they used only trips, stop_times, and stops, which may be a good strategy here too.
+
+
 You have to request access to the realtime feed urls:http://www.rtd-denver.com/gtfs-developer-guide.shtml#realtime-feeds
 
 The realtime feed urls are:
