@@ -3,7 +3,7 @@ const	dir = require('path-reader'),
 		parseTxtFileToJson = require('./parseTxtFileToJson');
 
 
-function updateFeed(path) {
+function updateFeed(path,filesToInclude) {
 	return dir.promiseFiles(path,{
 		shortName:false,
 		recursive:false,
@@ -11,11 +11,17 @@ function updateFeed(path) {
 		// exclude: /^\./
 		})
 		.then((files) => {
+			// console.log("files before ",files);
 			// Neither match or exclude options seem to be working to filter out .DS_Store etc files
 			files = files.filter((file) => {
 				return file.indexOf('.txt') !== -1
 			});
-			// console.log("files ",files);
+			if (filesToInclude || filesToInclude !== undefined) {
+				files = files.filter((file) => {
+					return filesToInclude.includes(file.substring(file.lastIndexOf('/')+1));
+				});
+			}
+			// console.log("files after",files);
 			let i = 0, len = files.length;
 			for (; i < len; i++) {
 				let fullPath = files[i];
@@ -34,6 +40,6 @@ function updateFeed(path) {
 }
 
 // For testing only
-// updateFeed('./src/feed/');
+updateFeed('./src/feed/',['agency.txt']);
 
 module.exports = updateFeed;
