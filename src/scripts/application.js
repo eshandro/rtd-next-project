@@ -6,7 +6,8 @@ const checkFeed = require('./checkFeed'),
 const	mainFeedUrl = "http://www.rtd-denver.com/GoogleFeeder/",
 		feedUrl = "http://www.rtd-denver.com/GoogleFeeder/google_transit.zip",
 		downloadFolder = __dirname + "/../temp-feed/",
-		extractedFolder = __dirname + "/../feed/";
+		extractedFolder = __dirname + "/../feed/",
+		filesToUpdate = ['stop_times.txt', 'stops.txt', 'trips.txt','routes.txt'];
 
 function updateStaticFeed (staticFeedUrl) {
 	checkFeed(staticFeedUrl)
@@ -34,7 +35,8 @@ function updateStaticFeed (staticFeedUrl) {
 				return ({updateFeedSuccess: false, data:unzipData.data});
 			} else {
 				console.log("unzipFiles a success, calling updateFeed");
-				return updateFeed(unzipData.data);
+				// 2nd param passed to updateFeed determines what files from zip file to update. Pass false to update all.
+				return updateFeed(unzipData.data, filesToUpdate);
 			}
 		})
 		.then((updateFeedData) => {
@@ -45,7 +47,7 @@ function updateStaticFeed (staticFeedUrl) {
 			console.log("updateFeed a success, static feed done being updated");
 		})
 		.catch((err) => {
-			console.log("error in checkFeed: ", err);
+			console.log("error in updateStaticFeed: ", err);
 		});
 }
 updateStaticFeed(mainFeedUrl);

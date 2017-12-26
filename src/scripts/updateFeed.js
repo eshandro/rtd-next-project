@@ -11,7 +11,7 @@ function updateFeed(path,filesToInclude) {
 		// exclude: /^\./
 		})
 		.then((files) => {
-			// console.log("files before ",files);
+			console.log("files before ",files);
 			// Neither match or exclude options seem to be working to filter out .DS_Store etc files
 			files = files.filter((file) => {
 				return file.indexOf('.txt') !== -1
@@ -21,7 +21,7 @@ function updateFeed(path,filesToInclude) {
 					return filesToInclude.includes(file.substring(file.lastIndexOf('/')+1));
 				});
 			}
-			// console.log("files after",files);
+			console.log("files after",files);
 			let i = 0, len = files.length;
 			for (; i < len; i++) {
 				let fullPath = files[i];
@@ -40,6 +40,6 @@ function updateFeed(path,filesToInclude) {
 }
 
 // For testing only
-updateFeed('./src/feed/',['agency.txt']);
+// updateFeed('./src/feed/');
 
 module.exports = updateFeed;

@@ -16,7 +16,7 @@ function parseTxtFileToJson (path) {
 	return new Promise((resolve,reject) => {
 		const errorHandler = (error) => {
 			console.log("errorHandler in parseTxtFileToJson rl promise");
-			let errMsg = "Unable to read file: " + error;
+			let errMsg = `Unable to read file ${path}:  ${error}`;
 			reject({parseTxtFileSuccess: false, data: errMsg})
 		};
 		rl
@@ -59,12 +59,12 @@ function parseTxtFileToJson (path) {
 				// console.log("rl close event fired ");
 				file.write("\n\t]\n}");
 				file.end();
-				resolve();
+				resolve(jsonPath+dataName+".json");
 			});
 	
 	})
-	.then(() => {
-		return({parseTxtFileSuccess: true, data: ""});
+	.then((newFile) => {
+		return({parseTxtFileSuccess: true, data: newFile});
 	}, (err) => {
 		return Promise.reject({parseTxtFileSuccess:false, data:err});
 	})
