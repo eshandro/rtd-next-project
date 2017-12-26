@@ -7,7 +7,7 @@ const	mainFeedUrl = "http://www.rtd-denver.com/GoogleFeeder/",
 		feedUrl = "http://www.rtd-denver.com/GoogleFeeder/google_transit.zip",
 		downloadFolder = __dirname + "/../temp-feed/",
 		extractedFolder = __dirname + "/../feed/",
-		filesToUpdate = ['stop_times.txt', 'stops.txt', 'trips.txt','routes.txt'];
+		filesToUpdate = ['routes.txt','stop_times.txt','stops.txt','trips.txt'];
 
 function updateStaticFeed (staticFeedUrl) {
 	checkFeed(staticFeedUrl)

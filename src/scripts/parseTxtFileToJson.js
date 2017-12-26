@@ -25,7 +25,7 @@ function parseTxtFileToJson (path) {
 				if(counter === 0) {
 					keys = convertLineToArray(line);		
 					// console.log("keys", keys);
-					currJson = `{\n\t"${dataName}":[`;
+					currJson = `[`;
 				} else {
 					let currLine = convertLineToArray(line);
 					if (currLine && currLine.length > 0) {
@@ -39,13 +39,13 @@ function parseTxtFileToJson (path) {
 								 i = 0;
 							for (; i < len; i++){
 								if (i === 0) {
-									currJson = `${currJson}\t\t{\n\t\t\t`;
+									currJson = `${currJson}\t{\n\t\t`;
 								}
 								currJson = `${currJson}"${keys[i]}":"${currLine[i]}"`
 								if (i !== len-1) {
-									currJson = currJson + ",\n\t\t\t";
+									currJson = currJson + ",\n\t\t";
 								} else if (i === len-1) {
-									currJson = currJson + "\n\t\t}"
+									currJson = currJson + "\n\t}"
 								}
 							}
 						}
@@ -57,7 +57,7 @@ function parseTxtFileToJson (path) {
 			.on('error', errorHandler)
 			.on('close', () => {
 				// console.log("rl close event fired ");
-				file.write("\n\t]\n}");
+				file.write("\n]");
 				file.end();
 				resolve(jsonPath+dataName+".json");
 			});

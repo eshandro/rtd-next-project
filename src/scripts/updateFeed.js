@@ -16,7 +16,7 @@ function updateFeed(path,filesToInclude) {
 			files = files.filter((file) => {
 				return file.indexOf('.txt') !== -1
 			});
-			if (filesToInclude || filesToInclude !== undefined) {
+			if (filesToInclude) {
 				files = files.filter((file) => {
 					return filesToInclude.includes(file.substring(file.lastIndexOf('/')+1));
 				});
