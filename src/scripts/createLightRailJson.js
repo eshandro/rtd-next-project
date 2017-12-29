@@ -40,7 +40,6 @@ function stopTimesFilter(assembler) {
 	if(assembler.stack.length == 2 && assembler.key === null){
 		if(assembler.current.hasOwnProperty("trip_id")){
 			// "true" to accept, "false" to reject
-			console.log("stopTimesFilter both ifs true and assembler.current.trip_id in trip_ids", trip_ids.includes(assembler.current.trip_id));
 			return trip_ids.includes(assembler.current.trip_id);
 		}
 	}
@@ -154,7 +153,7 @@ function createLRJson(sourceFile, outputFile, filterFN, list, testKey) {
 			if (counter === 0) {
 				file.write('[\n\t')
 			} else {
-				if (counter > 1) {
+				if (counter >= 1) {
 					file.write(",\n\t")
 				} else {
 					file.write("\n\t")
