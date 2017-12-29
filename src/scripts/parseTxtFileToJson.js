@@ -39,13 +39,13 @@ function parseTxtFileToJson (path) {
 								 i = 0;
 							for (; i < len; i++){
 								if (i === 0) {
-									currJson = `${currJson}\t{\n\t\t`;
+									currJson = `${currJson}\t{`;
 								}
 								currJson = `${currJson}"${keys[i]}":"${currLine[i]}"`
 								if (i !== len-1) {
-									currJson = currJson + ",\n\t\t";
+									currJson = currJson + ",";
 								} else if (i === len-1) {
-									currJson = currJson + "\n\t}"
+									currJson = currJson + "}"
 								}
 							}
 						}
