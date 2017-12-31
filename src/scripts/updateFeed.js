@@ -22,13 +22,17 @@ function updateFeed(path,filesToInclude) {
 				});
 			}
 			// console.log("files after",files);
-			let i = 0, len = files.length;
+			let 	i = 0, 
+					len = files.length,
+					parsePromises = [];
 			for (; i < len; i++) {
 				let fullPath = files[i];
-				// console.log("fullPath ",fullPath);
-				parseTxtFileToJson(fullPath);
+				let parsePromise = parseTxtFileToJson(fullPath);
+				parsePromises.push(parsePromise);
 			}
-			return(len)
+			return Promise.all(parsePromises).then((returns) => {
+				return(len);
+			});
 		})
 		.then((length) => {
 			return ({updateFeedSuccess: true, data: `${length} files parsed to JSON`})

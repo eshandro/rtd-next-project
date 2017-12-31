@@ -1,7 +1,8 @@
 const checkFeed = require('./checkFeed'),
 		downloadFeed = require('./downloadFeed'),
 		unzipFiles = require('./unzipFiles'),
-		updateFeed = require('./updateFeed');
+		updateFeed = require('./updateFeed'),
+		filterLightRail = require('./filterLightRail');
 
 const	mainFeedUrl = "http://www.rtd-denver.com/GoogleFeeder/",
 		feedUrl = "http://www.rtd-denver.com/GoogleFeeder/google_transit.zip",
@@ -10,7 +11,7 @@ const	mainFeedUrl = "http://www.rtd-denver.com/GoogleFeeder/",
 		filesToUpdate = ['routes.txt','stop_times.txt','stops.txt','trips.txt'];
 
 function updateStaticFeed (staticFeedUrl) {
-	checkFeed(staticFeedUrl)
+	return checkFeed(staticFeedUrl)
 		.then((checkFeedData) => {
 			console.log('data in checkFeed call:', checkFeedData);
 			if (!checkFeedData.needUpdate) {
@@ -41,14 +42,38 @@ function updateStaticFeed (staticFeedUrl) {
 		})
 		.then((updateFeedData) => {
 			if(!updateFeedData.updateFeedSuccess) {
-				console.log("updateFeed err ",updateFeedData.data);
-				return;
+				console.log("updateFeed err: ",updateFeedData.data);
+				return ({updateStaticFeed: false});
+			} else {
+				console.log("updateFeed a success, calling filterLightRail");
+				return ({updateStaticFeed: true});
 			}
-			console.log("updateFeed a success, static feed done being updated");
 		})
 		.catch((err) => {
 			console.log("error in updateStaticFeed: ", err);
+			return ({updateStaticFeed: false, data: err});
 		});
 }
-updateStaticFeed(mainFeedUrl);
+updateStaticFeed(mainFeedUrl)
+	.then((data) => {
+		console.log("data returned from updateStaticFeed:",data);
+		if(!data.updateStaticFeed) {
+			// don't call filterLightRail
+			return ({lrJsonSuccess: false, data: "filterLightRail not called because updateStaticFeed failed or not needed"});
+		} else {
+			return filterLightRail();
+		}
+	})
+	.then((data)=> {
+		console.log("data after filterLightRail called or not called: ",data);
+		if (!data.lrJsonSuccess) {
+			return ({updateStaticFeed: false, data:data.data});
+		} else {
+			return {updateStaticFeed: true, data: data.data};
+		}
+	}).
+	catch((err) => {
+		console.log("error in updateStaticFeed after filterLightRail:", err);
+		return ({updateStaticFeed: false, data: err});
+	})
 
