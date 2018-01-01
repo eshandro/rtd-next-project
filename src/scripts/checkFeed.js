@@ -23,7 +23,6 @@ function getFeedDate(url) {
 	return fetch(url)
 		.then(handleFetchErrors)
 		.then((res) => {
-			console.log("res.status ",res.status);
 			return res.text();
 		})
 		.then((body) => {
