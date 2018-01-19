@@ -43,7 +43,7 @@ function updateStaticFeed (staticFeedUrl) {
 				console.log("updateFeed err: ",updateFeedData.data);
 				return ({updateStaticFeed: false});
 			} else {
-				console.log("updateFeed a success, calling filterLightRail");
+				console.log("updateFeed a success, return true so know to call filterLightRail");
 				return ({updateStaticFeed: true});
 			}
 		})

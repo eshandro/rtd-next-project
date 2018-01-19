@@ -22,9 +22,10 @@ Then, we can filter stop_times to only include trip_ids that are in filtered lig
 Then, we can filter stops to on include stop_ids that are in filtered stop_times.
 
  */
-const StreamFilteredArray = require("stream-json/utils/StreamFilteredArray"),
-		fs = require('fs');
-
+const stream = require('stream'),
+		StreamFilteredArray = require("stream-json/utils/StreamFilteredArray"),
+		StaticFeedData = require('./StaticFeedData');
+		// fs = require('fs');
 
 /**
 	Filter functions
@@ -63,45 +64,59 @@ function stopsFilter(assembler) {
 let 	trip_ids = [],
 		stop_ids = [];
 
-function createLRJson(sourceFile, outputFile, filterFN, list, testKey) {
-	const stream = StreamFilteredArray.make({objectFilter: filterFN}),
-			file = fs.createWriteStream(__dirname + "/../feed/json/" + outputFile);
-			let counter = 0;
+function createLRJson(source, filterFN, list, testKey) {
+	const streamArr = StreamFilteredArray.make({objectFilter: filterFN});
+			// file = fs.createWriteStream(__dirname + "/../feed/json/" + outputFile);
+	let 	counter = 0,
+			lrFeedData;
 	
 	return new Promise((resolve,reject) => {
 		const errorHandlerRead = (error) => {
 			console.log("errorHandlerRead in createLRJson promise");
-			let errMsg = `Unable to read file ${__dirname}/../feed/json/${sourceFile}:  ${error}`;
+			let errMsg = `Unable to read obj ${source.dataType}:  ${error}`;
 			reject(errMsg);
 		};			
-		const errorHandlerWrite = (error) => {
-			console.log("errorHandlerWrite in createLRJson promise");
-			let errMsg = `Unable to write file ${__dirname}/../feed/json/${outputFile}:  ${error}`;
-			reject(errMsg);
-		};
+		// const errorHandlerWrite = (error) => {
+		// 	console.log("errorHandlerWrite in createLRJson promise");
+		// 	let errMsg = `Unable to write file ${__dirname}/../feed/json/${outputFile}:  ${error}`;
+		// 	reject(errMsg);
+		// };
 
-		let read = fs.createReadStream(__dirname + "/../feed/json/" + sourceFile);
-		read.pipe(stream.input);
-		read.on('error', errorHandlerRead);
-		read.on('end', () => {console.log("read ends")});
+		// let read = fs.createReadStream(__dirname + "/../feed/json/" + sourceFile);
+		let readstream = new stream.Readable({objectMode: true});
+		readstream.push(source.data);
+		readstream.push(null);
+		readstream.pipe(streamArr.input);
+		readstream.on('error', (error) => {
+			console.log('error in readstream')
+			errorHandlerRead(error);
+		});
+		readstream.on('end', () => {console.log("read ends")});
 
-		stream.input
-			.on('error', errorHandlerRead)
-			.on('end', () => {
-				console.log("stream.input ends")
+		streamArr.input
+			// .on('error', errorHandlerRead)
+			.on('error', (error) => {
+				console.log('error in streamArr.input')
+				errorHandlerRead(error);
 			})
-		stream.output
+			.on('end', () => {
+				console.log("streamArr.input ends")
+			})
+		streamArr.output
 			.on("data", function(object){
 			if (counter === 0) {
-				file.write('[\n\t')
-			} else {
-				if (counter >= 1) {
-					file.write(",\n\t")
-				} else {
-					file.write("\n\t")
-				}
-			}
-			file.write(JSON.stringify(object.value));
+				// file.write('[\n\t')
+				lrFeedData = new StaticFeedData('lightrail_'+source.dataType, source.keys);
+			} 
+			// else {
+			// 	if (counter >= 1) {
+			// 		file.write(",\n\t")
+			// 	} else {
+			// 		file.write("\n\t")
+			// 	}
+			// }
+			// file.write(JSON.stringify(object.value));
+			lrFeedData.addData(JSON.stringify(object.value));
 			if(list && testKey) {
 				if(!list.includes(object.value[testKey])) {
 					list.push(object.value[testKey])
@@ -109,25 +124,30 @@ function createLRJson(sourceFile, outputFile, filterFN, list, testKey) {
 			}
 			counter++;
 		})
-		.on("error", errorHandlerRead)
+		// .on("error", errorHandlerRead)
+		.on('error', (error) => {
+			console.log('error in streamArr.output')
+			errorHandlerRead(error);
+		})
 		.on("end", function(){
-			file.write("\n]");
+			// file.write("\n]");
 			counter = 0;
-			file.end();
-			read.unpipe();
-			console.log("stream.output ends");
-			resolve({lrJsonSuccess: true, data:outputFile})
+			// file.end();
+			readstream.unpipe();
+			console.log("streamArr.output ends");
+			resolve({lrJsonSuccess: true, data:lrFeedData})
 		});
 
-		file
-			.on("error", errorHandlerWrite)
-			.on("close", () => {console.log('file end')})
+		// file
+		// 	.on("error", errorHandlerWrite)
+		// 	.on("close", () => {console.log('file end')})
 
 	})
 	.then((data) => {
+		console.log("data.dataType ",dataType);
 		return data;
 	}, (err) => {
-		file.end();
+		// file.end();
 		// if(read) read.unpipe();
 		console.log('err in createLRJson', err);
 		return Promise.reject({lrJsonSuccess: false, data: err});
@@ -166,5 +186,10 @@ function filterLightRail() {
 }
 
 // Testing only
+const parseTxtFileToJS = require('./parseTxtFileToJS');
+let js = parseTxtFileToJS('google_transit/stop_times.txt');
+js.then((obj) => {
+	createLRJson(obj.data, tripsFilter,trip_ids,'trip_id');	
+})
 // filterLightRail();
 module.exports = filterLightRail;
