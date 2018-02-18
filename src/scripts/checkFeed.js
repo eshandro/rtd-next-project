@@ -3,7 +3,11 @@ const fetch = require('node-fetch'),
 		lastModifiedDate = require('./lastModifiedDate'),
 		lastModifiedFile = "./lastModified.json";
 
-
+/**
+ * Pulls Date from RTD static feed page's html
+ * @param  {string} html
+ * @return {string}      [last modified date from html]
+ */
 function parseDateFromHTML(html) {
 	let 	test = /\d{2}.\w{3}.\d{4}\s*\d{2}\:\d{2}/,	
 			temp = html,
@@ -18,7 +22,11 @@ function parseDateFromHTML(html) {
 	}
 	return date;
 }
-
+/**
+ * get last modified date of static feed
+ * @param  {string} url 
+ * @return {string}     [last modified date]
+ */
 function getFeedDate(url) {
 	return fetch(url)
 		.then(handleFetchErrors)
@@ -36,6 +44,13 @@ function getFeedDate(url) {
 		});
 }
 
+/**
+ * Determinie if static feed needs updating
+ * @param  {string} url 
+ * @return {promise}     object {needUpdate: boolean, data: string} needupdate boolean used to 
+ *                       to determine if need to run rest of static feed update, data is a msg indicating
+ *                       needs to be done
+ */
 function checkFeed(url) {
 	let lastModified, feedDate, needUpdate;
 	let fileDatePromise = lastModifiedDate.getLastModified(lastModifiedFile);

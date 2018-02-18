@@ -4,6 +4,14 @@ const	fs = require('fs'),
 		handleFetchErrors = require('./handleFetchErrors');
 let 	file_name = '', destPath;
 
+/**
+ * downloads the static feed zip file and streams it to temp download folder
+ * @param  {string} fileUrl url to RTD's zip file
+ * @param  {string} apiPath path to temp download folder
+ * @return {promise}        object {downloadFeedSuccess: boolean, data: string}
+ *                                 downloadFeedSuccess used to determine next step in application
+ *                                 data: error message or path to newly downloaded zip file
+ */
 function downloadFeed(fileUrl, apiPath) {
 	let 	p = url.parse(fileUrl),
 			file,

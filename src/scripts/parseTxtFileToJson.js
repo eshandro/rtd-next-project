@@ -1,6 +1,12 @@
 const fs = require('fs'),
 		readline = require('readline');
-
+/**
+ * parses text file to JSON and writes JSON to new file
+ * @param  {string} path path to text file to be parsed
+ * @return {promse}      object {parseTxtFileSuccess: boolean, data: string}
+ *                              parseTxtFileSuccess: used to determine next step
+ *                              data: error or path to newly created .json file
+ */
 function parseTxtFileToJson (path) {
 	let 	keys,
 			counter = 0,

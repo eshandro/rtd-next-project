@@ -2,7 +2,14 @@ const	dir = require('path-reader'),
 		fs = require('fs'),
 		parseTxtFileToJson = require('./parseTxtFileToJson');
 
-
+/**
+ * parses unzipped files, limited by filesToInclude, to JSON
+ * @param  {string} path           path to unzipped files
+ * @param  {array} filesToInclude  list of files to parse 
+ * @return {promise}                object {updateFeedSuccess: boolean, data: string}
+ *                                         updateFeedSuccess: used to determine next step
+ *                                         data: error or number of files parsed to JSON
+ */
 function updateFeed(path,filesToInclude) {
 	return dir.promiseFiles(path,{
 		shortName:false,

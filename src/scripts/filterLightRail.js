@@ -27,7 +27,8 @@ const StreamFilteredArray = require("stream-json/utils/StreamFilteredArray"),
 
 
 /**
-	Filter functions
+	Helper Functions:
+	Filter functions used by StreamFilteredArray
 **/
 function tripsFilter(assembler) {
 	// test only top-level objects in the array:
@@ -63,6 +64,17 @@ function stopsFilter(assembler) {
 let 	trip_ids = [],
 		stop_ids = [];
 
+/**
+ * create Light Rail only JSON files
+ * @param  {string} sourceFile File to be stripped to lightrail only info
+ * @param  {string} outputFile New file with lightrail only info
+ * @param  {function} filterFN Filter function used to filter lightrail only info (see above helper functions)
+ * @param  {array} list        List of relevant ids used for filtering
+ * @param  {string} testKey    Key used to add to relevant list
+ * @return {promise}           object {lrJsonSuccess: boolean, data: string}
+ *                                    lrJsonSuccess used to determine next step
+ *                                    data: error or path to newly create filtered JSON file
+ */
 function createLRJson(sourceFile, outputFile, filterFN, list, testKey) {
 	const stream = StreamFilteredArray.make({objectFilter: filterFN}),
 			file = fs.createWriteStream(__dirname + "/../feed/json/" + outputFile);
@@ -134,6 +146,12 @@ function createLRJson(sourceFile, outputFile, filterFN, list, testKey) {
 	})
 }
 
+/**
+ * Function that controls the order of lightrail filtering
+ * @return {promise} object {lrJsonSuccess: boolean, data: array}
+ *                          lrJsonSuccess: used to determine next step
+ *                          data: list of newly filtered lightrail files
+ */
 function filterLightRail() {
 	const lrJson = createLRJson('trips.json','trips-lr.json',tripsFilter, trip_ids,'trip_id');
 

@@ -1,6 +1,14 @@
 const		fs = require('fs');
 const		unzipper = require('unzipper');
 
+/**
+ * unzips the static feed zip file
+ * @param  {string} zippedFile Path of zip file
+ * @param  {string} outputPath Path for unzipped files
+ * @return {promise}            object {unzipSuccess: boolean, data: string}
+ *                                     unzipSuccess: used to determine next step
+ *                                     data: error or path to newly unzipped files
+ */
 function unzipFiles (zippedFile,outputPath) {
 
 	return fs.createReadStream(zippedFile)
