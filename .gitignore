@@ -58,8 +58,8 @@ typings/
 .env
 
 # feed files
-src/feed/
-src/temp-feed
+feed/
+feed-temp/
 src/testing-files
 
 

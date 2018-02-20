@@ -1,12 +1,9 @@
 const checkFeed = require('./checkFeed'),
 		downloadFeed = require('./downloadFeed'),
 		unzipFiles = require('./unzipFiles'),
-		updateFeed = require('./updateFeed');
+		updateFeed = require('./updateFeed'),
+		globals = require('./globals');
 
-const	feedUrl = "http://www.rtd-denver.com/GoogleFeeder/google_transit.zip",
-		downloadFolder = __dirname + "/../temp-feed/",
-		extractedFolder = __dirname + "/../feed/",
-		filesToUpdate = ['routes.txt','stop_times.txt','stops.txt','trips.txt'];
 
 function updateStaticFeed (staticFeedUrl) {
 	return checkFeed(staticFeedUrl)
@@ -17,7 +14,7 @@ function updateStaticFeed (staticFeedUrl) {
 				return ({downloadFeedSuccess: false, data:checkFeedData.data});
 			} 
 			console.log("checkFeed a success, calling downloadFeed");
-			return downloadFeed(feedUrl, downloadFolder);
+			return downloadFeed(globals.feedUrl, globals.downloadFolder);
 
 		})
 		.then((downloadData) => {
@@ -26,7 +23,7 @@ function updateStaticFeed (staticFeedUrl) {
 				return ({unzipSuccess:false, data:downloadData.data});
 			}
 			console.log("downloadFeed a success, calling unzipFiles");
-			return unzipFiles(downloadData.data, extractedFolder);
+			return unzipFiles(downloadData.data, globals.extractedFolder);
 		})
 		.then((unzipData) => {
 			if (!unzipData.unzipSuccess) {
@@ -35,7 +32,7 @@ function updateStaticFeed (staticFeedUrl) {
 			} else {
 				console.log("unzipFiles a success, calling updateFeed");
 				// 2nd param passed to updateFeed determines what files from zip file to update. Pass false to update all.
-				return updateFeed(unzipData.data, filesToUpdate);
+				return updateFeed(unzipData.data, globals.filesToUpdate);
 			}
 		})
 		.then((updateFeedData) => {

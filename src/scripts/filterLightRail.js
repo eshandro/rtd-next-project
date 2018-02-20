@@ -23,7 +23,9 @@ Then, we can filter stops to on include stop_ids that are in filtered stop_times
 
  */
 const StreamFilteredArray = require("stream-json/utils/StreamFilteredArray"),
-		fs = require('fs');
+		fs = require('fs'),
+
+		globals = require('./globals');
 
 
 /**
@@ -77,22 +79,22 @@ let 	trip_ids = [],
  */
 function createLRJson(sourceFile, outputFile, filterFN, list, testKey) {
 	const stream = StreamFilteredArray.make({objectFilter: filterFN}),
-			file = fs.createWriteStream(__dirname + "/../feed/json/" + outputFile);
+			file = fs.createWriteStream(globals.extractedFolder + "json/" + outputFile);
 			let counter = 0;
 	
 	return new Promise((resolve,reject) => {
 		const errorHandlerRead = (error) => {
 			console.log("errorHandlerRead in createLRJson promise");
-			let errMsg = `Unable to read file ${__dirname}/../feed/json/${sourceFile}:  ${error}`;
+			let errMsg = `Unable to read file ${globals.extractedFolder}/json/${sourceFile}:  ${error}`;
 			reject(errMsg);
 		};			
 		const errorHandlerWrite = (error) => {
 			console.log("errorHandlerWrite in createLRJson promise");
-			let errMsg = `Unable to write file ${__dirname}/../feed/json/${outputFile}:  ${error}`;
+			let errMsg = `Unable to write file ${globals.extractedFolder}/json/${outputFile}:  ${error}`;
 			reject(errMsg);
 		};
 
-		let read = fs.createReadStream(__dirname + "/../feed/json/" + sourceFile);
+		let read = fs.createReadStream(globals.extractedFolder + "/json/" + sourceFile);
 		read.pipe(stream.input);
 		read.on('error', errorHandlerRead);
 		read.on('end', () => {console.log("read ends")});
@@ -148,6 +150,9 @@ function createLRJson(sourceFile, outputFile, filterFN, list, testKey) {
 
 /**
  * Function that controls the order of lightrail filtering
+ * First step is to filter trips.json to only light rail related trips.
+ *	Then, we can filter stop_times to only include trip_ids that are in filtered light rail trips.
+ *	Then, we can filter stops to on include stop_ids that are in filtered stop_times
  * @return {promise} object {lrJsonSuccess: boolean, data: array}
  *                          lrJsonSuccess: used to determine next step
  *                          data: list of newly filtered lightrail files

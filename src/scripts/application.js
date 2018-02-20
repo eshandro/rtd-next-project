@@ -21,8 +21,8 @@ updateStaticFeed(mainFeedUrl)
 		} else {
 			return {updateStaticFeed: true, data: data.data};
 		}
-	}).
-	catch((err) => {
+	})
+	.catch((err) => {
 		console.log("error in updateStaticFeed:", err);
 		return ({updateStaticFeed: false, data: err});
 	})

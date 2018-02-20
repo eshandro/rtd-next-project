@@ -88,6 +88,6 @@ function convertLineToObj (line, keys) {
 // For testing only
 // let json = parseTxtFileToJson('google_transit/routes.txt');
 // console.log("type of json.then ",typeof json.then);
-// parseTxtFileToJS('google_transit/stop_times.txt');
+// parseTxtFileToJS('google_transit/trips.txt');
 
 module.exports = parseTxtFileToJS;

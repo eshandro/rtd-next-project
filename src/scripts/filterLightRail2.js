@@ -186,10 +186,10 @@ function filterLightRail() {
 }
 
 // Testing only
-const parseTxtFileToJS = require('./parseTxtFileToJS');
-let js = parseTxtFileToJS('google_transit/stop_times.txt');
-js.then((obj) => {
-	createLRJson(obj.data, tripsFilter,trip_ids,'trip_id');	
-})
+// const parseTxtFileToJS = require('./parseTxtFileToJS');
+// let js = parseTxtFileToJS('google_transit/trips.txt');
+// js.then((obj) => {
+	// createLRJson(obj.data, tripsFilter,trip_ids,'trip_id');	
+// })
 // filterLightRail();
 module.exports = filterLightRail;
