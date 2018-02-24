@@ -65,6 +65,7 @@ function parseTxtFileToJson (path) {
 				// console.log("rl close event fired ");
 				file.write("\n]");
 				file.end();
+				fs.unlinkSync(path);
 				resolve(jsonPath+dataName+".json");
 			});
 	

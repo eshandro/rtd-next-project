@@ -25,7 +25,14 @@ function updateFeed(path,filesToInclude) {
 			});
 			if (filesToInclude) {
 				files = files.filter((file) => {
-					return filesToInclude.includes(file.substring(file.lastIndexOf('/')+1));
+					// delete unneeded txt files
+					if (!filesToInclude.includes(file.substring(file.lastIndexOf('/')+1))) {
+						fs.unlinkSync(file);
+						return false;
+					} else {
+						return true;	
+					}
+					
 				});
 			}
 			// console.log("files after",files);

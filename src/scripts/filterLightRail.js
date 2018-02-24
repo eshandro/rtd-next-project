@@ -97,13 +97,13 @@ function createLRJson(sourceFile, outputFile, filterFN, list, testKey) {
 		let read = fs.createReadStream(globals.extractedFolder + "/json/" + sourceFile);
 		read.pipe(stream.input);
 		read.on('error', errorHandlerRead);
-		read.on('end', () => {console.log("read ends")});
+		// read.on('end', () => {console.log("read ends")});
 
 		stream.input
 			.on('error', errorHandlerRead)
-			.on('end', () => {
-				console.log("stream.input ends")
-			})
+			// .on('end', () => {
+			// 	console.log("stream.input ends")
+			// })
 		stream.output
 			.on("data", function(object){
 			if (counter === 0) {
@@ -129,13 +129,13 @@ function createLRJson(sourceFile, outputFile, filterFN, list, testKey) {
 			counter = 0;
 			file.end();
 			read.unpipe();
-			console.log("stream.output ends");
+			// console.log("stream.output ends");
 			resolve({lrJsonSuccess: true, data:outputFile})
 		});
 
 		file
 			.on("error", errorHandlerWrite)
-			.on("close", () => {console.log('file end')})
+			// .on("close", () => {console.log('file end')})
 
 	})
 	.then((data) => {
@@ -150,7 +150,8 @@ function createLRJson(sourceFile, outputFile, filterFN, list, testKey) {
 
 /**
  * Function that controls the order of lightrail filtering
- * First step is to filter trips.json to only light rail related trips.
+ * First, filter routes.json without affecting any other lists
+ * Then, filter trips.json to only light rail related trips.
  *	Then, we can filter stop_times to only include trip_ids that are in filtered light rail trips.
  *	Then, we can filter stops to on include stop_ids that are in filtered stop_times
  * @return {promise} object {lrJsonSuccess: boolean, data: array}
@@ -158,28 +159,28 @@ function createLRJson(sourceFile, outputFile, filterFN, list, testKey) {
  *                          data: list of newly filtered lightrail files
  */
 function filterLightRail() {
-	const lrJson = createLRJson('trips.json','trips-lr.json',tripsFilter, trip_ids,'trip_id');
+	const lrJson = createLRJson('routes.json','routes-lr.json',tripsFilter, false,false);
 
 	let t1 = Date.now(), filesFiltered = [];
 	return lrJson
 		.then((data) => {
-			console.log("data 1 lrJson ",data);
+			filesFiltered.push(data.data);
+			return createLRJson('trips.json','trips-lr.json',tripsFilter, trip_ids,'trip_id');
+		})
+		.then((data) => {
 			filesFiltered.push(data.data);
 			return createLRJson('stop_times.json', 'stop_times-lr.json',stopTimesFilter,stop_ids,'stop_id');
 		})
 		.then((data) => {
-			console.log("data 2 lrJson ",data);
 			filesFiltered.push(data.data);
 			return createLRJson('stops.json', 'stops-lr.json',stopsFilter,false,false);
 		})
 		.then((data) => {
-			console.log("data 3 lrJson ",data);
 			filesFiltered.push(data.data);
 			let 	t2 = Date.now(),
 					totalTime = t2-t1,
 					d = new Date(totalTime);
 			console.log("filterLightRail took " + d.getUTCMinutes() + ' mins & ' + d.getUTCSeconds() + ' seconds');
-			console.log("lrJson done");
 			return ({lrJsonSuccess: data.lrJsonSuccess, data: filesFiltered});
 		})
 		.catch((err) => {
