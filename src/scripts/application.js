@@ -1,10 +1,9 @@
 const filterLightRail = require('./filterLightRail'),
-		updateStaticFeed = require('./updateStaticFeed');
+		updateStaticFeed = require('./updateStaticFeed'),
+		globals = require('./globals');
 
-const	mainFeedUrl = "http://www.rtd-denver.com/GoogleFeeder/";
 
-
-updateStaticFeed(mainFeedUrl)
+updateStaticFeed(globals.mainFeedUrl)
 	.then((data) => {
 		console.log("data returned from updateStaticFeed:",data);
 		if(!data.updateStaticFeed) {
