@@ -5,7 +5,10 @@ mongoose.Promise = global.Promise;
 before((done) => {
   mongoose.connect('mongodb://localhost/rtd-nextTrain');
   mongoose.connection
-    .once('open', () => { done(); })
+    .once('open', () => { 
+      console.log('successful connection to db in test_setup.js');
+      done(); 
+    })
     .on('error', (error) => {
       console.warn('Warning', error);
     });
