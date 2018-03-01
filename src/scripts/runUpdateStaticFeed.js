@@ -3,7 +3,7 @@ const filterLightRail = require('./filterLightRail'),
 		globals = require('./globals');
 
 
-updateStaticFeed(globals.mainFeedUrl)
+updateStaticFeed(globals.mainFeedUrl,forceUpdate = process.argv[2])
 	.then((data) => {
 		console.log("data returned from updateStaticFeed:",data);
 		if(!data.updateStaticFeed) {

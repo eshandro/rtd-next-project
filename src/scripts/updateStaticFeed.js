@@ -5,8 +5,8 @@ const checkFeed = require('./checkFeed'),
 		globals = require('./globals');
 
 
-function updateStaticFeed (staticFeedUrl) {
-	return checkFeed(staticFeedUrl)
+function updateStaticFeed (staticFeedUrl,forceUpdate) {
+	return checkFeed(staticFeedUrl, forceUpdate)
 		.then((checkFeedData) => {
 			console.log('data in checkFeed call:', checkFeedData);
 			if (!checkFeedData.needUpdate) {

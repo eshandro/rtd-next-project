@@ -7,7 +7,8 @@
   "author": "eshandro <erik843@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "updateFeed": "node src/src/runUpdateStaticFeed.js",
+    "updateFeed": "node src/scripts/runUpdateStaticFeed.js",
+    "forceUpdateFeed": "node src/scripts/runUpdateStaticFeed.js true",
     "test": "nodemon mocha",
     "production": "NODE_ENV=production node src/scripts/application.js"
   },
