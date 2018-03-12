@@ -2,7 +2,7 @@ const checkFeed = require('./checkFeed'),
 		downloadFeed = require('./downloadFeed'),
 		unzipFiles = require('./unzipFiles'),
 		updateFeed = require('./updateFeed'),
-		globals = require('./globals');
+		globals = require('../globals');
 
 
 function updateStaticFeed (staticFeedUrl,forceUpdate) {

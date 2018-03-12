@@ -77,9 +77,9 @@ function checkFeed(url, forceUpdate) {
 			}
 			if (htmlDate !== fileDate || forceUpdate) {
 				lastModifiedDate.updateLastModified(lastModifiedFile, htmlDate,fileDate);
-				return {needUpdate: true, data: "Feed has been updated"};
+				return {needUpdate: true, data: "RTD has updated feed"};
 			} else {
-				return {needUpdate: false, data: "Feed has NOT been updated"}
+				return {needUpdate: false, data: "RTD has NOT updated feed"}
 			}
 		})
 		.catch(reason => console.log('Error in checkFeed Promise.all', reason));

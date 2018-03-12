@@ -8,10 +8,11 @@ const TripSchema = new Schema ({
 	day: String, // service_id in trips.json
 	route_id: String,
 	direction: String,
-	headsign: String
+	headsign: String,
 	stop_times: [StopTimeSchema]
 });
 
-// const Trip = mongoose.model('trip', TripSchema)
+const Trip = mongoose.model('trip', TripSchema)
 
-module.exports = TripSchema;
+// module.exports = TripSchema;
+module.exports = Trip;

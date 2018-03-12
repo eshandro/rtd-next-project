@@ -1,6 +1,6 @@
 const filterLightRail = require('./filterLightRail'),
 		updateStaticFeed = require('./updateStaticFeed'),
-		globals = require('./globals');
+		globals = require('../globals');
 
 
 updateStaticFeed(globals.mainFeedUrl,forceUpdate = process.argv[2])

@@ -25,7 +25,7 @@ Then, we can filter stops to on include stop_ids that are in filtered stop_times
 const StreamFilteredArray = require("stream-json/utils/StreamFilteredArray"),
 		fs = require('fs'),
 
-		globals = require('./globals');
+		globals = require('../globals');
 
 
 /**
