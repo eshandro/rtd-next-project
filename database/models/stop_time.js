@@ -1,13 +1,13 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-// Note not sure how to determine direction, maybe need to utilize trips?
+// Direction is determined by stop_id, each stop has 2 stop_ids - one for each direction
 const StopTimeSchema = new Schema ({
 	time: String,
-	trip_id: String,
-	direction: String
+	stop_id: Number,
+	trip_id: Number
 });
 
-// const StopTime = mongoose.model('stoptime', StopSchema)
+// const StopTime = mongoose.model('stoptime', StopTimeSchema)
 
-module.exports = StopTime;
+module.exports = StopTimeSchema;

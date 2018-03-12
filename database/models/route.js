@@ -6,6 +6,7 @@ const TripSchema = require('./trip');
 const RouteSchema = new Schema ({
 	id: String,
 	name: String,
+	shortName: String,
 	desc: String,
 	stops: [{
 		type: Schema.Types.ObjectId,

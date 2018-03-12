@@ -1,15 +1,17 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-// Note not sure how to determine direction, maybe need to utilize trips?
+const StopTimeSchema = require('./stop_time');
+
 const TripSchema = new Schema ({
 	id: String,
 	day: String, // service_id in trips.json
 	route_id: String,
 	direction: String,
 	headsign: String
+	stop_times: [StopTimeSchema]
 });
 
-// const Trip = mongoose.model('trip', StopSchema)
+// const Trip = mongoose.model('trip', TripSchema)
 
-module.exports = Trip;
+module.exports = TripSchema;

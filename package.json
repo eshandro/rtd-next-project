@@ -2,7 +2,7 @@
   "name": "rtd-project",
   "version": "0.0.1",
   "description": "RTD Next Ride finder",
-  "main": "application.js",
+  "main": "index.js",
   "repository": "https://github.com/eshandro/rtd-next-project.git",
   "author": "eshandro <erik843@gmail.com>",
   "license": "MIT",

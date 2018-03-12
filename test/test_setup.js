@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 
 before((done) => {
-  mongoose.connect('mongodb://localhost/rtd-nextTrain');
+  mongoose.connect('mongodb://localhost/rtdNextTrain_test');
   mongoose.connection
     .once('open', () => { 
       console.log('successful connection to db in test_setup.js');

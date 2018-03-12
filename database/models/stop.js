@@ -4,9 +4,10 @@ const StopTimeSchema = require('./stop_time');
 const TripSchema = require('./trip')
 
 const StopSchema = new Schema ({
-	id: String,
+	id: Number,
 	name: String,
 	desc: String,
+	direction: String,
 	lat: Number,
 	long: Number,
 	// stop_times: [{
