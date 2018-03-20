@@ -1,7 +1,7 @@
 const filterLightRail = require('./filterLightRail'),
 		updateStaticFeed = require('./updateStaticFeed'),
-		globals = require('../globals'),
-		persistStaticLRData = require('./persistStaticLRData');
+		globals = require('../globals');
+		// persistStaticLRData = require('./persistStaticLRData');
 
 /**
  * Runs updateStaticFeed to:
@@ -17,18 +17,18 @@ updateStaticFeed(globals.mainFeedUrl,forceUpdate = process.argv[2])
 		console.log("data returned from updateStaticFeed:",data);
 		if(!data.updateStaticFeed) {
 			// don't call filterLightRail
-			return ({lrJsonSuccess: false, data: "filterLightRail not called because updateStaticFeed failed or not needed"});
+			return ({lightRailDataSuccess: false, data: "filterLightRail not called because updateStaticFeed failed or not needed"});
 		} else {
 			return filterLightRail();
 		}
 	})
 	.then((data)=> {
 		// console.log("data after filterLightRail called or not called: ",data);
-		if (!data.lrJsonSuccess) {
+		if (!data.lightRailDataSuccess) {
 			return ({updateStaticFeed: false, data:data.data});
 		} else {
 			// return {updateStaticFeed: true, data: data.data};
-			return persistStaticLRData(data.data);
+			return ({updateStaticFeed: true, data: data.data});
 		}
 	})
 	.catch((err) => {

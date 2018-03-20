@@ -1,6 +1,9 @@
 const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 
+const Trip = require('../database/models/trip'),
+		Route = require('../database/models/route'),
+		Stop = require('../database/models/stop');
 
 before((done) => {
 	mongoose.connect('mongodb://localhost/rtdNextTrain_test');
@@ -25,7 +28,7 @@ before((done) => {
 // 		});
 // 	});
 // });
-// 
+
 beforeEach((done) => {
 	const {trips} = mongoose.connection.collections;
 	// console.log("trips ",trips);

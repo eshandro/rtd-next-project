@@ -73,13 +73,16 @@ let 	trip_ids = [],
  * @param  {function} filterFN Filter function used to filter lightrail only info (see above helper functions)
  * @param  {array} list        List of relevant ids used for filtering
  * @param  {string} testKey    Key used to add to relevant list
- * @return {promise}           object {lrJsonSuccess: boolean, data: string}
- *                                    lrJsonSuccess used to determine next step
+ * @return {promise}           object {lightRailDataSuccess: boolean, data: string}
+ *                                    lightRailDataSuccess used to determine next step
  *                                    data: error or path to newly create filtered JSON file
  */
-function createLRJson(sourceFile, outputFile, filterFN, list, testKey) {
-	const stream = StreamFilteredArray.make({objectFilter: filterFN}),
-			file = fs.createWriteStream(globals.extractedFolder + "json/" + outputFile);
+// REWRITE: Rename function from createLRJson
+function addLightRailData(sourceFile, filterFN, list, testKey) {
+	const stream = StreamFilteredArray.make({objectFilter: filterFN});
+			// REWRITE: No longer need file since writing to DB
+			// file = fs.createWriteStream(globals.extractedFolder + "json/" + outputFile);
+			// REWRITE: May no longer need counter
 			let counter = 0;
 	
 	return new Promise((resolve,reject) => {
@@ -87,64 +90,67 @@ function createLRJson(sourceFile, outputFile, filterFN, list, testKey) {
 			console.log("errorHandlerRead in createLRJson promise");
 			let errMsg = `Unable to read file ${globals.extractedFolder}/json/${sourceFile}:  ${error}`;
 			reject(errMsg);
-		};			
-		const errorHandlerWrite = (error) => {
-			console.log("errorHandlerWrite in createLRJson promise");
-			let errMsg = `Unable to write file ${globals.extractedFolder}/json/${outputFile}:  ${error}`;
-			reject(errMsg);
-		};
+		};	
+		// REWRITE:	No writing via fs
+		// const errorHandlerWrite = (error) => {
+		// 	console.log("errorHandlerWrite in createLRJson promise");
+		// 	let errMsg = `Unable to write file ${globals.extractedFolder}/json/${outputFile}:  ${error}`;
+		// 	reject(errMsg);
+		// };
 
 		let read = fs.createReadStream(globals.extractedFolder + "/json/" + sourceFile);
 		read.pipe(stream.input);
+		
 		read.on('error', errorHandlerRead);
-		// read.on('end', () => {console.log("read ends")});
 
 		stream.input
 			.on('error', errorHandlerRead)
-			// .on('end', () => {
-			// 	console.log("stream.input ends")
-			// })
+
 		stream.output
 			.on("data", function(object){
-			if (counter === 0) {
-				file.write('[\n\t')
-			} else {
-				if (counter >= 1) {
-					file.write(",\n\t")
-				} else {
-					file.write("\n\t")
+				// REWRITE No longer writing to file
+				// if (counter === 0) {
+				// 	file.write('[\n\t')
+				// } else {
+				// 	if (counter >= 1) {
+				// 		file.write(",\n\t")
+				// 	} else {
+				// 		file.write("\n\t")
+				// 	}
+				// }
+				// file.write(JSON.stringify(object.value));
+				if (counter < 5) console.log('object.value in stream.output from ' + sourceFile, object.value);
+				if(list && testKey) {
+					if(!list.includes(object.value[testKey])) {
+						list.push(object.value[testKey])
+					};
 				}
-			}
-			file.write(JSON.stringify(object.value));
-			if(list && testKey) {
-				if(!list.includes(object.value[testKey])) {
-					list.push(object.value[testKey])
-				};
-			}
-			counter++;
-		})
-		.on("error", errorHandlerRead)
-		.on("end", function(){
-			file.write("\n]");
-			counter = 0;
-			file.end();
-			read.unpipe();
-			// console.log("stream.output ends");
-			resolve({lrJsonSuccess: true, data:outputFile})
-		});
-
-		file
-			.on("error", errorHandlerWrite)
+				counter++;
+			})
+			.on("error", errorHandlerRead)
+			.on("end", function(){
+				// REWRITE
+				// file.write("\n]");
+				// counter = 0;
+				// file.end();
+				read.unpipe();
+				// console.log("stream.output ends");
+				// REWRITE: Change data to sourceFile from outputFile
+				resolve({lightRailDataSuccess: true, data:sourceFile})
+			});
+		// REWRITE
+		// file
+		// 	.on("error", errorHandlerWrite)
 			// .on("close", () => {console.log('file end')})
 
 	})
 	.then((data) => {
 		return data;
 	}, (err) => {
-		file.end();
+		// file.end();
 		// if(read) read.unpipe();
-		console.log('err in createLRJson', err);
-		return Promise.reject({lrJsonSuccess: false, data: err});
+		console.log('err in addLightRailData', err);
+		return Promise.reject({lightRailDataSuccess: false, data: err});
 	})
 }
 
@@ -154,26 +160,29 @@ function createLRJson(sourceFile, outputFile, filterFN, list, testKey) {
  * Then, filter trips.json to only light rail related trips.
  *	Then, we can filter stop_times to only include trip_ids that are in filtered light rail trips.
  *	Then, we can filter stops to on include stop_ids that are in filtered stop_times
- * @return {promise} object {lrJsonSuccess: boolean, data: array}
- *                          lrJsonSuccess: used to determine next step
+ * @return {promise} object {lightRailDataSuccess: boolean, data: array}
+ *                          lightRailDataSuccess: used to determine next step
  *                          data: list of newly filtered lightrail files
  */
 function filterLightRail() {
-	const lrJson = createLRJson('routes.json','routes-lr.json',tripsFilter, false,false);
+	const lightRailData = addLightRailData('routes.json',tripsFilter,false,false);
 
 	let t1 = Date.now(), filesFiltered = [];
-	return lrJson
+	return lightRailData
 		.then((data) => {
+			console.log("data 1 ",data);
 			filesFiltered.push(data.data);
-			return createLRJson('trips.json','trips-lr.json',tripsFilter, trip_ids,'trip_id');
+			return addLightRailData('trips.json',tripsFilter,trip_ids,'trip_id');
 		})
 		.then((data) => {
+			console.log("data 2 ",data);
 			filesFiltered.push(data.data);
-			return createLRJson('stop_times.json', 'stop_times-lr.json',stopTimesFilter,stop_ids,'stop_id');
+			return addLightRailData('stop_times.json',stopTimesFilter,stop_ids,'stop_id');
 		})
 		.then((data) => {
+			console.log("data 3 ",data);
 			filesFiltered.push(data.data);
-			return createLRJson('stops.json', 'stops-lr.json',stopsFilter,false,false);
+			return addLightRailData('stops.json',stopsFilter,false,false);
 		})
 		.then((data) => {
 			filesFiltered.push(data.data);
@@ -181,10 +190,10 @@ function filterLightRail() {
 					totalTime = t2-t1,
 					d = new Date(totalTime);
 			console.log("filterLightRail took " + d.getUTCMinutes() + ' mins & ' + d.getUTCSeconds() + ' seconds');
-			return ({lrJsonSuccess: data.lrJsonSuccess, data: filesFiltered});
+			return ({lightRailDataSuccess: data.lightRailDataSuccess, data: filesFiltered});
 		})
 		.catch((err) => {
-			console.log("lrJson err", err);
+			console.log("lightRailData err", err);
 			return err;
 		})
 }

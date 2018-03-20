@@ -1,6 +1,6 @@
 const assert = require('assert');
 // const Trip = require('../database/models/trip');
-const createTrips = require('../../src/scripts/staticFeed/createTrips')
+const createTrips = require('../../src/scripts/static_feed/createTrips');
 
 describe('Create a Trips collection', () => {
 	let newTrip;
