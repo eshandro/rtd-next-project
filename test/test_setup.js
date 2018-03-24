@@ -17,22 +17,15 @@ before((done) => {
 	});
 });
 
-// beforeEach((done) => {
-// 	console.log("beforeEach in text_setup.js")
-// 	const { route, stop, trip } = mongoose.connection.collections;
-// 	route.drop(() => {
-// 		stop.drop(() => {
-// 			trip.drop(() => {
-// 				done();
-// 			})
-// 		});
-// 	});
-// });
-
 beforeEach((done) => {
-	const {trips} = mongoose.connection.collections;
-	// console.log("trips ",trips);
-	trips.drop(() => {
-		done();		
-	})
-})
+	const { routes, stoptimes,stops, trips } = mongoose.connection.collections;
+	routes.drop(() => {
+		stoptimes.drop(() => {
+			stops.drop(() => {
+				trips.drop(() => {
+					done();
+				});
+			});
+		});
+	});
+});

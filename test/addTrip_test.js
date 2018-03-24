@@ -5,7 +5,7 @@ describe('Create a Trip', () => {
 	let newTrip;
 	it('saves a new trip', (done) => {
 		newTrip = new Trip({
-			id: "111859139",
+			trip_id: "111859139",
 			route_id: "101C",
 			day: "FR",
 			direction: "0",

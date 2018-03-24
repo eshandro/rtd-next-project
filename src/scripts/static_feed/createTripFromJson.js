@@ -9,7 +9,7 @@ const Trip = require('../../../database/models/trip');
 // shape_id
 
 /** Trip Schema: **/
-// id: String,
+// trip_id: String,
 // day: String, // service_id in trips.json
 // route_id: String,
 // direction: String,
@@ -17,8 +17,15 @@ const Trip = require('../../../database/models/trip');
 // stop_times: [StopTimeSchema]
 
 function createTrip(json) {
-
-
+	let newTrip = new Trip ({
+		trip_id: json.trip_id,
+		day: json.service_id,
+		route_id: json.route_id,
+		direction: json.direction_id,
+		headsign: json.trip_headsign,
+		stop_times: []
+	});
+	return newTrip;
 }
 
 module.exports = createTrip;
