@@ -14,7 +14,10 @@ const Trip = require('../../../database/models/trip');
 // route_id: String,
 // direction: String,
 // headsign: String,
-// stop_times: [StopTimeSchema]
+// stop_times: [{
+// 	type: Schema.Types.ObjectId,
+// 	ref: 'stop_time'
+// }]
 
 function createTrip(json) {
 	let newTrip = new Trip ({

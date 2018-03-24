@@ -9,7 +9,7 @@ const StopSchema = new Schema ({
 	desc: String,
 	// direction: String,
 	lat: Number,
-	long: Number,
+	lng: Number,
 	stop_times: [{
 		type: Schema.Types.ObjectId,
 		ref: 'stop_time'

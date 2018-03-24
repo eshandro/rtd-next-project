@@ -25,6 +25,7 @@ Then, we can filter stops to on include stop_ids that are in filtered stop_times
 const StreamFilteredArray = require("stream-json/utils/StreamFilteredArray"),
 		fs = require('fs'),
 
+		createTripFromJson = require("./createTripFromJson"),
 		globals = require('../globals');
 
 
@@ -69,7 +70,6 @@ let 	trip_ids = [],
 /**
  * create Light Rail only JSON files
  * @param  {string} sourceFile File to be stripped to lightrail only info
- * @param  {string} outputFile New file with lightrail only info
  * @param  {function} filterFN Filter function used to filter lightrail only info (see above helper functions)
  * @param  {array} list        List of relevant ids used for filtering
  * @param  {string} testKey    Key used to add to relevant list
@@ -77,26 +77,18 @@ let 	trip_ids = [],
  *                                    lightRailDataSuccess used to determine next step
  *                                    data: error or path to newly create filtered JSON file
  */
-// REWRITE: Rename function from createLRJson
+
 function addLightRailData(sourceFile, filterFN, list, testKey) {
 	const stream = StreamFilteredArray.make({objectFilter: filterFN});
-			// REWRITE: No longer need file since writing to DB
-			// file = fs.createWriteStream(globals.extractedFolder + "json/" + outputFile);
-			// REWRITE: May no longer need counter
-			let counter = 0;
+	// REWRITE: May no longer need counter
+	let counter = 0;
 	
 	return new Promise((resolve,reject) => {
 		const errorHandlerRead = (error) => {
-			console.log("errorHandlerRead in createLRJson promise");
+			console.log("errorHandlerRead in addLightRailData promise");
 			let errMsg = `Unable to read file ${globals.extractedFolder}/json/${sourceFile}:  ${error}`;
 			reject(errMsg);
-		};	
-		// REWRITE:	No writing via fs
-		// const errorHandlerWrite = (error) => {
-		// 	console.log("errorHandlerWrite in createLRJson promise");
-		// 	let errMsg = `Unable to write file ${globals.extractedFolder}/json/${outputFile}:  ${error}`;
-		// 	reject(errMsg);
-		// };
+		};
 
 		let read = fs.createReadStream(globals.extractedFolder + "/json/" + sourceFile);
 		read.pipe(stream.input);
