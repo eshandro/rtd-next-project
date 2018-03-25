@@ -4,7 +4,7 @@ const Schema = mongoose.Schema;
 // const TripSchema = require('./trip');
 
 const StopSchema = new Schema ({
-	stop_id: Number,
+	stop_id: String,
 	name: String,
 	desc: String,
 	// direction: String,

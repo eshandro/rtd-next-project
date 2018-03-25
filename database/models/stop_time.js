@@ -6,8 +6,8 @@ const Schema = mongoose.Schema;
 // Note time to be stored in 24 hour time, e.g. 6:05 PM = 1805
 const StopTimeSchema = new Schema ({
 	time: String,
-	stop_id: Number,
-	trip_id: Number,
+	stop_id: String,
+	trip_id: String,
 	stop_sequence: Number,
 	pickup_type: Number
 });

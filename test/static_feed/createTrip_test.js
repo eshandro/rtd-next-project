@@ -10,6 +10,4 @@ describe('Create a new Trip from JSON', () => {
 		assert(newTrip.trip_id === json.trip_id);
 		done();
 	})
-
-
 });
