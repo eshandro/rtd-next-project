@@ -3,7 +3,8 @@ mongoose.Promise = global.Promise;
 
 const Trip = require('../database/models/trip'),
 		Route = require('../database/models/route'),
-		Stop = require('../database/models/stop');
+		Stop = require('../database/models/stop'),
+		StopTime = require('../database/models/stop_time');
 
 before((done) => {
 	mongoose.connect('mongodb://localhost/rtdNextTrain_test');
@@ -23,6 +24,7 @@ beforeEach((done) => {
 		stoptimes.drop(() => {
 			stops.drop(() => {
 				trips.drop(() => {
+					console.log("all collections dropped in beforeEach in test_setup")
 					done();
 				});
 			});

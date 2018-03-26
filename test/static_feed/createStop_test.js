@@ -18,8 +18,13 @@ describe('Create a new Stop from JSON', () => {
 		"wheelchair_boarding":"1"}
 	it('creates a single new Stop from JSON', (done) => {
 		newStop = createStop(json);
-		console.log("newStop ",newStop);
+		// console.log("newStop ",newStop);
 		assert(newStop.stop_id === json.stop_id);
+		done();
+	})
+	it('is able to add geoJson to location', (done) => {
+		assert(newStop.location.coordinates[0] == json.stop_lon);
+		assert(newStop.location.coordinates[1] == json.stop_lat);
 		done();
 	})
 });

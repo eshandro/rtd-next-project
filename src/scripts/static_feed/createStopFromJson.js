@@ -21,6 +21,7 @@ const Stop = require('../../../database/models/stop');
 // // direction: String,
 // lat: Number,
 // lon: Number,
+// location: geoPointSchema,
 // stop_times: [{
 // 	type: Schema.Types.ObjectId,
 // 	ref: 'stop_time'
@@ -39,6 +40,7 @@ function createStop(json) {
 		desc: json.stop_desc,
 		lat:json.stop_lat,
 		lng: json.stop_lon,
+		location: {type:"Point", coordinates:[json.stop_lon, json.stop_lat]},
 		stop_times: [],
 		trips: []
 	});

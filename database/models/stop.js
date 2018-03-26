@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-// const StopTimeSchema = require('./stop_time');
-// const TripSchema = require('./trip');
+const geoPointSchema = require('./geoPointSchema');
 
 const StopSchema = new Schema ({
 	stop_id: String,
@@ -10,6 +9,8 @@ const StopSchema = new Schema ({
 	// direction: String,
 	lat: Number,
 	lng: Number,
+	// lng, lat in coordinates
+	location: geoPointSchema,
 	stop_times: [{
 		type: Schema.Types.ObjectId,
 		ref: 'stop_time'

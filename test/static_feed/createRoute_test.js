@@ -14,7 +14,7 @@ describe('Create a new Route from JSON', () => {
 		"route_text_color":"FFFFFF"};
 	it('creates a single new Route from JSON', (done) => {
 		newRoute = createRoute(json);
-		console.log("newRoute ",newRoute);
+		// console.log("newRoute ",newRoute);
 		assert(newRoute.route_id === json.route_id);
 		done();
 	})

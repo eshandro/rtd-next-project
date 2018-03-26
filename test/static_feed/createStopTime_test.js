@@ -15,7 +15,7 @@ describe('Create a new StopTime from JSON', () => {
 		"shape_dist_traveled":"0"}
 	it('creates a single new StopTime from JSON', (done) => {
 		newStopTime = createStopTime(json);
-		console.log("newStopTime ",newStopTime);
+		// console.log("newStopTime ",newStopTime);
 		assert(newStopTime.stop_id === json.stop_id);
 		done();
 	})
