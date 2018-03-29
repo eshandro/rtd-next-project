@@ -122,28 +122,25 @@ function addLightRailData(sourceFile, filterFN, dbFunc, dbModel,list, testKey) {
 
 				let newDoc = dbFunc(object.value);
 				docs.push(newDoc);
-				// if (counter < 3) console.log("docs ",docs);
+				// if (counter < 1) console.log("docs ",docs);
 				counter++;
 
 			})
 			.on("error", errorHandlerRead)
 			.on("end", function(){
-				dbModel.insertMany(docs), (err, documents) => {
+				dbModel.insertMany(docs, (err, documents) => {
 					if (err) {
 						console.log("err in insertMany ",err);
 					}
 					read.unpipe();
-					// console.log("stream.output ends");
 					resolve({lightRailDataSuccess: true, data:sourceFile})
-				}
+				})
 			});
 
 	})
 	.then((data) => {
 		return data;
 	}, (err) => {
-		// file.end();
-		// if(read) read.unpipe();
 		console.log('err in addLightRailData', err);
 		return Promise.reject({lightRailDataSuccess: false, data: err});
 	})
