@@ -18,16 +18,16 @@ before((done) => {
 	});
 });
 
-beforeEach((done) => {
-	const { routes, stoptimes,stops, trips } = mongoose.connection.collections;
-	routes.drop(() => {
-		stoptimes.drop(() => {
-			stops.drop(() => {
-				trips.drop(() => {
-					console.log("all collections dropped in beforeEach in test_setup")
-					done();
-				});
-			});
-		});
-	});
-});
+// beforeEach((done) => {
+// 	const { routes, stoptimes,stops, trips } = mongoose.connection.collections;
+// 	routes.drop(() => {
+// 		stoptimes.drop(() => {
+// 			stops.drop(() => {
+// 				trips.drop(() => {
+// 					console.log("all collections dropped in beforeEach in test_setup")
+// 					done();
+// 				});
+// 			});
+// 		});
+// 	});
+// });

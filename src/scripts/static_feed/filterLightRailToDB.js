@@ -89,13 +89,9 @@ let 	trip_ids = [],
 
 function addLightRailData(sourceFile, filterFN, dbFunc, dbModel,list, testKey) {
 	const stream = StreamFilteredArray.make({objectFilter: filterFN});
-	// REWRITE: May no longer need counter
+	// May no longer need counter
 	let 	counter = 0,
 			docs = [];
-	// 		model = (sourceFile.charAt(0).toUpperCase() + sourceFile.substring(1)).substring(0,sourceFile.lastIndexOf('.'));
-	// if(model.indexOf('_') !== -1) {
-	// 	model = model.substring(0,model.lastIndexOf('_')) + model.charAt(model.lastIndexOf('_')+1).toUpperCase() + model.substring(model.lastIndexOf('_')+2);
-	// }
 	
 	return new Promise((resolve,reject) => {
 		const errorHandlerRead = (error) => {
@@ -157,57 +153,24 @@ function addLightRailData(sourceFile, filterFN, dbFunc, dbModel,list, testKey) {
  *                          data: list of newly filtered lightrail files
  */
 function filterLightRail() {
+	let t1, filesFiltered = [];
 	// Drop collections before adding updated data
 	
-	// return Route.collection.drop()
-	// 	.then(() => {
-	// 		console.log("route collection dropped")
-	// 		return Stop.collection.drop();
-	// 	})
-	// 	.then(() => {
-	// 		return StopTime.collection.drop();
-	// 	})
-	// 	.then(() => {
-	// 		return Trip.collection.drop();
-	// 	})
-	// 	.then(() => {
-	// 		let t1 = Date.now(), filesFiltered = [];
-	// 		const lightRailData = addLightRailData('routes.json',tripsFilter,createRouteFromJson, false,false);
-	// 		return addLightRailData('routes.json',tripsFilter,createRouteFromJson, false,false);
-	// 	})
-	// 	.then((data) => {
-	// 		filesFiltered.push(data.data);
-	// 		return addLightRailData('trips.json',tripsFilter,createTripFromJson,trip_ids,'trip_id');
-	// 	})
-	// 	.then((data) => {
-	// 		filesFiltered.push(data.data);
-	// 		return addLightRailData('stop_times.json',stopTimesFilter,createStopTimeFromJson,stop_ids,'stop_id');
-	// 	})
-	// 	.then((data) => {
-	// 		filesFiltered.push(data.data);
-	// 		return addLightRailData('stops.json',stopsFilter,createStopFromJson,false,false);
-	// 	})
-	// 	.then((data) => {
-	// 		filesFiltered.push(data.data);
-
-	// 		let 	t2 = Date.now(),
-	// 				totalTime = t2-t1,
-	// 				d = new Date(totalTime);
-	// 		console.log("filterLightRail took " + d.getUTCMinutes() + ' mins & ' + d.getUTCSeconds() + ' seconds');
-			
-	// 		return ({lightRailDataSuccess: data.lightRailDataSuccess, data: filesFiltered});
-	// 	})
-	// 	.catch((err) => {
-	// 		console.log("lightRailData err", err);
-	// 		return err;
-	// 	})
-
-
-
-	let t1 = Date.now(), filesFiltered = [];
-	const lightRailData = addLightRailData('routes.json',tripsFilter,createRouteFromJson,Route,false,false);
-
-	return lightRailData
+	return Route.collection.drop()
+		.then(() => {
+			return Stop.collection.drop();
+		})
+		.then(() => {
+			return StopTime.collection.drop();
+		})
+		.then(() => {
+			return Trip.collection.drop();
+		})
+		.then(() => {
+			t1 = new Date();
+			console.log("start filterLightRail after drop ",t1.toLocaleString("en-US", {timezone: "America/Denver"}));
+			return addLightRailData('routes.json',tripsFilter,createRouteFromJson,Route,false,false);
+		})
 		.then((data) => {
 			filesFiltered.push(data.data);
 			return addLightRailData('trips.json',tripsFilter,createTripFromJson,Trip,trip_ids,'trip_id');
@@ -234,6 +197,39 @@ function filterLightRail() {
 			console.log("lightRailData err", err);
 			return err;
 		})
+
+
+
+	// let t1 = Date.now(), filesFiltered = [];
+	// const lightRailData = addLightRailData('routes.json',tripsFilter,createRouteFromJson,Route,false,false);
+
+	// return lightRailData
+	// 	.then((data) => {
+	// 		filesFiltered.push(data.data);
+	// 		return addLightRailData('trips.json',tripsFilter,createTripFromJson,Trip,trip_ids,'trip_id');
+	// 	})
+	// 	.then((data) => {
+	// 		filesFiltered.push(data.data);
+	// 		return addLightRailData('stop_times.json',stopTimesFilter,createStopTimeFromJson,StopTime,stop_ids,'stop_id');
+	// 	})
+	// 	.then((data) => {
+	// 		filesFiltered.push(data.data);
+	// 		return addLightRailData('stops.json',stopsFilter,createStopFromJson,Stop,false,false);
+	// 	})
+	// 	.then((data) => {
+	// 		filesFiltered.push(data.data);
+
+	// 		let 	t2 = Date.now(),
+	// 				totalTime = t2-t1,
+	// 				d = new Date(totalTime);
+	// 		console.log("filterLightRail took " + d.getUTCMinutes() + ' mins & ' + d.getUTCSeconds() + ' seconds');
+			
+	// 		return ({lightRailDataSuccess: data.lightRailDataSuccess, data: filesFiltered});
+	// 	})
+	// 	.catch((err) => {
+	// 		console.log("lightRailData err", err);
+	// 		return err;
+	// 	})
 }
 
 // Testing only

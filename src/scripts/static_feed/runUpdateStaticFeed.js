@@ -10,6 +10,7 @@ const filterLightRail = require('./filterLightRail'),
  * 3. parse text files to JSON files
  * 4. filter JSON files to light rail only JSON files
  * 5. add light rail JSON data to db
+ * 6. add subdocuments to light rail collections
  * 
  */
 updateStaticFeed(globals.mainFeedUrl,forceUpdate = process.argv[2])
