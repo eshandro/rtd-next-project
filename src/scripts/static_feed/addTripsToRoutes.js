@@ -16,6 +16,10 @@ function addTrips(doc) {
 	
 }
 
+function getTrips(routeID) {
+	return Trip.find({route_id: routeID});
+}
+
 
 function addTripsToRoutes() {
 
@@ -28,16 +32,23 @@ function addTripsToRoutes() {
 	// });
 	routesCursor.eachAsync((doc) => {
 		console.log("eachAsync called");
-		console.log("doc in eachAsync ",doc);
+		console.log("doc.route_id in eachAsync ",doc.route_id);
 		// First clear out existing trips
 		doc.update({trips: []})
 		.then(() => {
-			Trip.find({route_id: doc.route_id})
-			.then((trips) => {
-				doc.trips = trips;
-				return doc.save();
-			})
-		})		
+			return getTrips(doc.route_id);
+		})
+		.then((trips) => {
+			// console.log("trips[0] ",trips[0]);
+			return doc.update({trips: trips})
+		})
+		// .then(() => {
+		// 	Trip.find({route_id: doc.route_id})
+		// 	.then((trips) => {
+		// 		doc.trips = trips;
+		// 		return doc.save();
+		// 	})
+		// })		
 	})
 	.then(() => {
 		console.log('routesCursor done!');

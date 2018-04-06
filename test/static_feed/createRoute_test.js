@@ -16,6 +16,7 @@ describe('Create a new Route from JSON', () => {
 		newRoute = createRoute(json);
 		// console.log("newRoute ",newRoute);
 		assert(newRoute.route_id === json.route_id);
-		done();
+		// To avoid having an extra document in our data set remove this newly made document
+		newRoute.remove(done);
 	})
 });

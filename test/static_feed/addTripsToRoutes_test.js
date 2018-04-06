@@ -42,21 +42,23 @@ describe("Add Trips to each Route", () => {
 	})
 
 	it("adds all trips associated with given route to route.trips", (done) => {
-		Route.findOne({route_id: "101C"})
-		.then((route) => {
-			Trip.find({route_id: route.route_id})
-			.then((trips) => {
-				route.trips = trips;
-				return route.save();
-			})
+
+		Trip.find({route_id: "101C"})
+		.then((foundTrips) => {
+			return Route.findOneAndUpdate({route_id: "101C"}, {trips: foundTrips},{new:true})
+		})
+		.then((updatedRoute) => {
+			updatedRoute.populate('trips').execPopulate()
 			.then(() => {
-				return Route.findOne({route_id: "101C"}).populate('trips')
-			})
-			.then((route2) => {
-				assert(route2.trips[0].route_id === route.route_id);
+
+				assert(updatedRoute.trips[0].route_id === "101C")
 				done();
 			})
 		})
+		// .then((route2) => {
+		// 	assert(route2.trips[0].route_id === route.route_id);
+		// 	done();
+		// })
 
 	})
 	it("calls the addTripsToRoutes fn and adds trips to all routes", (done) => {

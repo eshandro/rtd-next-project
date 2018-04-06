@@ -28,7 +28,8 @@ describe('Create a Route', () => {
 		newRoute.save()
 			.then((route) => {
 				assert(!route.isNew);
-				done();
+				// done();
+				route.remove(done)
 			})
 	})
 

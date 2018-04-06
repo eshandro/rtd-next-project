@@ -32,7 +32,8 @@ describe('Create a stop', () => {
 		newStop.save()
 			.then((stop) => {
 				assert(!stop.isNew);
-				done();
+				// done();
+				stop.remove(done)
 			})
 	})
 

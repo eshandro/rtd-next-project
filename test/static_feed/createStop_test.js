@@ -25,6 +25,7 @@ describe('Create a new Stop from JSON', () => {
 	it('is able to add geoJson to location', (done) => {
 		assert(newStop.location.coordinates[0] == json.stop_lon);
 		assert(newStop.location.coordinates[1] == json.stop_lat);
-		done();
+		// To avoid having an extra document in our data set remove this newly made document
+		newStop.remove(done)
 	})
 });

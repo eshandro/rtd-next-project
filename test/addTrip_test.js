@@ -14,7 +14,8 @@ describe('Create a Trip', () => {
 		newTrip.save()
 			.then((trip) => {
 				assert(!trip.isNew);
-				done();
+				// done();
+				trip.remove(done);
 			})
 	})
 

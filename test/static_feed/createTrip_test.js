@@ -8,6 +8,7 @@ describe('Create a new Trip from JSON', () => {
 		newTrip = createTrip(json);
 		// console.log("newTrip ",newTrip);
 		assert(newTrip.trip_id === json.trip_id);
-		done();
+		// To avoid having an extra document in our data set remove this newly made document
+		newTrip.remove(done)
 	})
 });

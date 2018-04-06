@@ -21,7 +21,8 @@ describe('Create a Stop_Time', () => {
 		newStopTime.save()
 			.then((stopTime) => {
 				assert(!stopTime.isNew);
-				done();
+				// done();
+				stopTime.remove(done);
 			})
 	})
 
