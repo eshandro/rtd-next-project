@@ -4,16 +4,16 @@ const	Trip = require('../../database/models/trip'),
 		assert = require('assert');
 
 describe("Add Trips to each Route", () => {
-	beforeEach((done) => {
-		Route.findOne({route_id: "101C"})
-			.then((route) => {
-				route.update({trips: []})
-				.then(() => {
-					done();
-				})
-			})
-	})
-	it("streams all Route Ids from Route", (done) => {
+	// beforeEach((done) => {
+	// 	Route.findOne({route_id: "101C"})
+	// 		.then((route) => {
+	// 			route.update({trips: []})
+	// 			.then(() => {
+	// 				done();
+	// 			})
+	// 		})
+	// })
+	xit("streams all Route Ids from Route", (done) => {
 		let routesCursor = Route.find({},'route_id').cursor();
 		routesCursor.on('data', (doc) => {
 			assert(doc.route_id);
@@ -39,7 +39,7 @@ describe("Add Trips to each Route", () => {
 						})
 					})
 			}) 
-	})
+	}).timeout(0)
 
 	it("adds all trips associated with given route to route.trips", (done) => {
 
@@ -50,21 +50,25 @@ describe("Add Trips to each Route", () => {
 		.then((updatedRoute) => {
 			updatedRoute.populate('trips').execPopulate()
 			.then(() => {
-
 				assert(updatedRoute.trips[0].route_id === "101C")
-				done();
+				// clear out trips
+				return updatedRoute.update({trips: []})
+			})
+			.then(()=> {
+				done();				
 			})
 		})
-		// .then((route2) => {
-		// 	assert(route2.trips[0].route_id === route.route_id);
-		// 	done();
-		// })
 
-	})
+
+	}).timeout(0)
+
 	it("calls the addTripsToRoutes fn and adds trips to all routes", (done) => {
 		addTripsToRoutes()
-		// .then(data => console.log('data from addTripsToRoutes',data));
-		done();
-	})
+		.then((val) => {
+			console.log("val in addTripsToRoutes ",val);
+			done();
+		})
+
+	}).timeout(0)
 
 })

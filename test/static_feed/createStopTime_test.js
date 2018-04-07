@@ -24,5 +24,5 @@ describe('Create a new StopTime from JSON', () => {
 		assert(newStopTime.time === json.arrival_time.substring(0,json.arrival_time.lastIndexOf(':')).replace(':',''));
 		// To avoid having an extra document in our data set remove this newly made document
 		newStopTime.remove(done)
-	})
+	}).timeout(0)
 });

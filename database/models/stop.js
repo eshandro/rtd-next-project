@@ -13,7 +13,7 @@ const StopSchema = new Schema ({
 	location: geoPointSchema,
 	stop_times: [{
 		type: Schema.Types.ObjectId,
-		ref: 'stop_time'
+		ref: 'stoptime'
 	}],
 	// stop_times: [StopTimeSchema],
 	// trips: [TripSchema]

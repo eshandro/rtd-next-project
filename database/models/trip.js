@@ -12,7 +12,7 @@ const TripSchema = new Schema ({
 	// stop_times: [StopTimeSchema]
 	stop_times: [{
 		type: Schema.Types.ObjectId,
-		ref: 'stop_time'
+		ref: 'stoptime'
 	}]
 
 });
