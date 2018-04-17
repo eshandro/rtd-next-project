@@ -8,6 +8,8 @@ const StopTimeSchema = new Schema ({
 	time: String,
 	stop_id: String,
 	trip_id: String,
+	// this may be direction travelling?
+	// Now I think this is the order of stop
 	stop_sequence: Number,
 	pickup_type: Number
 });

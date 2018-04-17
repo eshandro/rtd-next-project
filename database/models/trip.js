@@ -5,9 +5,10 @@ const Schema = mongoose.Schema;
 
 const TripSchema = new Schema ({
 	trip_id: String,
+	// MT = Monday - Thursday, FR = Friday, SA = Saturday, SU = Sunday
 	day: String, // service_id in trips.json
 	route_id: String,
-	direction: String,
+	direction: Number,
 	headsign: String,
 	// stop_times: [StopTimeSchema]
 	stop_times: [{

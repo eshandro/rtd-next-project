@@ -25,11 +25,13 @@ const Route = require('../../../database/models/route');
 // }]
 
 function createRoute(json) {
+	let regex = /^.*Travels\s*/i;
 	let newRoute = new Route ({
 		route_id: json.route_id,
 		name: json.route_long_name,
 		shortName: json.route_short_name,
 		desc: json.route_desc,
+		directions: json.route_desc.replace(regex,'').replace(/&\s/,'').split(' '),
 		stops: [],
 		trips: []
 	});

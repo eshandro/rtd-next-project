@@ -19,7 +19,7 @@
   "dependencies": {
     "fs-readfile-promise": "^3.0.0",
     "mongoose": "^5.0.7",
-    "node-fetch": "^1.7.3",
+    "node-fetch": "^2.1.2",
     "path-reader": "^1.0.6",
     "stream-json": "^0.5.2",
     "unzipper": "^0.8.11"

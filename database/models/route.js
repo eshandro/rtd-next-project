@@ -8,6 +8,7 @@ const RouteSchema = new Schema ({
 	name: String,
 	shortName: String,
 	desc: String,
+	directions: [],
 	stops: [{
 		type: Schema.Types.ObjectId,
 		ref: 'stop'

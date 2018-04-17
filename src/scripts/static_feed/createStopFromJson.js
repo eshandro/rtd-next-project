@@ -18,7 +18,7 @@ const Stop = require('../../../database/models/stop');
 // stop_id: Number,
 // name: String,
 // desc: String,
-// // direction: String,
+// direction: String,
 // lat: Number,
 // lon: Number,
 // location: geoPointSchema,
@@ -34,10 +34,12 @@ const Stop = require('../../../database/models/stop');
 // }]
 
 function createStop(json) {
+	let regex = /Vehicles\s*Travelling\s*/i;
 	let newStop = new Stop ({
 		stop_id: json.stop_id,
 		name: json.stop_name,
 		desc: json.stop_desc,
+		direction: json.stop_desc.replace(regex,''),
 		lat:json.stop_lat,
 		lng: json.stop_lon,
 		location: {type:"Point", coordinates:[json.stop_lon, json.stop_lat]},

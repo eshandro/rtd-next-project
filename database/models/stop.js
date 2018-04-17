@@ -6,7 +6,7 @@ const StopSchema = new Schema ({
 	stop_id: String,
 	name: String,
 	desc: String,
-	// direction: String,
+	direction: String,
 	lat: Number,
 	lng: Number,
 	// lng, lat in coordinates

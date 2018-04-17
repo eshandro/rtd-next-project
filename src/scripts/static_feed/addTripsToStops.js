@@ -12,7 +12,7 @@ function addTripsToStops() {
 
 	return stopsCursor.eachAsync((doc) => {
 		let [tripsList] = [doc.stop_times];
-		// change from array objects to array of just trip_ids
+		// change from array of mongoose objects to array of just trip_ids
 		tripsList = tripsList.map(item => item.trip_id);
 		// Creates a Set from arr3 and a value in a Set can only occur once
 		// Then, we use the spread operator to turn it back into an Array from a Set
