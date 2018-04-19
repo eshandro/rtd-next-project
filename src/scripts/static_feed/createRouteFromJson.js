@@ -14,6 +14,7 @@ const Route = require('../../../database/models/route');
 // name: String,
 // shortName: String,
 // desc: String,
+// directions: [],
 // stops: [{
 // 	type: Schema.Types.ObjectId,
 // 	ref: 'stop'

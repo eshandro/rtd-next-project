@@ -15,16 +15,17 @@ const Stop = require('../../../database/models/stop');
 
 
 /** Stop Schema: **/
-// stop_id: Number,
+// stop_id: String,
 // name: String,
 // desc: String,
 // direction: String,
 // lat: Number,
-// lon: Number,
+// lng: Number,
+// // lng, lat in coordinates
 // location: geoPointSchema,
 // stop_times: [{
 // 	type: Schema.Types.ObjectId,
-// 	ref: 'stop_time'
+// 	ref: 'stoptime'
 // }],
 // // stop_times: [StopTimeSchema],
 // // trips: [TripSchema]

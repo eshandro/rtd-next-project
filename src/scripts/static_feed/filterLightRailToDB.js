@@ -47,7 +47,7 @@ function tripsFilter(assembler) {
 	if(assembler.stack.length == 2 && assembler.key === null){
 		if(assembler.current.hasOwnProperty("route_id")){
 			// "true" to accept, "false" to reject
-			return /101.|103W|^A$|107R|113B|109L/.test(assembler.current.route_id);
+			return globals.lightRailRoutesRegex.test(assembler.current.route_id);
 		}
 	}
   // return undefined to indicate our uncertainty at this moment
@@ -145,9 +145,10 @@ function addLightRailData(sourceFile, filterFN, dbFunc, dbModel,list, testKey) {
 /**
  * Function that controls the order of lightrail filtering
  * First, filter routes.json without affecting any other lists
- * Then, filter trips.json to only light rail related trips.
- *	Then, we can filter stop_times to only include trip_ids that are in filtered light rail trips.
- *	Then, we can filter stops to on include stop_ids that are in filtered stop_times
+ * Then, filter trips.json to only light rail related trips, creating a list of trip_ids to be used in the next step.
+ *	Then, we can filter stop_times to only include trip_ids that are in filtered light rail trips, creating list of stop_ids to 
+ *	be used in the next step.
+ *	Then, we can filter stops to only include stop_ids that are in filtered stop_times
  * @return {promise} object {lightRailDataSuccess: boolean, data: array}
  *                          lightRailDataSuccess: used to determine next step
  *                          data: list of newly filtered lightrail files
@@ -158,32 +159,40 @@ function filterLightRail() {
 	
 	return Route.collection.drop()
 		.then(() => {
+			console.log("Route.collection dropped");
 			return Stop.collection.drop();
 		})
 		.then(() => {
+			console.log("Stop.collection dropped");
 			return StopTime.collection.drop();
 		})
 		.then(() => {
+			console.log("StopTime.collection dropped");
 			return Trip.collection.drop();
 		})
 		.then(() => {
+			console.log("Trip.collection dropped")
 			t1 = new Date();
-			console.log("start filterLightRail after drop ",t1.toLocaleString("en-US", {timezone: "America/Denver"}));
+			console.log("start filterLightRail after drops ",t1.toLocaleString("en-US", {timezone: "America/Denver"}));
 			return addLightRailData('routes.json',tripsFilter,createRouteFromJson,Route,false,false);
 		})
 		.then((data) => {
+			console.log("addLightRailData('routes.json',tripsFilter,createRouteFromJson,Route,false,false); completed")
 			filesFiltered.push(data.data);
 			return addLightRailData('trips.json',tripsFilter,createTripFromJson,Trip,trip_ids,'trip_id');
 		})
 		.then((data) => {
+			console.log("addLightRailData('trips.json',tripsFilter,createTripFromJson,Trip,trip_ids,'trip_id'); completed")
 			filesFiltered.push(data.data);
 			return addLightRailData('stop_times.json',stopTimesFilter,createStopTimeFromJson,StopTime,stop_ids,'stop_id');
 		})
 		.then((data) => {
+			console.log("addLightRailData('stop_times.json',stopTimesFilter,createStopTimeFromJson,StopTime,stop_ids,'stop_id'); completed")
 			filesFiltered.push(data.data);
 			return addLightRailData('stops.json',stopsFilter,createStopFromJson,Stop,false,false);
 		})
 		.then((data) => {
+			console.log("addLightRailData('stops.json',stopsFilter,createStopFromJson,Stop,false,false); completed")
 			filesFiltered.push(data.data);
 
 			let 	t2 = Date.now(),
@@ -195,41 +204,9 @@ function filterLightRail() {
 		})
 		.catch((err) => {
 			console.log("lightRailData err", err);
-			return err;
+			return ({lightRailDataSuccess: false, data: err});
 		})
 
-
-
-	// let t1 = Date.now(), filesFiltered = [];
-	// const lightRailData = addLightRailData('routes.json',tripsFilter,createRouteFromJson,Route,false,false);
-
-	// return lightRailData
-	// 	.then((data) => {
-	// 		filesFiltered.push(data.data);
-	// 		return addLightRailData('trips.json',tripsFilter,createTripFromJson,Trip,trip_ids,'trip_id');
-	// 	})
-	// 	.then((data) => {
-	// 		filesFiltered.push(data.data);
-	// 		return addLightRailData('stop_times.json',stopTimesFilter,createStopTimeFromJson,StopTime,stop_ids,'stop_id');
-	// 	})
-	// 	.then((data) => {
-	// 		filesFiltered.push(data.data);
-	// 		return addLightRailData('stops.json',stopsFilter,createStopFromJson,Stop,false,false);
-	// 	})
-	// 	.then((data) => {
-	// 		filesFiltered.push(data.data);
-
-	// 		let 	t2 = Date.now(),
-	// 				totalTime = t2-t1,
-	// 				d = new Date(totalTime);
-	// 		console.log("filterLightRail took " + d.getUTCMinutes() + ' mins & ' + d.getUTCSeconds() + ' seconds');
-			
-	// 		return ({lightRailDataSuccess: data.lightRailDataSuccess, data: filesFiltered});
-	// 	})
-	// 	.catch((err) => {
-	// 		console.log("lightRailData err", err);
-	// 		return err;
-	// 	})
 }
 
 // Testing only

@@ -23,8 +23,12 @@ function addStopTimesToStops() {
 	
 	})
 	.then(() => {
-		console.log('stopsCursor done!');
+		console.log('stopsCursor in addStopTimesToStops done!');
 		return Promise.resolve({complete: true});
+	})
+	.catch((err) => {
+		console.log('error in addStopTimesToStops', err);
+		return Promise.reject({complete: false});
 	})
 
 }

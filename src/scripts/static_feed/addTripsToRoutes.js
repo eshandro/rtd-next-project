@@ -23,8 +23,12 @@ function addTripsToRoutes() {
 	
 	})
 	.then(() => {
-		console.log('routesCursor done!');
+		console.log('routesCursor in addTripsToRoutes done!');
 		return Promise.resolve({complete: true});
+	})
+	.catch((err) => {
+		console.log('error in addTripsToRoutes', err);
+		return Promise.reject({complete: false});
 	})
 
 }

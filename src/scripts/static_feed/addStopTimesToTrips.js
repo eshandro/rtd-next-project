@@ -23,9 +23,12 @@ function addStopTimesToTrips() {
 	
 	})
 	.then(() => {
-		console.log('tripsCursor done!');
+		console.log('tripsCursor in addStopTimesToTrips done!');
 		return Promise.resolve({complete: true});
 	})
-
+	.catch((err) => {
+		console.log('error in addStopTimesToTrips', err);
+		return Promise.reject({complete: false});
+	})
 }
 module.exports = addStopTimesToTrips;

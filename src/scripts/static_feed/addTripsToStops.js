@@ -32,6 +32,9 @@ function addTripsToStops() {
 		console.log('stopsCursor in addTripsToStops done!');
 		return Promise.resolve({complete: true});
 	})
-
+	.catch((err) => {
+		console.log('error in addTripsToStops', err);
+		return Promise.reject({complete: false});
+	})
 }
 module.exports = addTripsToStops;
