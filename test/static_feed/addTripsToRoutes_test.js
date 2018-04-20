@@ -41,7 +41,7 @@ describe("Add Trips to each Route", () => {
 			}) 
 	}).timeout(0)
 
-	it("adds all trips associated with given route to route.trips", (done) => {
+	xit("adds all trips associated with given route to route.trips", (done) => {
 
 		Trip.find({route_id: "101C"})
 		.then((foundTrips) => {
@@ -62,7 +62,7 @@ describe("Add Trips to each Route", () => {
 
 	}).timeout(0)
 
-	it("calls the addTripsToRoutes fn and adds trips to all routes", (done) => {
+	xit("calls the addTripsToRoutes fn and adds trips to all routes", (done) => {
 		addTripsToRoutes()
 		.then((val) => {
 			console.log("val in addTripsToRoutes ",val);

@@ -41,6 +41,7 @@ mongoose.connection
 			if (!data.lightRailDataSuccess) {
 				return ({updateStaticFeed: false, msg:data.msg});
 			} else {
+				console.log("data.msg from filterLightRail() ",data.msg);
 				let t1 = new Date();
 				console.log("start Promise.all after filterLightRail ",t1.toLocaleString("en-US", {timezone: "America/Denver"}));
 				return Promise.all([addTripsToRoutes(), addStopTimesToStops(), addStopTimesToTrips()])

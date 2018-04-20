@@ -8,8 +8,8 @@ const assert = require('assert'),
 // It may be that we need to NOT run this test and un-comment out the beforeEach. 
 // Also this test take a couple of minutes to run, so may not want to always be running the test.
 // 4/1/2018 confirmed test ran successfully
-describe.only("Filter all data JSON to Light Rail only and persist to DB", () => {
-	it('reads and lists JSON filtered to include light rail only data', (done) => {
+describe("Filter all data JSON to Light Rail only and persist to DB", () => {
+	xit('reads and lists JSON filtered to include light rail only data', (done) => {
 		filterLightRail()
 			.then((returned) => {
 				console.log('returned:', returned )

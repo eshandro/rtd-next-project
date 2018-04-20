@@ -130,7 +130,7 @@ function createLRJson(sourceFile, outputFile, filterFN, list, testKey) {
 			file.end();
 			read.unpipe();
 			// console.log("stream.output ends");
-			resolve({lrJsonSuccess: true, data:outputFile})
+			resolve({lrJsonSuccess: true, data:list ? list : outputFile})
 		});
 
 		file
@@ -161,27 +161,27 @@ function createLRJson(sourceFile, outputFile, filterFN, list, testKey) {
 function filterLightRail() {
 	const lrJson = createLRJson('routes.json','routes-lr.json',tripsFilter, false,false);
 
-	let t1 = Date.now(), filesFiltered = [];
+	let t1 = Date.now(), lists = [];
 	return lrJson
 		.then((data) => {
-			filesFiltered.push(data.data);
+			lists.push(data.data);
 			return createLRJson('trips.json','trips-lr.json',tripsFilter, trip_ids,'trip_id');
 		})
 		.then((data) => {
-			filesFiltered.push(data.data);
+			lists.push(data.data);
 			return createLRJson('stop_times.json', 'stop_times-lr.json',stopTimesFilter,stop_ids,'stop_id');
 		})
 		.then((data) => {
-			filesFiltered.push(data.data);
+			lists.push(data.data);
 			return createLRJson('stops.json', 'stops-lr.json',stopsFilter,false,false);
 		})
 		.then((data) => {
-			filesFiltered.push(data.data);
+			lists.push(data.data);
 			let 	t2 = Date.now(),
 					totalTime = t2-t1,
 					d = new Date(totalTime);
 			console.log("filterLightRail took " + d.getUTCMinutes() + ' mins & ' + d.getUTCSeconds() + ' seconds');
-			return ({lrJsonSuccess: data.lrJsonSuccess, data: filesFiltered});
+			return ({lrJsonSuccess: data.lrJsonSuccess, data: lists});
 		})
 		.catch((err) => {
 			console.log("lrJson err", err);
