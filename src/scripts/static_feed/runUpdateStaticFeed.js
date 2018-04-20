@@ -28,37 +28,40 @@ mongoose.connection
 	 * 
 	 */
 	updateStaticFeed(globals.mainFeedUrl,forceUpdate = process.argv[2])
-		.then((data) => {
-			console.log("data returned from updateStaticFeed:",data);
-			if(!data.updateStaticFeed) {
+		.then((updateStaticFeedData) => {
+			// console.log("data returned from updateStaticFeed:",data);
+			if(!updateStaticFeedData.updateStaticFeed) {
 				// don't call filterLightRail
-				return ({lightRailDataSuccess: false, data: "filterLightRail not called because updateStaticFeed failed or not needed"});
+				return ({lightRailDataSuccess: false, msg: "filterLightRail not called because updateStaticFeed failed or not needed"});
 			} else {
 				return filterLightRail();
 			}
 		})
 		.then((data)=> {
-			// console.log("data after filterLightRail called or not called: ",data);
 			if (!data.lightRailDataSuccess) {
-				return ({updateStaticFeed: false, data:data.data});
+				return ({updateStaticFeed: false, msg:data.msg});
 			} else {
-				// return {updateStaticFeed: true, data: data.data};
-				// return ({updateStaticFeed: true, data: data.data});
+				let t1 = new Date();
+				console.log("start Promise.all after filterLightRail ",t1.toLocaleString("en-US", {timezone: "America/Denver"}));
 				return Promise.all([addTripsToRoutes(), addStopTimesToStops(), addStopTimesToTrips()])
 					.then((results) => {
 						console.log("Promise.all([addTripsToRoutes(), addStopTimesToStops(), addStopTimesToTrips()]) results ",results);
+						let 	t2 = Date.now(),
+								totalTime = t2-t1,
+								d = new Date(totalTime);
+						console.log("Promise.all took " + d.getUTCMinutes() + ' mins & ' + d.getUTCSeconds() + ' seconds');
 						return addTripsToStops()			
 					})
 					.catch((err) => {
 						console.log("Promise.all([addTripsToRoutes(), addStopTimesToStops(), addStopTimesToTrips()]) err ",err);
-						return ({complete: false, data: err});
+						return ({complete: false, msg: err});
 					})
 			}
 		})
 		.then((data) => {
 			console.log("data from addTripsToStops",data);
 			if (!data.complete) {
-				return ({updateStaticFeed: false, data:"addTripsToStops failed"});
+				return ({updateStaticFeed: false, msg:"addTripsToStops failed"});
 			} else {
 				return addStopsToRoutes();
 			}
@@ -67,15 +70,34 @@ mongoose.connection
 		.then((data) => {
 			console.log("data from addStopsToRoutes",data);
 			if (!data.complete) {
-				return ({updateStaticFeed: false, data:"addStopsToRoutes failed"});
+				return ({updateStaticFeed: false, msg:"addStopsToRoutes failed"});
 			} else {
-				return {updateStaticFeed: true, data: "Static Feed updated and DB updated"};
+				return {updateStaticFeed: true, msg:"Static Feed updated and DB updated"};
 			}
 
 		})
+		.then((data) => {
+			if(!data.updateStaticFeed) {
+				console.log("updateStaticFeed: false - ", data.msg);
+				mongoose.connection.close(() => {
+					console.log("mongoose connection closed because updateStaticFeed: false");
+					return;					
+				})
+			} else {
+				console.log("updateStaticFeed: true - ", data.msg);
+				mongoose.connection.close(() => {
+					console.log("mongoose connection closed updateStaticFeed: true");
+					return;					
+				})				
+			}
+		})
 		.catch((err) => {
-			console.log("error in updateStaticFeed:", err);
-			return ({updateStaticFeed: false, data: err});
+			console.log("error in runUpdateStaticFeed:", err);
+			// return ({updateStaticFeed: false, data: err});
+			mongoose.connection.close(() => {
+				console.log("mongoose connection closed because of err in runUpdateStaticFeed");
+				return;					
+			})	
 		})
 
 })

@@ -129,7 +129,7 @@ function addLightRailData(sourceFile, filterFN, dbFunc, dbModel,list, testKey) {
 						console.log("err in insertMany ",err);
 					}
 					read.unpipe();
-					resolve({lightRailDataSuccess: true, data:sourceFile})
+					resolve({lightRailDataSuccess: true, msg:list ? list : sourceFile})
 				})
 			});
 
@@ -138,7 +138,7 @@ function addLightRailData(sourceFile, filterFN, dbFunc, dbModel,list, testKey) {
 		return data;
 	}, (err) => {
 		console.log('err in addLightRailData', err);
-		return Promise.reject({lightRailDataSuccess: false, data: err});
+		return Promise.reject({lightRailDataSuccess: false, msg: err});
 	})
 }
 
@@ -154,7 +154,7 @@ function addLightRailData(sourceFile, filterFN, dbFunc, dbModel,list, testKey) {
  *                          data: list of newly filtered lightrail files
  */
 function filterLightRail() {
-	let t1, filesFiltered = [];
+	let t1, lists = [];
 	// Drop collections before adding updated data
 	
 	return Route.collection.drop()
@@ -177,34 +177,50 @@ function filterLightRail() {
 			return addLightRailData('routes.json',tripsFilter,createRouteFromJson,Route,false,false);
 		})
 		.then((data) => {
-			console.log("addLightRailData('routes.json',tripsFilter,createRouteFromJson,Route,false,false); completed")
-			filesFiltered.push(data.data);
-			return addLightRailData('trips.json',tripsFilter,createTripFromJson,Trip,trip_ids,'trip_id');
+			if (!data.lightRailDataSuccess) {
+				console.log("addLightRailData('routes.json',tripsFilter,createRouteFromJson,Route,false,false) failed");
+				return ({lightRailDataSuccess: false, msg: "addLightRailData('routes.json',tripsFilter,createRouteFromJson,Route,false,false) failed"})
+			} else {
+				lists.push(data.msg);
+				return addLightRailData('trips.json',tripsFilter,createTripFromJson,Trip,trip_ids,'trip_id');
+			}
 		})
 		.then((data) => {
-			console.log("addLightRailData('trips.json',tripsFilter,createTripFromJson,Trip,trip_ids,'trip_id'); completed")
-			filesFiltered.push(data.data);
-			return addLightRailData('stop_times.json',stopTimesFilter,createStopTimeFromJson,StopTime,stop_ids,'stop_id');
+			if (!data.lightRailDataSuccess) {
+				console.log("addLightRailData('trips.json',tripsFilter,createTripFromJson,Trip,trip_ids,'trip_id'); or call above failed");
+				return ({lightRailDataSuccess: false, msg: "addLightRailData('trips.json',tripsFilter,createTripFromJson,Trip,trip_ids,'trip_id') failed"})				
+			} else {
+				lists.push(data.msg);
+				return addLightRailData('stop_times.json',stopTimesFilter,createStopTimeFromJson,StopTime,stop_ids,'stop_id');
+			}
 		})
 		.then((data) => {
-			console.log("addLightRailData('stop_times.json',stopTimesFilter,createStopTimeFromJson,StopTime,stop_ids,'stop_id'); completed")
-			filesFiltered.push(data.data);
-			return addLightRailData('stops.json',stopsFilter,createStopFromJson,Stop,false,false);
+			if(!data.lightRailDataSuccess) {
+				console.log("addLightRailData('stop_times.json',stopTimesFilter,createStopTimeFromJson,StopTime,stop_ids,'stop_id') or call above failed");
+				return ({lightRailDataSuccess: false, msg: "addLightRailData('stop_times.json',stopTimesFilter,createStopTimeFromJson,StopTime,stop_ids,'stop_id') failed"})								
+			} else {
+				lists.push(data.msg);
+				return addLightRailData('stops.json',stopsFilter,createStopFromJson,Stop,false,false);
+			}
 		})
 		.then((data) => {
-			console.log("addLightRailData('stops.json',stopsFilter,createStopFromJson,Stop,false,false); completed")
-			filesFiltered.push(data.data);
+			if (!data.lightRailDataSuccess) {
+				console.log("addLightRailData('stops.json',stopsFilter,createStopFromJson,Stop,false,false); failed")
+				return ({lightRailDataSuccess: false, msg: "addLightRailData('stops.json',stopsFilter,createStopFromJson,Stop,false,false); or call above failed"})
+			} else {
+				lists.push(data.msg);
+				let 	t2 = Date.now(),
+						totalTime = t2-t1,
+						d = new Date(totalTime);
+				console.log("filterLightRail took " + d.getUTCMinutes() + ' mins & ' + d.getUTCSeconds() + ' seconds');
+				
+				return ({lightRailDataSuccess: true, msg: lists});
+			}
 
-			let 	t2 = Date.now(),
-					totalTime = t2-t1,
-					d = new Date(totalTime);
-			console.log("filterLightRail took " + d.getUTCMinutes() + ' mins & ' + d.getUTCSeconds() + ' seconds');
-			
-			return ({lightRailDataSuccess: data.lightRailDataSuccess, data: filesFiltered});
 		})
 		.catch((err) => {
 			console.log("lightRailData err", err);
-			return ({lightRailDataSuccess: false, data: err});
+			return ({lightRailDataSuccess: false, msg: err});
 		})
 
 }

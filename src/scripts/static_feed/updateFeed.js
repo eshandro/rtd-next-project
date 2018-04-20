@@ -49,11 +49,11 @@ function updateFeed(path,filesToInclude) {
 			});
 		})
 		.then((length) => {
-			return ({updateFeedSuccess: true, data: `${length} files parsed to JSON`})
+			return ({updateFeedSuccess: true, msg: `${length} files parsed to JSON`})
 		})
 		.catch((err) => {
 			console.log("Error in updateFeed dir.promise ", err);
-			return ({updateFeedSuccess: false, data: err})
+			return ({updateFeedSuccess: false, msg: err})
 		})
 }
 

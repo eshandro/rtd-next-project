@@ -28,7 +28,7 @@ function downloadFeed(fileUrl, apiPath) {
 			// console.log("res.status in downloadFeed fetch",res.status);
 			let len = res.headers.get('content-length');
 			if (!len) {
-				return Promise.reject({downloadFeedSuccess: false, data: "No data received"})
+				return Promise.reject({downloadFeedSuccess: false, msg: "No data received"})
 			}
 			// if you prefer to cache binary data in full, use buffer()
 			// note that buffer() is a node-fetch only API
@@ -40,7 +40,7 @@ function downloadFeed(fileUrl, apiPath) {
 				const errorHandler = (error) => {
 					console.log("errorHandler in fs promise");
 			   	let errMsg = "Unable to download file: " + error;
-			   	reject({downloadFeedSuccess: false, data: errMsg})
+			   	reject({downloadFeedSuccess: false, msg: errMsg})
 				};
 
 				file
@@ -49,7 +49,7 @@ function downloadFeed(fileUrl, apiPath) {
 			      	timer = setTimeout(() => {
 			      		console.log("timeout in fs promise");
 			      		file.close();
-			      		reject({downloadFeedSuccess: false, data: 'Timeout writing file'})
+			      		reject({downloadFeedSuccess: false, msg: 'Timeout writing file'})
 			      	}, timeout)
 			   	})
 			   	.on('error', errorHandler)
@@ -61,7 +61,7 @@ function downloadFeed(fileUrl, apiPath) {
 			.then((dest) => {
 				// console.log("dest ",dest);
 				clearTimeout(timer);
-				return ({downloadFeedSuccess:true, data:destPath});
+				return ({downloadFeedSuccess:true, msg:destPath});
 			}, (err) => {
 				clearTimeout(timer);
 				// End stream and delete file
@@ -71,15 +71,6 @@ function downloadFeed(fileUrl, apiPath) {
 				return Promise.reject(err)
 			})
 		})
-		// .then((buffer) => {
-		// 	console.log("buffer ",buffer);
-		// 	return fs.writeFileSync(destPath, buffer, 'utf-8', (err) => {
-		// 		if (err) {
-		// 			return Promise.resolve({downloadFeedSuccess: false, msg: "Error writing file: " + err})
-		// 		}
-		// 		return Promise.resolve({downloadFeedSuccess:true, msg:destPath});
-		// 	})
-		// })
 		.catch((err) => {
 			console.log("fetch err in downloadFeed", err);
 			// End stream and delete file  
@@ -88,9 +79,9 @@ function downloadFeed(fileUrl, apiPath) {
 			}
 			// check if error is fetch timeout error
 			if (err.type && (err.type === 'request-timeout' || err.type === 'body-timeout')) {
-				return ({downloadFeedSuccess: false, data: err.message});
+				return ({downloadFeedSuccess: false, msg: err.message});
 			} else if (typeof err.downloadFeedSuccess === 'undefined') { // handle error thrown by handleFetchErrors
-				return ({downloadFeedSuccess: false, data: err})
+				return ({downloadFeedSuccess: false, msg: err})
 			} else {
 				return err;
 			}

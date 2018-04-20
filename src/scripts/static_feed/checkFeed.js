@@ -48,7 +48,7 @@ function getFeedDate(url) {
  * Determinie if static feed needs updating
  * @param  {string} url to RTD static feed 
  * @param  {bool} force update regardless of if dates match
- * @return {promise}     object {needUpdate: boolean, data: string} needupdate boolean used to 
+ * @return {promise}     object {needUpdate: boolean, msg: string} needupdate boolean used to 
  *                       to determine if need to run rest of static feed update, data is a msg indicating
  *                       needs to be done
  */
@@ -73,13 +73,13 @@ function checkFeed(url, forceUpdate) {
 			}
 			if (checkFeedErr) {
 				console.log("checkFeedErr ",checkFeedErr);
-				return {needUpdate: false, data: checkFeedErr};
+				return {needUpdate: false, msg: checkFeedErr};
 			}
 			if (htmlDate !== fileDate || forceUpdate) {
 				lastModifiedDate.updateLastModified(lastModifiedFile, htmlDate,fileDate);
-				return {needUpdate: true, data: "RTD has updated feed"};
+				return {needUpdate: true, msg: "RTD has updated feed"};
 			} else {
-				return {needUpdate: false, data: "RTD has NOT updated feed"}
+				return {needUpdate: false, msg: "RTD has NOT updated feed"}
 			}
 		})
 		.catch(reason => console.log('Error in checkFeed Promise.all', reason));
