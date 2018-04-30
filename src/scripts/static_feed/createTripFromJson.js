@@ -1,18 +1,18 @@
 const Trip = require('../../../database/models/trip');
 /** json obj **/
-// route_id
-// service_id
-// trip_id
-// trip_headsign
-// direction_id
-// block_id
-// shape_id
+// "block_id": "b_109  8",
+// "route_id": "109L",
+// "direction_id": "1",
+// "trip_headsign": "L-Line 16th & Stout",
+// "shape_id": "1065555",
+// "service_id": "SA_merged_112042909",
+// "trip_id": "111972212"
 
 /** Trip Schema: **/
 // trip_id: String,
-// day: String, // service_id in trips.json
+// service_id: String,
 // route_id: String,
-// direction: String,
+// direction_id: String,
 // headsign: String,
 // stop_times: [{
 // 	type: Schema.Types.ObjectId,
@@ -22,10 +22,11 @@ const Trip = require('../../../database/models/trip');
 function createTrip(json) {
 	let newTrip = new Trip ({
 		trip_id: json.trip_id,
-		day: json.service_id,
+		service_id: json.service_id,
 		route_id: json.route_id,
-		direction: json.direction_id,
+		direction_id: json.direction_id,
 		headsign: json.trip_headsign,
+		block_id: json.block_id,
 		stop_times: []
 	});
 	return newTrip;

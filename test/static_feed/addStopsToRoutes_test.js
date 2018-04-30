@@ -5,7 +5,7 @@ const	Stop = require('../../database/models/stop'),
 		assert = require('assert');
 
 describe("Add Stops to Routes", () => {
-	it('can get list of a Routes\'s Trips and those Trip\'s StopTimes and their stop_ids', (done) =>{
+	xit('can get list of a Routes\'s Trips and those Trip\'s StopTimes and their stop_ids', (done) =>{
 		Route.findOne({route_id: "A"})
 			.populate({
 				path: 'trips',
@@ -25,7 +25,7 @@ describe("Add Stops to Routes", () => {
 			done();
 		})
 	}).timeout(0)
-	it('confirms that a Route\'s list of Trips, sorted by direction, and that Trip\'s list of stop_times, sorted by stop_sequence , has identical lists of stop_ids when the Trip\'s direction is the same', (done) => {
+	xit('confirms that a Route\'s list of Trips, sorted by direction, and that Trip\'s list of stop_times, sorted by stop_sequence , has identical lists of stop_ids when the Trip\'s direction is the same', (done) => {
 		Route.findOne({route_id: "A"})
 			.populate({
 				path: 'trips',
@@ -80,7 +80,7 @@ describe("Add Stops to Routes", () => {
 			done();
 		})
 	}).timeout(0)
-	it('can create a list of stop_ids from a Routes\'s Trips and those Trips\' Stop_Time\'s stop_ids, making sure each stop_id is unique ', (done) => {
+	xit('can create a list of stop_ids from a Routes\'s Trips and those Trips\' Stop_Time\'s stop_ids, making sure each stop_id is unique ', (done) => {
 		Route.findOne({route_id: "101C"})
 			.populate({
 				path: 'trips',

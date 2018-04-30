@@ -19,6 +19,7 @@ const Stop = require('../../../database/models/stop');
 // name: String,
 // desc: String,
 // direction: String,
+// stop_type: Number
 // lat: Number,
 // lng: Number,
 // // lng, lat in coordinates
@@ -40,6 +41,7 @@ function createStop(json) {
 		stop_id: json.stop_id,
 		name: json.stop_name,
 		desc: json.stop_desc,
+		stop_type: json.location_type,
 		direction: json.stop_desc.replace(regex,''),
 		lat:json.stop_lat,
 		lng: json.stop_lon,

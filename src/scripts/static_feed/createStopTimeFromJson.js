@@ -18,6 +18,7 @@ const dateHelpers = require('../dateHelpers');
 // trip_id: Number,
 // stop_sequence: Number,
 // pickup_type: Number
+// dropoff_type: Number
 
 function createStopTime(json) {
 	let newStopTime = new StopTime ({
@@ -25,7 +26,8 @@ function createStopTime(json) {
 		stop_id: json.stop_id,
 		trip_id: json.trip_id,
 		stop_sequence: json.stop_sequence,
-		pickup_type: json.pickup_type 
+		pickup_type: json.pickup_type ? json.pickup_type : 0,
+		dropoff_type: json.drop_off_type ? json.drop_off_type : 0
 	});
 	return newStopTime;
 }
