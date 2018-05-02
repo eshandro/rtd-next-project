@@ -27,10 +27,10 @@ const RouteSchema = new Schema ({
 	desc: String,
 	type: Number,
 	directions: [],
-	stops: [{
-		type: Schema.Types.ObjectId,
-		ref: 'stop'
-	}],
+	// stops: [{
+	// 	type: Schema.Types.ObjectId,
+	// 	ref: 'stop'
+	// }],
 	trips: [{
 		type: Schema.Types.ObjectId,
 		ref: 'trip'

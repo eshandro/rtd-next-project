@@ -3,6 +3,8 @@ const Trip = require('../../database/models/trip'),
 		Route = require('../../database/models/route'),
 		Stop = require('../../database/models/stop'),
 		StopTime = require('../../database/models/stop_time'),
+		Calendar = require('../../database/models/calendar'),
+		CalendarDates = require('../../database/models/calendar_dates'),
 		globals = require('../../src/scripts/globals');
 
 

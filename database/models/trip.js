@@ -1,7 +1,5 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-const CalendarSchema = require('./calendar');
-const CalendarDatesSchema = require('.calendar_dates');
 
 /*
 	trip_id = unique id
@@ -24,8 +22,6 @@ const CalendarDatesSchema = require('.calendar_dates');
 	block_id = The block_id field identifies the block to which the trip belongs. A block consists of a single trip 
 					or many sequential trips made using the same vehicle, defined by shared service day and block_id. A 
 					block_id can have trips with different service days, making distinct blocks
-	calendar = indicates service availability by date, referenced by service_id
-	calendar_dates = indicates service availabilty exceptions for a specific date, referenced by service_id
 	stop_times = list of stoptimes associated with this trip
 
 */
@@ -37,8 +33,6 @@ const TripSchema = new Schema ({
 	direction_id: Number,
 	headsign: String,
 	block_id: String,
-	calendar: [CalendarSchema],
-	calendar_dates: [CalendarDatesSchema],
 	stop_times: [{
 		type: Schema.Types.ObjectId,
 		ref: 'stoptime'

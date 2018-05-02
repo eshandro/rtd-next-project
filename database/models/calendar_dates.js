@@ -14,12 +14,12 @@ const Schema = mongoose.Schema;
 						* A value of 2 indicates that service has been removed for the specified date
  */
 
-service_id,start_date,end_date,monday,tuesday,wednesday,thursday,friday,saturday,sunday
-
 const CalendarDatesSchema = new Schema ({
 	service_id: String,
 	date: String,
 	exception_type: Number
 });
 
-module.exports = CalendarDatesSchema;
+const CalendarDates = mongoose.model('calendardates', CalendarDatesSchema);
+
+module.exports = CalendarDates;

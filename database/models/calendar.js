@@ -8,8 +8,6 @@ const Schema = mongoose.Schema;
 	monday - sunday - binary that indicates whether service is available this day or not (0 or 1)
  */
 
-service_id,start_date,end_date,monday,tuesday,wednesday,thursday,friday,saturday,sunday
-
 const CalendarSchema = new Schema ({
 	service_id: String,
 	start_date: String,
@@ -23,6 +21,6 @@ const CalendarSchema = new Schema ({
 	sunday: Number,
 });
 
-// const Calendar = mongoose.model('Calendar', CalendarSchema);
+const Calendar = mongoose.model('calendar', CalendarSchema);
 
-module.exports = CalendarSchema;
+module.exports = Calendar;

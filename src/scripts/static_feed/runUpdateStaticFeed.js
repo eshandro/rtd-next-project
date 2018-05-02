@@ -41,7 +41,6 @@ mongoose.connection
 			if (!data.lightRailDataSuccess) {
 				return ({updateStaticFeed: false, msg:data.msg});
 			} else {
-				console.log("data.msg from filterLightRail() ",data.msg);
 				let t1 = new Date();
 				console.log("start Promise.all after filterLightRail ",t1.toLocaleString("en-US", {timezone: "America/Denver"}));
 				return Promise.all([addTripsToRoutes(), addStopTimesToStops(), addStopTimesToTrips()])
@@ -51,7 +50,8 @@ mongoose.connection
 								totalTime = t2-t1,
 								d = new Date(totalTime);
 						console.log("Promise.all took " + d.getUTCMinutes() + ' mins & ' + d.getUTCSeconds() + ' seconds');
-						return addTripsToStops()			
+						// return addTripsToStops()
+						return ({updateStaticFeed:true,msg:"References added to collections in Promise.all"})
 					})
 					.catch((err) => {
 						console.log("Promise.all([addTripsToRoutes(), addStopTimesToStops(), addStopTimesToTrips()]) err ",err);
@@ -59,24 +59,24 @@ mongoose.connection
 					})
 			}
 		})
-		.then((data) => {
-			console.log("data from addTripsToStops",data);
-			if (!data.complete) {
-				return ({updateStaticFeed: false, msg:"addTripsToStops failed"});
-			} else {
-				return addStopsToRoutes();
-			}
+		// .then((data) => {
+		// 	console.log("data from addTripsToStops",data);
+		// 	if (!data.complete) {
+		// 		return ({updateStaticFeed: false, msg:"addTripsToStops failed"});
+		// 	} else {
+		// 		return addStopsToRoutes();
+		// 	}
 
-		})
-		.then((data) => {
-			console.log("data from addStopsToRoutes",data);
-			if (!data.complete) {
-				return ({updateStaticFeed: false, msg:"addStopsToRoutes failed"});
-			} else {
-				return {updateStaticFeed: true, msg:"Static Feed updated and DB updated"};
-			}
+		// })
+		// .then((data) => {
+		// 	console.log("data from addStopsToRoutes",data);
+		// 	if (!data.complete) {
+		// 		return ({updateStaticFeed: false, msg:"addStopsToRoutes failed"});
+		// 	} else {
+		// 		return {updateStaticFeed: true, msg:"Static Feed updated and DB updated"};
+		// 	}
 
-		})
+		// })
 		.then((data) => {
 			if(!data.updateStaticFeed) {
 				console.log("updateStaticFeed: false - ", data.msg);

@@ -30,10 +30,10 @@ const StopSchema = new Schema ({
 		type: Schema.Types.ObjectId,
 		ref: 'stoptime'
 	}],
-	trips: [{
-		type: Schema.Types.ObjectId,
-		ref: 'trip'
-	}]
+	// trips: [{
+	// 	type: Schema.Types.ObjectId,
+	// 	ref: 'trip'
+	// }]
 });
 
 const Stop = mongoose.model('stop', StopSchema)
