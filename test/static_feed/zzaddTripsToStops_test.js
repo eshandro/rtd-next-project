@@ -6,7 +6,7 @@ const	Stop = require('../../database/models/stop'),
 
 describe("Add Trips to each Stop", () => {
 	let arr1 = ["111859139", "111859169","111859257"];
-	it('can get list of a Stop\'s stop_times', (done) =>{
+	xit('can get list of a Stop\'s stop_times', (done) =>{
 		Stop.findOne({stop_id: "25438"})
 		.populate('stop_times')
 		.then((doc) => {
@@ -14,7 +14,7 @@ describe("Add Trips to each Stop", () => {
 			done();
 		})
 	})
-	it('can get list of trips from array of trip_ids', (done) => {
+	xit('can get list of trips from array of trip_ids', (done) => {
 		let arr1 = ["111859139", "111859169","111859257"];
 		Trip.find({trip_id: {$in: arr1} }, 'trip_id _id')
 		.then((docs) => {
@@ -23,7 +23,7 @@ describe("Add Trips to each Stop", () => {
 		})
 
 	})
-	it('can make a copy of an array and remove duplicates', (done) => {
+	xit('can make a copy of an array and remove duplicates', (done) => {
 		let [arr2] = [arr1];
 		assert(arr2 === arr1);
 		let arr3 = [...arr2,...arr1];
@@ -36,7 +36,7 @@ describe("Add Trips to each Stop", () => {
 		assert(arr3.length === arr1.length)
 		done();
 	})
-	it('can create a unique list of trip_ids from a Stop\'s stop_times', (done) => {
+	xit('can create a unique list of trip_ids from a Stop\'s stop_times', (done) => {
 		let tripIdsList;
 		Stop.findOne({stop_id: "24894"}).populate('stop_times')
 		.then((doc) => {
@@ -73,7 +73,7 @@ describe("Add Trips to each Stop", () => {
 		})
 		// .then(data => console.log('data from addTripsToRoutes',data));
 	}).timeout(0)
-	it('queries db and get list of stop_times for a certain stop', (done) => {
+	xit('queries db and get list of stop_times for a certain stop', (done) => {
 		Stop.findOne({stop_id: "24894"}, 'stop_id stop_times name')
 		.populate({
 			path: 'stop_times',

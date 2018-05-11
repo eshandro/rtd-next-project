@@ -5,6 +5,7 @@ const Trip = require('../../database/models/trip'),
 		StopTime = require('../../database/models/stop_time'),
 		Calendar = require('../../database/models/calendar'),
 		CalendarDates = require('../../database/models/calendar_dates'),
+		dateHelpers = require('../../src/scripts/dateHelpers'),
 		globals = require('../../src/scripts/globals');
 
 
@@ -16,7 +17,7 @@ const Trip = require('../../database/models/trip'),
 
 describe.only('Confirms we\'ve filtered Light Rail Data correct', () => {
 	let trip_idsList, stop_idsList;
-	it('can confirm Trips only includes route_ids from regexp', (done) => {
+	xit('can confirm Trips only includes route_ids from regexp', (done) => {
 		let count1, count2;
 		Trip.count({})
 			.then((count) => {
@@ -29,7 +30,7 @@ describe.only('Confirms we\'ve filtered Light Rail Data correct', () => {
 					})
 			})
 	})
-	it('can get a list of trip_ids from Trips that have already been filtered', (done) => {
+	xit('can get a list of trip_ids from Trips that have already been filtered', (done) => {
 		Trip.find({},'trip_id -_id').lean()
 		.then((docs) => {
 			trip_idsList = docs.map((item) => item.trip_id);
@@ -39,7 +40,7 @@ describe.only('Confirms we\'ve filtered Light Rail Data correct', () => {
 			done();
 		})
 	})
-	it('can use the trip_idsList to filter stop_times', (done) => {
+	xit('can use the trip_idsList to filter stop_times', (done) => {
 		let count1, count2;
 		StopTime.count({})
 		.then((count) => {
@@ -52,21 +53,37 @@ describe.only('Confirms we\'ve filtered Light Rail Data correct', () => {
 			})
 		})
 	})
-	it('can get a list of Stops for a route going in one direction', (done) => {
-		Route.findOne({route_id: '101D'}, 'stops directions name')
-		.populate({
-			path: 'stops',
-			model: 'stop',
-			// match: {direction: 'North'},
-			select: 'stop_id name direction lat lng -_id',
-			sort: {lng: 1}
-		})
-		.then((doc) => {
-			console.log("doc ",doc);
-			console.log("doc.stops.length", doc.stops.length)
+	it('can get service_id(s) from current date', (done) => {
+		let d = new Date();
+		let today = dateHelpers.convertCurrentDateToRTDFormat(d);
+		let day = dateHelpers.convertDayToDayName(d.getDay());
+		Calendar.find({start_date: {$lt: today}, end_date: {$gt: today}, [day]: {$ne: 0} }, 'service_id -_id')
+		.then((docs) => {
+			console.log("docs ",docs);
+			for(let i=0;i<docs.length;i++) {
+				assert(docs[i].service_id)
+			}
 			done();
 		})
 
+	})
+	it('can use list of service_id(s) from current date to get list of trips', (done) => {
+		let d = new Date();
+		let today = dateHelpers.convertCurrentDateToRTDFormat(d);
+		let day = dateHelpers.convertDayToDayName(d.getDay());
+		Calendar.find({start_date: {$lt: today}, end_date: {$gt: today}, [day]: {$ne: 0} }, 'service_id -_id')
+		.then((docs) => {
+			let list = docs.map(item => item.service_id);
+			console.log("list ",list);
+			return Promise.resolve(list)
+		})
+		.then((ids) => {
+			Trip.find({service_id: {$in: ids},route_id: '101D' })
+			.then((trips) => {
+				console.log("trips.length ",trips.length);			
+				done();
+			})
+		})
 	})
 	xit('can get a list of stoptimes for a given stop', (done) => {
 		// Littleton Downtown stop and going North on a Friday for Route 101D

@@ -23,7 +23,7 @@ describe("Add Trips to each Route", () => {
 		})
 	})
 
-	it("finds all trips associated with given route", (done) => {
+	xit("finds all trips associated with given route", (done) => {
 		let allTripsCount, filteredTripsCount 
 		Trip.count({})
 			.then((count) => {
