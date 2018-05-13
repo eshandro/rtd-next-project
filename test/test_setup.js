@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 
+
 const Trip = require('../database/models/trip'),
 		Route = require('../database/models/route'),
 		Stop = require('../database/models/stop'),
@@ -8,6 +9,7 @@ const Trip = require('../database/models/trip'),
 
 before((done) => {
 	mongoose.connect('mongodb://localhost/rtdNextTrain_test');
+	// mongoose.set("debug", true);
 	mongoose.connection
 	.once('open', () => { 
 		console.log('successful connection to db in test_setup.js');
