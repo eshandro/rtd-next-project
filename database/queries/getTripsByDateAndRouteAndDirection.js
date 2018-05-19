@@ -1,5 +1,5 @@
 const	Trip = require('../../database/models/trip'),
-		Calendar = require('../../database/models/calendar'),
+		getServiceIdsForDate = require('../../database/queries/getServiceIdsForDate'),
 		dateHelpers = require('../../src/scripts/dateHelpers');
 
 /**
@@ -13,11 +13,7 @@ function getTripsByDateAndRouteAndDirection (date, route, direction) {
 	let today = dateHelpers.convertCurrentDateToRTDFormat(date);
 	let day = dateHelpers.convertDayToDayName(date.getDay());
 
-	return Calendar.find({start_date: {$lt: today}, end_date: {$gt: today}, [day]: {$ne: 0} }, 'service_id -_id').lean()
-	.then((docs) => {
-		let list = docs.map(item => item.service_id);
-		return list;
-	})
+	return getServiceIdsForDate(date)
 	.then((ids) => {
 		return Trip.find({service_id: {$in: ids},route_id: route, direction_id: direction}).lean()
 		.populate({

@@ -10,7 +10,7 @@ function getServiceIdsForDate (date) {
 	let today = dateHelpers.convertCurrentDateToRTDFormat(date);
 	let day = dateHelpers.convertDayToDayName(date.getDay());
 
-	return Calendar.find({start_date: {$lt: today}, end_date: {$gt: today}, [day]: {$ne: 0} }, 'service_id -_id').lean()
+	return Calendar.find({start_date: {$lte: today}, end_date: {$gte: today}, [day]: {$ne: 0} }, 'service_id -_id').lean()
 	.then((docs) => {
 		let list = docs.map(item => item.service_id);
 		return list;
