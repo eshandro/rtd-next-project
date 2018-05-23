@@ -27,7 +27,7 @@ function updateStaticFeed (staticFeedUrl,forceUpdate) {
 		})
 		.then((unzipData) => {
 			if (!unzipData.unzipSuccess) {
-				console.log('unzipFiles err: ', unzipData.msg);
+				console.log('unzipFiles failed: ', unzipData.msg);
 				return ({updateFeedSuccess: false, msg:unzipData.msg});
 			} else {
 				console.log("unzipFiles a success, calling updateFeed");
@@ -37,7 +37,7 @@ function updateStaticFeed (staticFeedUrl,forceUpdate) {
 		})
 		.then((updateFeedData) => {
 			if(!updateFeedData.updateFeedSuccess) {
-				console.log("updateFeed err: ",updateFeedData.msg);
+				console.log("updateFeed failed: ",updateFeedData.msg);
 				return ({updateStaticFeed: false, msg:updateFeedData.msg});
 			} else {
 				console.log("updateFeed a success, return true so know to call filterLightRail");

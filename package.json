@@ -7,8 +7,8 @@
   "author": "eshandro <erik843@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "updateFeed": "node src/scripts/static_feed/runUpdateStaticFeed.js",
-    "forceUpdateFeed": "node src/scripts/static_feed/runUpdateStaticFeed.js true",
+    "updateFeed": "node src/scripts/static_feed/initUpdateStaticFeed.js",
+    "forceUpdateFeed": "node src/scripts/static_feed/initUpdateStaticFeed.js true",
     "test": "NODE_ENV=test nodemon --exec 'mocha --recursive'",
     "production": "NODE_ENV=production node src/scripts/index.js"
   },

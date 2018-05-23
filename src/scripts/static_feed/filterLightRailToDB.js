@@ -157,8 +157,9 @@ function addLightRailData(sourceFile, filterFN, dbFunc, dbModel,list, testKey) {
  */
 function filterLightRail() {
 	let t1, lists = [];
+	console.log('filterLightRail called')
+
 	// Drop collections before adding updated data
-	
 	return Route.collection.drop()
 		.then(() => {
 			console.log("Route.collection dropped");
@@ -252,6 +253,4 @@ function filterLightRail() {
 
 }
 
-// Testing only
-// filterLightRail();
 module.exports = filterLightRail;
