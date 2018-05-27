@@ -20,7 +20,7 @@ const Schema = mongoose.Schema;
 	stops = list of stops associated with this route
 	trips = list of trips associated with this route
  */
-const RouteSchema = new Schema ({
+const RouteSchema = new Schema({
 	route_id: String,
 	name: String,
 	shortName: String,
@@ -37,6 +37,6 @@ const RouteSchema = new Schema ({
 	}]
 });
 
-const Route = mongoose.model('route', RouteSchema)
+const Route = mongoose.model('route', RouteSchema);
 
 module.exports = Route;

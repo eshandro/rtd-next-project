@@ -17,7 +17,7 @@ const geoPointSchema = require('./geoPointSchema');
 	trips = list of trips associated with this stop
  */
 
-const StopSchema = new Schema ({
+const StopSchema = new Schema({
 	stop_id: String,
 	name: String,
 	desc: String,
@@ -36,6 +36,6 @@ const StopSchema = new Schema ({
 	// }]
 });
 
-const Stop = mongoose.model('stop', StopSchema)
+const Stop = mongoose.model('stop', StopSchema);
 
 module.exports = Stop;

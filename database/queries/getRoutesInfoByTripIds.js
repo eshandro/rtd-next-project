@@ -6,10 +6,10 @@ const	Trip = require('../../database/models/trip');
  * @return {Array}         list of routes with route_id, headsign, & direction
  */
 function getRoutesInfoByTripIds (tripIds) {
-	return Trip.find({trip_id: {$in: tripIds}}, 'route_id headsign direction_id -_id').lean()
+	return	Trip.find({trip_id: {$in: tripIds}}, 'route_id headsign direction_id -_id').lean()
 			.then((routesInfo) => {
-				return routesInfo
-			})
+				return routesInfo;
+			});
 }
 
 module.exports = getRoutesInfoByTripIds;

@@ -25,7 +25,8 @@ function addStopsToRoutes() {
 	return routesCursor.eachAsync((doc) => {
 		let directChange = doc.trips.findIndex((element) => element.direction === 1);
 		let [stopIdsDirection0] = [doc.trips[0].stop_times],
-			 [stopIdsDirection1] = [doc.trips[directChange].stop_times];
+			[stopIdsDirection1] = [doc.trips[directChange].stop_times];
+		
 		// change from array of mongoose objects to array of just stop_ids
 		stopIdsDirection0 = stopIdsDirection0.map(item => item.stop_id);
 		stopIdsDirection1 = stopIdsDirection1.map(item => item.stop_id);
@@ -50,8 +51,8 @@ function addStopsToRoutes() {
 			return getStops(stopIdsList);
 		})
 		.then((stops) => {
-			return doc.update({stops: stops})
-		})
+			return doc.update({stops: stops});
+		});
 	
 	})
 	.then(() => {
@@ -61,7 +62,7 @@ function addStopsToRoutes() {
 	.catch((err) => {
 		console.log('error in addStopsToRoutes', err);
 		return Promise.reject({complete: false});
-	})
+	});
 
 }
 module.exports = addStopsToRoutes;

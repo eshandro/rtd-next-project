@@ -2,7 +2,7 @@
 const {fork} = require('child_process');
 
 
-describe.only('Test for creating child_process to run long running items', ()=> {
+describe('Test for creating child_process to run long running items', ()=> {
 	it('can start a long running child_process via fork', () => {
 		let longrun = fork('./test/longRunning.js')
 		longrun.send('start')

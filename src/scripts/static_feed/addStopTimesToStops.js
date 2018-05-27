@@ -18,8 +18,8 @@ function addStopTimesToStops() {
 			return getStopTimes(doc.stop_id);
 		})
 		.then((stoptimes) => {
-			return doc.update({stop_times: stoptimes})
-		})
+			return doc.update({stop_times: stoptimes});
+		});
 	
 	})
 	.then(() => {
@@ -29,7 +29,7 @@ function addStopTimesToStops() {
 	.catch((err) => {
 		console.log('error in addStopTimesToStops', err);
 		return Promise.reject({complete: false});
-	})
+	});
 
 }
 module.exports = addStopTimesToStops;

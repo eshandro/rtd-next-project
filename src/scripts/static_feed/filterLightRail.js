@@ -63,8 +63,8 @@ function stopsFilter(assembler) {
   // return undefined to indicate our uncertainty at this moment
 }
 
-let 	trip_ids = [],
-		stop_ids = [];
+let trip_ids = [],
+	stop_ids = [];
 
 /**
  * create Light Rail only JSON files
@@ -78,9 +78,9 @@ let 	trip_ids = [],
  *                                    data: error or path to newly create filtered JSON file
  */
 function createLRJson(sourceFile, outputFile, filterFN, list, testKey) {
-	const stream = StreamFilteredArray.make({objectFilter: filterFN}),
+	const 	stream = StreamFilteredArray.make({objectFilter: filterFN}),
 			file = fs.createWriteStream(globals.extractedFolder + "json/" + outputFile);
-			let counter = 0;
+	let counter = 0;
 	
 	return new Promise((resolve,reject) => {
 		const errorHandlerRead = (error) => {
@@ -100,26 +100,26 @@ function createLRJson(sourceFile, outputFile, filterFN, list, testKey) {
 		// read.on('end', () => {console.log("read ends")});
 
 		stream.input
-			.on('error', errorHandlerRead)
+			.on('error', errorHandlerRead);
 			// .on('end', () => {
 			// 	console.log("stream.input ends")
 			// })
 		stream.output
 			.on("data", function(object){
 			if (counter === 0) {
-				file.write('[\n\t')
+				file.write('[\n\t');
 			} else {
 				if (counter >= 1) {
-					file.write(",\n\t")
+					file.write(",\n\t");
 				} else {
-					file.write("\n\t")
+					file.write("\n\t");
 				}
 			}
 			file.write(JSON.stringify(object.value));
 			if(list && testKey) {
 				if(!list.includes(object.value[testKey])) {
-					list.push(object.value[testKey])
-				};
+					list.push(object.value[testKey]);
+				}
 			}
 			counter++;
 		})
@@ -130,13 +130,11 @@ function createLRJson(sourceFile, outputFile, filterFN, list, testKey) {
 			file.end();
 			read.unpipe();
 			// console.log("stream.output ends");
-			resolve({lrJsonSuccess: true, data:list ? list : outputFile})
+			resolve({lrJsonSuccess: true, data:list ? list : outputFile});
 		});
 
 		file
-			.on("error", errorHandlerWrite)
-			// .on("close", () => {console.log('file end')})
-
+		.on("error", errorHandlerWrite);
 	})
 	.then((data) => {
 		return data;
@@ -145,7 +143,7 @@ function createLRJson(sourceFile, outputFile, filterFN, list, testKey) {
 		// if(read) read.unpipe();
 		console.log('err in createLRJson', err);
 		return Promise.reject({lrJsonSuccess: false, data: err});
-	})
+	});
 }
 
 /**
@@ -186,7 +184,7 @@ function filterLightRail() {
 		.catch((err) => {
 			console.log("lrJson err", err);
 			return err;
-		})
+		});
 }
 
 // Testing only

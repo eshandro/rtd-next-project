@@ -2,7 +2,7 @@ const	fs = require('fs'),
 		url = require('url'),
 		fetch = require('node-fetch'),
 		handleFetchErrors = require('./handleFetchErrors');
-let 	file_name = '', destPath;
+let file_name = '', destPath;
 
 /**
  * downloads the static feed zip file and streams it to temp download folder
@@ -13,9 +13,10 @@ let 	file_name = '', destPath;
  *                                 data: error message or path to newly downloaded zip file
  */
 function downloadFeed(fileUrl, apiPath) {
-	let 	p = url.parse(fileUrl),
-			file,
-			timeout = 300000; // 300000 ms = 5 minutes
+	let p = url.parse(fileUrl),
+		file,
+		timeout = 300000; // 300000 ms = 5 minutes
+	
 	file_name = p.pathname.substring(p.pathname.lastIndexOf('/')+1);
 	destPath = apiPath + file_name;
 	
@@ -28,19 +29,19 @@ function downloadFeed(fileUrl, apiPath) {
 			// console.log("res.status in downloadFeed fetch",res.status);
 			let len = res.headers.get('content-length');
 			if (!len) {
-				return Promise.reject({downloadFeedSuccess: false, msg: "No data received"})
+				return Promise.reject({downloadFeedSuccess: false, msg: "No data received"});
 			}
 			// if you prefer to cache binary data in full, use buffer()
 			// note that buffer() is a node-fetch only API
 			// return res.buffer();
-			let 	file = fs.createWriteStream(destPath);
+			let file = fs.createWriteStream(destPath);
 			res.body.pipe(file);
-			let 	timer;
+			let timer;
 			return new Promise((resolve, reject) => {
 				const errorHandler = (error) => {
 					console.log("errorHandler in fs promise");
 			   	let errMsg = "Unable to download file: " + error;
-			   	reject({downloadFeedSuccess: false, msg: errMsg})
+			   	reject({downloadFeedSuccess: false, msg: errMsg});
 				};
 
 				file
@@ -49,14 +50,14 @@ function downloadFeed(fileUrl, apiPath) {
 			      	timer = setTimeout(() => {
 			      		console.log("timeout in fs promise");
 			      		file.close();
-			      		reject({downloadFeedSuccess: false, msg: 'Timeout writing file'})
-			      	}, timeout)
+			      		reject({downloadFeedSuccess: false, msg: 'Timeout writing file'});
+			      	}, timeout);
 			   	})
 			   	.on('error', errorHandler)
 			   	.on('finish', () => {
 			   		// console.log("finish writestream in downloadFeed");
-			    		resolve(destPath)
-			   	})
+			    	resolve(destPath);
+			   	});
 			})
 			.then((dest) => {
 				// console.log("dest ",dest);
@@ -66,22 +67,22 @@ function downloadFeed(fileUrl, apiPath) {
 				clearTimeout(timer);
 				// End stream and delete file
 				if(file) {
-					file.end(() => { fs.unlinkSync(destPath)});
+					file.end(() => fs.unlinkSync(destPath) );
 				}				
-				return Promise.reject(err)
-			})
+				return Promise.reject(err);
+			});
 		})
 		.catch((err) => {
 			console.log("fetch err in downloadFeed", err);
 			// End stream and delete file  
 			if(file) {
-				file.end(() => { fs.unlinkSync(destPath)});
+				file.end(() => fs.unlinkSync(destPath) );
 			}
 			// check if error is fetch timeout error
 			if (err.type && (err.type === 'request-timeout' || err.type === 'body-timeout')) {
 				return ({downloadFeedSuccess: false, msg: err.message});
 			} else if (typeof err.downloadFeedSuccess === 'undefined') { // handle error thrown by handleFetchErrors
-				return ({downloadFeedSuccess: false, msg: err})
+				return ({downloadFeedSuccess: false, msg: err});
 			} else {
 				return err;
 			}

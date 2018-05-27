@@ -23,8 +23,8 @@ function getTripsByDateAndRouteAndDirection (date, route, direction) {
 		})
 		.then((trips) => {
 			return trips;		
-		})
-	})
+		});
+	});
 }
 
 module.exports = getTripsByDateAndRouteAndDirection;

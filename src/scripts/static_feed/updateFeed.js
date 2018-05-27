@@ -21,7 +21,7 @@ function updateFeed(path,filesToInclude) {
 			// console.log("files before ",files);
 			// Neither match or exclude options seem to be working to filter out .DS_Store etc files
 			files = files.filter((file) => {
-				return file.indexOf('.txt') !== -1
+				return file.indexOf('.txt') !== -1;
 			});
 			if (filesToInclude) {
 				files = files.filter((file) => {
@@ -49,12 +49,12 @@ function updateFeed(path,filesToInclude) {
 			});
 		})
 		.then((length) => {
-			return ({updateFeedSuccess: true, msg: `${length} files parsed to JSON`})
+			return ({updateFeedSuccess: true, msg: `${length} files parsed to JSON`});
 		})
 		.catch((err) => {
 			console.log("Error in updateFeed dir.promise ", err);
-			return ({updateFeedSuccess: false, msg: err})
-		})
+			return ({updateFeedSuccess: false, msg: err});
+		});
 }
 
 // For testing only

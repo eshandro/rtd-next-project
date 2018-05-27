@@ -22,7 +22,7 @@ Then, we can filter stop_times to only include trip_ids that are in filtered lig
 Then, we can filter stops to on include stop_ids that are in filtered stop_times.
 
  */
-const StreamFilteredArray = require("stream-json/utils/StreamFilteredArray"),
+const 	StreamFilteredArray = require("stream-json/utils/StreamFilteredArray"),
 		fs = require('fs'),
 
 		createTripFromJson = require("./createTripFromJson"),
@@ -110,14 +110,14 @@ function addLightRailData(sourceFile, filterFN, dbFunc, dbModel,list, testKey) {
 		read.on('error', errorHandlerRead);
 
 		stream.input
-			.on('error', errorHandlerRead)
+			.on('error', errorHandlerRead);
 
 		stream.output
 			.on("data", function(object){
 				if(list && testKey) {
 					if(!list.includes(object.value[testKey])) {
-						list.push(object.value[testKey])
-					};
+						list.push(object.value[testKey]);
+					}
 				}
 				let newDoc = dbFunc(object.value);
 				
@@ -131,8 +131,8 @@ function addLightRailData(sourceFile, filterFN, dbFunc, dbModel,list, testKey) {
 						console.log("err in insertMany ",err);
 					}
 					read.unpipe();
-					resolve({lightRailDataSuccess: true, msg:list ? list : sourceFile})
-				})
+					resolve({lightRailDataSuccess: true, msg:list ? list : sourceFile});
+				});
 			});
 
 	})
@@ -141,7 +141,7 @@ function addLightRailData(sourceFile, filterFN, dbFunc, dbModel,list, testKey) {
 	}, (err) => {
 		console.log('err in addLightRailData', err);
 		return Promise.reject({lightRailDataSuccess: false, msg: err});
-	})
+	});
 }
 
 /**
@@ -157,7 +157,7 @@ function addLightRailData(sourceFile, filterFN, dbFunc, dbModel,list, testKey) {
  */
 function filterLightRail() {
 	let t1, lists = [];
-	console.log('filterLightRail called')
+	console.log('filterLightRail called');
 
 	// Drop collections before adding updated data
 	return Route.collection.drop()
@@ -185,12 +185,12 @@ function filterLightRail() {
 			console.log("CalendarDates collection dropped");
 			t1 = new Date();
 			console.log("start filterLightRail after drops ",t1.toLocaleString("en-US", {timezone: "America/Denver"}));
-			return addLightRailData('routes.json',tripsFilter,createRouteFromJson,Route,false,false)
+			return addLightRailData('routes.json',tripsFilter,createRouteFromJson,Route,false,false);
 		})
 		.then((data) => {
 			if (!data.lightRailDataSuccess) {
 				console.log("addLightRailData('routes.json',tripsFilter,createRouteFromJson,Route,false,false) failed");
-				return ({lightRailDataSuccess: false, msg: "addLightRailData('routes.json',tripsFilter,createRouteFromJson,Route,false,false) failed"})
+				return ({lightRailDataSuccess: false, msg: "addLightRailData('routes.json',tripsFilter,createRouteFromJson,Route,false,false) failed"});
 			} else {
 				lists.push(data.msg);
 				return addLightRailData('calendar.json','',createCalendarFromJson,Calendar,false,false);
@@ -199,7 +199,7 @@ function filterLightRail() {
 		.then((data) => {
 			if (!data.lightRailDataSuccess) {
 				console.log("addLightRailData('calendar.json','',createCalendarFromJson,Calendar,false,false) failed");
-				return ({lightRailDataSuccess: false, msg: "addLightRailData('calendar.json','',createCalendarFromJson,Calendar,false,false) failed"})
+				return ({lightRailDataSuccess: false, msg: "addLightRailData('calendar.json','',createCalendarFromJson,Calendar,false,false) failed"});
 			} else {
 				lists.push(data.msg);
 				return addLightRailData('calendar_dates.json','',createCalendarDatesFromJson,CalendarDates,false,false);
@@ -208,7 +208,7 @@ function filterLightRail() {
 		.then((data) => {
 			if (!data.lightRailDataSuccess) {
 				console.log("addLightRailData('calendar_dates.json','',createCalendarDatesFromJson,CalendarDates,false,false) failed");
-				return ({lightRailDataSuccess: false, msg: "addLightRailData('calendar_dates.json','',createCalendarDatesFromJson,CalendarDates,false,false) failed"})
+				return ({lightRailDataSuccess: false, msg: "addLightRailData('calendar_dates.json','',createCalendarDatesFromJson,CalendarDates,false,false) failed"});
 			} else {
 				lists.push(data.msg);
 				return addLightRailData('trips.json',tripsFilter,createTripFromJson,Trip,trip_ids,'trip_id');
@@ -217,7 +217,7 @@ function filterLightRail() {
 		.then((data) => {
 			if (!data.lightRailDataSuccess) {
 				console.log("addLightRailData('trips.json',tripsFilter,createTripFromJson,Trip,trip_ids,'trip_id'); or call above failed");
-				return ({lightRailDataSuccess: false, msg: "addLightRailData('trips.json',tripsFilter,createTripFromJson,Trip,trip_ids,'trip_id') failed"})				
+				return ({lightRailDataSuccess: false, msg: "addLightRailData('trips.json',tripsFilter,createTripFromJson,Trip,trip_ids,'trip_id') failed"});
 			} else {
 				lists.push(data.msg);
 				return addLightRailData('stop_times.json',stopTimesFilter,createStopTimeFromJson,StopTime,stop_ids,'stop_id');
@@ -226,7 +226,7 @@ function filterLightRail() {
 		.then((data) => {
 			if(!data.lightRailDataSuccess) {
 				console.log("addLightRailData('stop_times.json',stopTimesFilter,createStopTimeFromJson,StopTime,stop_ids,'stop_id') or call above failed");
-				return ({lightRailDataSuccess: false, msg: "addLightRailData('stop_times.json',stopTimesFilter,createStopTimeFromJson,StopTime,stop_ids,'stop_id') failed"})								
+				return ({lightRailDataSuccess: false, msg: "addLightRailData('stop_times.json',stopTimesFilter,createStopTimeFromJson,StopTime,stop_ids,'stop_id') failed"});
 			} else {
 				lists.push(data.msg);
 				return addLightRailData('stops.json',stopsFilter,createStopFromJson,Stop,false,false);
@@ -234,8 +234,8 @@ function filterLightRail() {
 		})
 		.then((data) => {
 			if (!data.lightRailDataSuccess) {
-				console.log("addLightRailData('stops.json',stopsFilter,createStopFromJson,Stop,false,false); failed")
-				return ({lightRailDataSuccess: false, msg: "addLightRailData('stops.json',stopsFilter,createStopFromJson,Stop,false,false); or call above failed"})
+				console.log("addLightRailData('stops.json',stopsFilter,createStopFromJson,Stop,false,false); failed");
+				return ({lightRailDataSuccess: false, msg: "addLightRailData('stops.json',stopsFilter,createStopFromJson,Stop,false,false); or call above failed"});
 			} else {
 				lists.push(data.msg);
 				let 	t2 = Date.now(),
@@ -249,7 +249,7 @@ function filterLightRail() {
 		.catch((err) => {
 			console.log("lightRailData err", err);
 			return ({lightRailDataSuccess: false, msg: err});
-		})
+		});
 
 }
 

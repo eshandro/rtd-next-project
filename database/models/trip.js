@@ -26,7 +26,7 @@ const Schema = mongoose.Schema;
 
 */
 
-const TripSchema = new Schema ({
+const TripSchema = new Schema({
 	trip_id: String,
 	service_id: String,
 	route_id: String,
@@ -40,7 +40,7 @@ const TripSchema = new Schema ({
 
 });
 
-const Trip = mongoose.model('trip', TripSchema)
+const Trip = mongoose.model('trip', TripSchema);
 
 // module.exports = TripSchema;
 module.exports = Trip;

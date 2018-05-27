@@ -24,8 +24,8 @@ function addTripsToStops() {
 			return getTrips(tripsList);
 		})
 		.then((trips) => {
-			return doc.update({trips: trips})
-		})
+			return doc.update({trips: trips});
+		});
 	
 	})
 	.then(() => {
@@ -35,6 +35,6 @@ function addTripsToStops() {
 	.catch((err) => {
 		console.log('error in addTripsToStops', err);
 		return Promise.reject({complete: false});
-	})
+	});
 }
 module.exports = addTripsToStops;

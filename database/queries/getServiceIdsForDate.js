@@ -14,7 +14,7 @@ function getServiceIdsForDate (date) {
 	.then((docs) => {
 		let list = docs.map(item => item.service_id);
 		return list;
-	})
+	});
 }
 
 module.exports = getServiceIdsForDate;

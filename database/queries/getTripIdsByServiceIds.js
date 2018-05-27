@@ -11,7 +11,7 @@ function getTripIdsByServiceIds (ids) {
 	.then((docs) => {
 		let list = docs.map(item => item.trip_id);
 		return list;
-	})
+	});
 }
 
 module.exports = getTripIdsByServiceIds;

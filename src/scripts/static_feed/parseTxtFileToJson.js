@@ -1,4 +1,4 @@
-const fs = require('fs'),
+const 	fs = require('fs'),
 		readline = require('readline');
 /**
  * parses text file to JSON and writes JSON to new file
@@ -23,58 +23,58 @@ function parseTxtFileToJson (path) {
 		const errorHandler = (error) => {
 			console.log("errorHandler in parseTxtFileToJson rl promise");
 			let errMsg = `Unable to read file ${path}:  ${error}`;
-			reject({parseTxtFileSuccess: false, data: errMsg})
+			reject({parseTxtFileSuccess: false, data: errMsg});
 		};
 		rl
-			.on('line', (line) => {
-				let currJson = "";
-				if(counter === 0) {
-					keys = convertLineToArray(line);		
-					// console.log("keys", keys);
-					currJson = `[`;
-				} else {
-					let currLine = convertLineToArray(line);
-					if (currLine && currLine.length > 0) {
-						if (keys.length === currLine.length) {
-							if(counter > 1) {
-								currJson = ",\n";
-							} else {
-								currJson = "\n";
+		.on('line', (line) => {
+			let currJson = "";
+			if (counter === 0) {
+				keys = convertLineToArray(line);
+				// console.log("keys", keys);
+				currJson = `[`;
+			} else {
+				let currLine = convertLineToArray(line);
+				if (currLine && currLine.length > 0) {
+					if (keys.length === currLine.length) {
+						if (counter > 1) {
+							currJson = ",\n";
+						} else {
+							currJson = "\n";
+						}
+						let len = keys.length,
+						i = 0;
+						for (; i < len; i++) {
+							if (i === 0) {
+								currJson = `${currJson}\t{`;
 							}
-							let len = keys.length,
-								 i = 0;
-							for (; i < len; i++){
-								if (i === 0) {
-									currJson = `${currJson}\t{`;
-								}
-								currJson = `${currJson}"${keys[i]}":"${currLine[i]}"`
-								if (i !== len-1) {
-									currJson = currJson + ",";
-								} else if (i === len-1) {
-									currJson = currJson + "}"
-								}
+							currJson = `${currJson}"${keys[i]}":"${currLine[i]}"`;
+							if (i !== len - 1) {
+								currJson = currJson + ",";
+							} else if (i === len - 1) {
+								currJson = currJson + "}";
 							}
 						}
 					}
 				}
-				file.write(currJson);
-				counter++;				
-			})
-			.on('error', errorHandler)
-			.on('close', () => {
-				// console.log("rl close event fired ");
-				file.write("\n]");
-				file.end();
-				fs.unlinkSync(path);
-				resolve(jsonPath+dataName+".json");
-			});
+			}
+			file.write(currJson);
+			counter++;
+		})
+		.on('error', errorHandler)
+		.on('close', () => {
+			// console.log("rl close event fired ");
+			file.write("\n]");
+			file.end();
+			fs.unlinkSync(path);
+			resolve(jsonPath + dataName + ".json");
+		});
 	
 	})
 	.then((newFile) => {
 		return({parseTxtFileSuccess: true, data: newFile});
 	}, (err) => {
 		return Promise.reject({parseTxtFileSuccess:false, data:err});
-	})
+	});
 }
 
 

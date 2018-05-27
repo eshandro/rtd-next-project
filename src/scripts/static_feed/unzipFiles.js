@@ -19,7 +19,7 @@ function unzipFiles (zippedFile,outputPath) {
 			// console.log("entry.type ",entry.type);
 			// console.log("entry.path ",entry.path);
 			// TODO: May want to add test here to be sure entry.type == file
-			entry.pipe(fs.createWriteStream(outputPath+entry.path))
+			entry.pipe(fs.createWriteStream(outputPath+entry.path));
 		})
 		.on('finish', () => {
 			// console.log('finish fired');
@@ -33,9 +33,9 @@ function unzipFiles (zippedFile,outputPath) {
 			return ({unzipSuccess: false, msg: 'Error unzipping files: ' + err});
 		})
 		.catch((err) => {
-			console.log("catch is working")
+			console.log("catch is working");
 			return ({unzipSuccess: false, msg: 'Error unzipping files: ' + err});
-		})
+		});
 }
 
 // For testing only

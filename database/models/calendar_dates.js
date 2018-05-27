@@ -14,7 +14,7 @@ const Schema = mongoose.Schema;
 						* A value of 2 indicates that service has been removed for the specified date
  */
 
-const CalendarDatesSchema = new Schema ({
+const CalendarDatesSchema = new Schema({
 	service_id: String,
 	date: String,
 	exception_type: Number

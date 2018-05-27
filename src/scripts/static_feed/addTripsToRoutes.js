@@ -18,8 +18,8 @@ function addTripsToRoutes() {
 			return getTrips(doc.route_id);
 		})
 		.then((trips) => {
-			return doc.update({trips: trips})
-		})
+			return doc.update({trips: trips});
+		});
 	
 	})
 	.then(() => {
@@ -29,7 +29,7 @@ function addTripsToRoutes() {
 	.catch((err) => {
 		console.log('error in addTripsToRoutes', err);
 		return Promise.reject({complete: false});
-	})
+	});
 
 }
 module.exports = addTripsToRoutes;

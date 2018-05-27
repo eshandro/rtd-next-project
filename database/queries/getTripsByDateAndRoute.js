@@ -22,8 +22,8 @@ function getTripsByDateAndRoute (date, route) {
 		})
 		.then((trips) => {
 			return trips;
-		})
-	})
+		});
+	});
 }
 
 module.exports = getTripsByDateAndRoute;

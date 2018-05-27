@@ -1,14 +1,14 @@
-const fs = require('fs'),
+const 	fs = require('fs'),
 		readline = require('readline')
 		StaticFeedData = require('./StaticFeedData');
 
 
 function parseTxtFileToJS (path) {
-	let 	keys,
-			feedData,
-			counter = 0,
-			tempArr = [],
-			dataName = path.substring(path.lastIndexOf('/')+1,path.lastIndexOf('.'));
+	let keys,
+		feedData,
+		counter = 0,
+		tempArr = [],
+		dataName = path.substring(path.lastIndexOf('/')+1,path.lastIndexOf('.'));
 
 	const	instream = fs.createReadStream(path),
 			rl = readline.createInterface(instream);
@@ -17,28 +17,28 @@ function parseTxtFileToJS (path) {
 		const errorHandler = (error) => {
 			console.log("errorHandler in parseTxtFileToJS rl promise");
 			let errMsg = `Unable to read file ${path}:  ${error}`;
-			reject({parseTxtFileSuccess: false, data: errMsg})
+			reject({parseTxtFileSuccess: false, data: errMsg});
 		};
 		rl
-			.on('line', (line) => {
-				if(counter === 0) {
-					keys = convertLineToArray(line);
-					feedData = new StaticFeedData(dataName, keys);
-					console.log("feedData ",feedData);	
-					// console.log("keys", keys);
-				} else {
-					let currLine = convertLineToArray(line);
-					if (currLine && currLine.length > 0) {
-						// tempArr.push(convertLineToObj(currLine,keys));
-						feedData.addData(convertLineToObj(currLine,keys))
-					}
+		.on('line', (line) => {
+			if (counter === 0) {
+				keys = convertLineToArray(line);
+				feedData = new StaticFeedData(dataName, keys);
+				console.log("feedData ", feedData);
+				// console.log("keys", keys);
+			} else {
+				let currLine = convertLineToArray(line);
+				if (currLine && currLine.length > 0) {
+					// tempArr.push(convertLineToObj(currLine,keys));
+					feedData.addData(convertLineToObj(currLine, keys));
 				}
-				counter++;				
-			})
-			.on('error', errorHandler)
-			.on('close', () => {
-				resolve(feedData);
-			});
+			}
+			counter++;
+		})
+		.on('error', errorHandler)
+		.on('close', () => {
+			resolve(feedData);
+		});
 	
 	})
 	.then((jsObj) => {
@@ -48,7 +48,7 @@ function parseTxtFileToJS (path) {
 		return({parseTxtFileSuccess: true, data: jsObj});
 	}, (err) => {
 		return Promise.reject({parseTxtFileSuccess:false, data:err});
-	})
+	});
 }
 
 

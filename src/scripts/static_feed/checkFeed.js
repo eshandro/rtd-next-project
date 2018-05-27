@@ -1,4 +1,4 @@
-const fetch = require('node-fetch'),
+const 	fetch = require('node-fetch'),
 		handleFetchErrors = require('./handleFetchErrors'),
 		lastModifiedDate = require('./lastModifiedDate'),
 		lastModifiedFile = "./lastModified.json";
@@ -9,11 +9,12 @@ const fetch = require('node-fetch'),
  * @return {string}      [last modified date from html]
  */
 function parseDateFromHTML(html) {
-	let 	test = /\d{2}.\w{3}.\d{4}\s*\d{2}\:\d{2}/,	
-			temp = html,
-			start = temp.indexOf('google_transit.zip'),
-			end = temp.indexOf('</tr', start),
-			date = "";
+	let test = /\d{2}.\w{3}.\d{4}\s*\d{2}\:\d{2}/,	
+		temp = html,
+		start = temp.indexOf('google_transit.zip'),
+		end = temp.indexOf('</tr', start),
+		date = "";
+	
 	temp = temp.substring(start,end);
 	if (temp.match(test)) {
 		date = temp.match(test)[0];
@@ -79,7 +80,7 @@ function checkFeed(url, forceUpdate) {
 				lastModifiedDate.updateLastModified(lastModifiedFile, htmlDate,fileDate);
 				return {needUpdate: true, msg: "RTD has updated feed"};
 			} else {
-				return {needUpdate: false, msg: "RTD has NOT updated feed"}
+				return {needUpdate: false, msg: "RTD has NOT updated feed"};
 			}
 		})
 		.catch(reason => console.log('Error in checkFeed Promise.all', reason));

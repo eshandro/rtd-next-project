@@ -8,7 +8,7 @@ const Schema = mongoose.Schema;
 	monday - sunday - binary that indicates whether service is available this day or not (0 or 1)
  */
 
-const CalendarSchema = new Schema ({
+const CalendarSchema = new Schema({
 	service_id: String,
 	start_date: String,
 	end_date: String,
