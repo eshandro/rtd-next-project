@@ -1,5 +1,5 @@
 const 	fs = require('fs'),
-		readline = require('readline')
+		readline = require('readline'),
 		StaticFeedData = require('./StaticFeedData');
 
 

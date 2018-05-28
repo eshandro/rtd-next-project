@@ -37,9 +37,9 @@ describe.only('Confirms we\'ve filtered Light Rail Data correct', () => {
 				count2 = countAgain;
 				assert(count1 === count2);
 				done();
-			})
-		})
-	})
+			});
+		});
+	});
 	xit('can get a list of trip_ids from Trips that have already been filtered', (done) => {
 		Trip.find({}, 'trip_id -_id').lean()
 		.then((docs) => {
@@ -48,8 +48,8 @@ describe.only('Confirms we\'ve filtered Light Rail Data correct', () => {
 			// confirm list of trips is unique
 			assert(trip_idsList.length === new Set(trip_idsList).size);
 			done();
-		})
-	})
+		});
+	});
 	xit('can use the trip_idsList to filter stop_times', (done) => {
 		let count1, count2;
 		StopTime.count({})
@@ -64,9 +64,9 @@ describe.only('Confirms we\'ve filtered Light Rail Data correct', () => {
 				count2 = countAgain;
 				assert(count1 === count2);
 				done();
-			})
-		})
-	})
+			});
+		});
+	});
 	xit('can get service_id(s) from current date', (done) => {
 		let d = new Date();
 		let today = dateHelpers.convertCurrentDateToRTDFormat(d);
@@ -85,12 +85,12 @@ describe.only('Confirms we\'ve filtered Light Rail Data correct', () => {
 		.then((docs) => {
 			console.log("docs ", docs);
 			for (let i = 0; i < docs.length; i++) {
-				assert(docs[i].service_id)
+				assert(docs[i].service_id);
 			}
 			done();
-		})
+		});
 
-	})
+	});
 
 	xit('can use list of service_id(s) from current date to get list of Trips by route_id and direction_id', (done) => {
 		let d = new Date();
@@ -110,7 +110,7 @@ describe.only('Confirms we\'ve filtered Light Rail Data correct', () => {
 		.then((docs) => {
 			let list = docs.map(item => item.service_id);
 			console.log("list ", list);
-			return Promise.resolve(list)
+			return Promise.resolve(list);
 		})
 		.then((ids) => {
 			Trip.find({
@@ -133,9 +133,9 @@ describe.only('Confirms we\'ve filtered Light Rail Data correct', () => {
 				console.log("trips.length in Trip.find", trips.length);
 				console.log("trips[0] in Trip.find", trips[0]);
 				done();
-			})
-		})
-	})
+			});
+		});
+	});
 	xit('can use list of service_id(s) from current date to get list of Trips going in one direction using a Route', (done) => {
 		let d = new Date();
 		let today = dateHelpers.convertCurrentDateToRTDFormat(d);
@@ -154,7 +154,7 @@ describe.only('Confirms we\'ve filtered Light Rail Data correct', () => {
 		.then((docs) => {
 			let list = docs.map(item => item.service_id);
 			console.log("list ", list);
-			return Promise.resolve(list)
+			return Promise.resolve(list);
 		})
 		.then((ids) => {
 			Route.findOne({
@@ -194,9 +194,9 @@ describe.only('Confirms we\'ve filtered Light Rail Data correct', () => {
 				// console.log("route.trips[0].stop_times ",route.trips[0].stop_times);
 				// console.log("route.trips[route.trips.length-1].stop_times ",route.trips[route.trips.length-1].stop_times);
 				done();
-			})
-		})
-	})
+			});
+		});
+	});
 	it('can use a query function to get list of trips for a given day and route', (done) => {
 		let count1, count2;
 		let d = new Date();
@@ -216,7 +216,7 @@ describe.only('Confirms we\'ve filtered Light Rail Data correct', () => {
 		.then((docs) => {
 			let list = docs.map(item => item.service_id);
 			// console.log("list in Calendar.find ",list);
-			return Promise.resolve(list)
+			return Promise.resolve(list);
 		})
 		.then((ids) => {
 			Trip.find({
@@ -236,7 +236,7 @@ describe.only('Confirms we\'ve filtered Light Rail Data correct', () => {
 			})
 			.then((trips) => {
 				console.log("trips.length in Trip.find", trips.length);
-				count1 = trips.length
+				count1 = trips.length;
 				getTripsByDateAndRoute(d, '101D')
 				.then((trips2) => {
 					console.log("trips2.length ", trips2.length);
@@ -244,10 +244,10 @@ describe.only('Confirms we\'ve filtered Light Rail Data correct', () => {
 					count2 = trips2.length;
 					assert(count1 === count2);
 					done();
-				})
-			})
-		})
-	})
+				});
+			});
+		});
+	});
 	it('can use a query function to get list of trips for a given day and route and given direction', (done) => {
 		let count1, count2;
 		let d = new Date();
@@ -266,7 +266,7 @@ describe.only('Confirms we\'ve filtered Light Rail Data correct', () => {
 		}, 'service_id -_id')
 		.then((docs) => {
 			let list = docs.map(item => item.service_id);
-			return Promise.resolve(list)
+			return Promise.resolve(list);
 		})
 		.then((ids) => {
 			Trip.find({
@@ -287,7 +287,7 @@ describe.only('Confirms we\'ve filtered Light Rail Data correct', () => {
 			})
 			.then((trips) => {
 				console.log("trips.length in Trip.find", trips.length);
-				count1 = trips.length
+				count1 = trips.length;
 				getTripsByDateAndRouteAndDirection(d, '101D', 0)
 				.then((trips2) => {
 					console.log("trips2.length ", trips2.length);
@@ -295,10 +295,10 @@ describe.only('Confirms we\'ve filtered Light Rail Data correct', () => {
 					count2 = trips2.length;
 					assert(count1 === count2);
 					done();
-				})
-			})
-		})
-	})
+				});
+			});
+		});
+	});
 	it('can use a query function to get list of service_ids for a date', (done) => {
 		let count1, count2;
 		let d = new Date();
@@ -317,7 +317,7 @@ describe.only('Confirms we\'ve filtered Light Rail Data correct', () => {
 		}, 'service_id -_id')
 		.then((docs) => {
 			let list = docs.map(item => item.service_id);
-			return Promise.resolve(list)
+			return Promise.resolve(list);
 		})
 		.then((ids) => {
 			count1 = ids.length;
@@ -327,10 +327,10 @@ describe.only('Confirms we\'ve filtered Light Rail Data correct', () => {
 				count2 = list.length;
 				assert(count1 === count2);
 				done();
-			})
+			});
 
-		})
-	})
+		});
+	});
 	xit('can get a list of next 3 stoptimes for a given stop and direction and time', (done) => {
 		let d = new Date(),
 		now = dateHelpers.convertCurrentTimeTo24(d),
@@ -339,7 +339,7 @@ describe.only('Confirms we\'ve filtered Light Rail Data correct', () => {
 		routesInfo;
 		getServiceIdsForDate(d)
 		.then((serviceIds) => {
-			return getTripIdsByServiceIds(serviceIds)
+			return getTripIdsByServiceIds(serviceIds);
 		})
 		.then((tripIds) => {
 			return Stop.findOne({
@@ -375,8 +375,8 @@ describe.only('Confirms we\'ve filtered Light Rail Data correct', () => {
 				return ({
 					times: times,
 					stopTripIds: stopTripIds
-				})
-			})
+				});
+			});
 		})
 		.then((data) => {
 			Trip.find({
@@ -388,71 +388,99 @@ describe.only('Confirms we\'ve filtered Light Rail Data correct', () => {
 				routesInfo = routes;
 				console.log("routesInfo ", routesInfo);
 				done();
-			})
-		})
+			});
+		});
 
-	})
+	});
 	it('can use query functions to get a list of next x stoptimes for a given stop and direction and time', (done) => {
 		let d = new Date(),
 		now = dateHelpers.convertCurrentTimeTo24(d);
 		getServiceIdsForDate(d)
 		.then((serviceIds) => {
-			return getTripIdsByServiceIds(serviceIds)
+			return getTripIdsByServiceIds(serviceIds);
 		})
 		.then((tripIds) => {
-			return getXNextStopTimesForStop('24894', tripIds, 1)
+			return getXNextStopTimesForStop('24894', tripIds, 1);
 		})
 		.then((stopTimes) => {
 			console.log("stopTimes.times ", stopTimes.times);
-			return getRoutesInfoByTripIds(stopTimes.stopTripIds)
+			return getRoutesInfoByTripIds(stopTimes.stopTripIds);
 		})
 		.then((routesInfo) => {
 			console.log("routesInfo ", routesInfo);
 			done();
-		})
-	})
-	it('can get all stops for a given route, date, and direction', (done) => {
+		});
+	});
+	xit('BROKEN, save for mapReduce sample can get all stops for a given route, date, and direction', (done) => {
 		let d = new Date();
 		getTripsByDateAndRouteAndDirection(d, '101D', 0)
 		.then((trips) => {
-			trips[0].stop_times.sort((a, b) => a.stop_sequence - b.stop_sequence)
+			trips[0].stop_times.sort((a, b) => a.stop_sequence - b.stop_sequence);
 			return trips[0].stop_times.map(item => item.stop_id);
 		})
 		.then((stopIds) => {
 			console.log("stopIds ", stopIds);
 			// return Stop.find({stop_id: {$in: stopIds}}, '-stop_times',{}).lean()
-			let stops = Stop.mapReduce(
-				function() {
-					let order = inputs.indexOf(this.stop_id);
-					emit(order, {
-						doc: this
-					});
-				},
-				function() {}, {
-					"out": {
-						"inline": 1
-					},
-					"query": {
-						"stop_id": {
-							"$in": stopIds
-						}
-					},
-					"scope": {
-						"inputs": stopIds
-					},
-					"finalize": function(key, value) {
-						return value.doc;
-					}
-				}
-			)
-			console.log("stops ", stops);
+			let o = {};
+			o.map = function() {
+						let order = inputs.indexOf(this.stop_id);
+						emit(order, {
+							doc: this
+						});
+					};
+			o.reduce = 	function(key, value) { return value.doc; };
+			o.out = { "inline": 1 };
+			o.query = { "stop_id": { "$in": stopIds }};
+			o.scope = { "inputs": stopIds };
+			let docs;
+			return Stop.mapReduce(o, function (err, results) {
+				docs = results.results.map(function(current,index) { 
+					return current.value.doc;
+				});
+				console.log("docs[0].stop_id ",docs[0].stop_id);
+			})
+			.then(() => docs);
 		})
-		.then((stops) => {
+		.then((docs) => {
 			// stops do not come in the order of the stop_ids array created in the .then((trips))
-			// console.log("stops ",stops);
+			let stops = docs.map(function(current,index) {
+				return current.stop_id;
+			});
+			console.log("stops ",stops);
 			done();
+		});
+	});
+	it('can get all stops for a given route, date, and direction', (done) => {
+		let d = new Date();
+		getTripsByDateAndRouteAndDirection(d, '101D', 0)
+		.then((trips) => {
+			trips[trips.length/2].stop_times.sort((a, b) => a.stop_sequence - b.stop_sequence);
+			return trips[trips.length/2].stop_times.map(item => item.stop_id);
 		})
-	})
+		.then((stopIds) => {
+			console.log("stopIds ", stopIds);
+			let stopsInOrder = [];
+			return Stop.find({stop_id: {$in: stopIds}}, '-stop_times -location -_id',{}).lean()
+			.then((stops) => {
+				stopsInOrder = stops.map((current,index) => {
+					let id = stopIds[index],
+						i = stops.findIndex(item => item.stop_id === id);
+					return stops[i];
+				});
+				return stopsInOrder;
+			});
+		})
+		.then((docs) => {
+			// let stops = docs.map(function(current,index) {
+			// 	return current.stop_id;
+			// });
+			for (let i=0; i < docs.length; i++) {
+				console.log(docs[i].name);
+			}
+			done();
+
+		});
+	});
 
 });
 
