@@ -16,35 +16,35 @@ mongoose.Promise = global.Promise;
 mongoose.connect('mongodb://localhost/rtdNextTrain');
 
 mongoose.connection
-.once('open', () => { 
-	console.log('successful connection to db in runUpdateStaticFeed');
-	// Because this takes several minutes to run, it is being run as a child_process to 
-	// free up the main process
+	.once('open', () => { 
+		console.log('successful connection to db in runUpdateStaticFeed');
+		// Because this takes several minutes to run, it is being run as a child_process to 
+		// free up the main process
 
-	// First, tell main process we're ready
-	process.send('ready');
+		// First, tell main process we're ready
+		process.send('ready');
 
-	process.on('message', (msg) => {
-		if (msg === 'update') {
-			console.log("msg sent to child_process ",msg);
-			runUpdateStaticFeed(false)
-			.then((result) => {
-				console.log("result ",result);
-				process.send(result);
-			});
-		} else if (msg === 'force update') {
-			console.log("msg sent to child_process ",msg);
-			runUpdateStaticFeed(true)
-			.then((result) => {
-				console.log("result ",result);
-				process.send(result);
-			});
-		}
+		process.on('message', (msg) => {
+			if (msg === 'update') {
+				console.log("msg sent to child_process ",msg);
+				runUpdateStaticFeed(false)
+					.then((result) => {
+						console.log("result ",result);
+						process.send(result);
+					});
+			} else if (msg === 'force update') {
+				console.log("msg sent to child_process ",msg);
+				runUpdateStaticFeed(true)
+					.then((result) => {
+						console.log("result ",result);
+						process.send(result);
+					});
+			}
+		});
+	})
+	.on('error', (error) => {
+		console.warn('Error in DB connection in runUpdateStaticFeed', error);
 	});
-})
-.on('error', (error) => {
-	console.warn('Error in DB connection in runUpdateStaticFeed', error);
-});
 
 function runUpdateStaticFeed(force) {
 	console.log('runUpdateStaticFeed called with ', force);
@@ -76,9 +76,9 @@ function runUpdateStaticFeed(force) {
 				return Promise.all([addTripsToRoutes(), addStopTimesToStops(), addStopTimesToTrips()])
 					.then((results) => {
 						console.log("Promise.all([addTripsToRoutes(), addStopTimesToStops(), addStopTimesToTrips()]) results ",results);
-						let 	t2 = Date.now(),
-								totalTime = t2-t1,
-								d = new Date(totalTime);
+						let t2 = Date.now(),
+							totalTime = t2-t1,
+							d = new Date(totalTime);
 						console.log("Promise.all took " + d.getUTCMinutes() + ' mins & ' + d.getUTCSeconds() + ' seconds');
 						return ({updateStaticFeed:true,msg:"References added to collections in Promise.all"});
 					})

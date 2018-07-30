@@ -1,4 +1,4 @@
-const checkFeed = require('./checkFeed'),
+const 	checkFeed = require('./checkFeed'),
 		downloadFeed = require('./downloadFeed'),
 		unzipFiles = require('./unzipFiles'),
 		updateFeed = require('./updateFeed'),

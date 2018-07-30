@@ -5,4 +5,4 @@ module.exports = {
 	extractedFolder : __dirname + "/../../feed/",
 	filesToUpdate : ['routes.txt','stop_times.txt','stops.txt','trips.txt','calendar.txt','calendar_dates.txt'],
 	lightRailRoutesRegex : /101.|103W|^A$|107R|113B|109L/
-}
+};

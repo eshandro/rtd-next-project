@@ -8,9 +8,9 @@ let dateHelpers = {
 	convertCurrentTimeTo24 (current) {
 		// current should be a JS Date object
 		let h = current.getHours().toString();
-		if (h.length === 1) {h = '0' + h}
+		if (h.length === 1) {h = '0' + h;}
 		let m = current.getMinutes().toString();
-		if (m.length === 1) {m = '0' + m }
+		if (m.length === 1) {m = '0' + m;}
 		return h + m;
 	},
 
@@ -28,26 +28,26 @@ let dateHelpers = {
 	convertDayToDayName (day) {
 		let dayName;
 		switch (new Date().getDay()) {
-		   case 0:
-		      dayName = "sunday";
-		      break;
-		   case 1:
-		      dayName = "monday";
-		      break;
-		   case 2:
-		      dayName = "tuesday";
-		      break;
-		   case 3:
-		      dayName = "wednesday";
-		      break;
-		   case 4:
-		      dayName = "thursday";
-		      break;
-		   case 5:
-		      dayName = "friday";
-		      break;
-		   case 6:
-		      dayName = "saturday";
+		case 0:
+			dayName = "sunday";
+			break;
+		case 1:
+			dayName = "monday";
+			break;
+		case 2:
+			dayName = "tuesday";
+			break;
+		case 3:
+			dayName = "wednesday";
+			break;
+		case 4:
+			dayName = "thursday";
+			break;
+		case 5:
+			dayName = "friday";
+			break;
+		case 6:
+			dayName = "saturday";
 		}
 		return dayName;
 	}

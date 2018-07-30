@@ -40,24 +40,24 @@ function downloadFeed(fileUrl, apiPath) {
 			return new Promise((resolve, reject) => {
 				const errorHandler = (error) => {
 					console.log("errorHandler in fs promise");
-			   	let errMsg = "Unable to download file: " + error;
-			   	reject({downloadFeedSuccess: false, msg: errMsg});
+					let errMsg = "Unable to download file: " + error;
+					reject({downloadFeedSuccess: false, msg: errMsg});
 				};
 
 				file
-			   	.on('open', () => {
-			   		// console.log("open writestream in downloadFeed");
-			      	timer = setTimeout(() => {
-			      		console.log("timeout in fs promise");
-			      		file.close();
-			      		reject({downloadFeedSuccess: false, msg: 'Timeout writing file'});
-			      	}, timeout);
-			   	})
-			   	.on('error', errorHandler)
-			   	.on('finish', () => {
-			   		// console.log("finish writestream in downloadFeed");
-			    	resolve(destPath);
-			   	});
+					.on('open', () => {
+						// console.log("open writestream in downloadFeed");
+						timer = setTimeout(() => {
+							console.log("timeout in fs promise");
+							file.close();
+							reject({downloadFeedSuccess: false, msg: 'Timeout writing file'});
+						}, timeout);
+					})
+					.on('error', errorHandler)
+					.on('finish', () => {
+						// console.log("finish writestream in downloadFeed");
+						resolve(destPath);
+					});
 			})
 			.then((dest) => {
 				// console.log("dest ",dest);

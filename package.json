@@ -10,11 +10,16 @@
     "updateFeed": "node src/scripts/static_feed/initUpdateStaticFeed.js",
     "forceUpdateFeed": "node src/scripts/static_feed/initUpdateStaticFeed.js true",
     "test": "NODE_ENV=test nodemon --exec 'mocha --recursive'",
-    "production": "NODE_ENV=production node src/scripts/index.js"
+    "production": "NODE_ENV=production node src/scripts/index.js",
+    "lint": "./node_modules/.bin/eslint src"
   },
   "devDependencies": {
+    "babel-eslint": "^8.2.3",
+    "eslint": "^4.19.1",
+    "eslint-plugin-react": "^7.9.1",
     "mocha": "^5.0.1",
-    "nodemon": "^1.15.1"
+    "nodemon": "^1.15.1",
+    "webpack": "^4.9.1"
   },
   "dependencies": {
     "fs-readfile-promise": "^3.0.0",

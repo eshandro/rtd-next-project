@@ -9,18 +9,18 @@ function getStops(stopIdsList) {
 
 function addStopsToRoutes() {
 	let routesCursor = Route.find({})
-			.populate({
-				path: 'trips',
-				model: 'trip',
-				options: {sort: {direction:1}},
-				populate:{
-					path: 'stop_times',
-					model: 'stoptime',
-					select: 'stop_id stop_sequence -_id',
-					options: {sort: {stop_sequence: 1}}
-				}
-			})
-			.cursor();
+		.populate({
+			path: 'trips',
+			model: 'trip',
+			options: {sort: {direction:1}},
+			populate:{
+				path: 'stop_times',
+				model: 'stoptime',
+				select: 'stop_id stop_sequence -_id',
+				options: {sort: {stop_sequence: 1}}
+			}
+		})
+		.cursor();
 
 	return routesCursor.eachAsync((doc) => {
 		let directChange = doc.trips.findIndex((element) => element.direction === 1);
@@ -47,13 +47,12 @@ function addStopsToRoutes() {
 		
 		// clear out existing stops before adding stops
 		doc.update({stops: []})
-		.then(() => {
-			return getStops(stopIdsList);
-		})
-		.then((stops) => {
-			return doc.update({stops: stops});
-		});
-	
+			.then(() => {
+				return getStops(stopIdsList);
+			})
+			.then((stops) => {
+				return doc.update({stops: stops});
+			});
 	})
 	.then(() => {
 		console.log('routesCursor in addStopsToRoutes done!');

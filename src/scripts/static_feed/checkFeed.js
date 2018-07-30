@@ -9,7 +9,7 @@ const 	fetch = require('node-fetch'),
  * @return {string}      [last modified date from html]
  */
 function parseDateFromHTML(html) {
-	let test = /\d{2}.\w{3}.\d{4}\s*\d{2}\:\d{2}/,	
+	let test = /\d{2}.\w{3}.\d{4}\s*\d{2}:\d{2}/,	
 		temp = html,
 		start = temp.indexOf('google_transit.zip'),
 		end = temp.indexOf('</tr', start),
@@ -54,7 +54,7 @@ function getFeedDate(url) {
  *                       needs to be done
  */
 function checkFeed(url, forceUpdate) {
-	let lastModified, feedDate, needUpdate;
+	// let lastModified, feedDate, needUpdate;
 	let fileDatePromise = lastModifiedDate.getLastModified(lastModifiedFile);
 	let htmlDatePromise = getFeedDate(url);
 

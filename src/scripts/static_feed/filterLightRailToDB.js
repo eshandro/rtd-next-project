@@ -54,7 +54,7 @@ function tripsFilter(assembler) {
 			return globals.lightRailRoutesRegex.test(assembler.current.route_id);
 		}
 	}
-  // return undefined to indicate our uncertainty at this moment
+	// return undefined to indicate our uncertainty at this moment
 }
 
 function stopTimesFilter(assembler) {
@@ -64,7 +64,7 @@ function stopTimesFilter(assembler) {
 			return trip_ids.includes(assembler.current.trip_id);
 		}
 	}
-  // return undefined to indicate our uncertainty at this moment
+	// return undefined to indicate our uncertainty at this moment
 }
 
 function stopsFilter(assembler) {
@@ -74,11 +74,11 @@ function stopsFilter(assembler) {
 			return stop_ids.includes(assembler.current.stop_id);
 		}
 	}
-  // return undefined to indicate our uncertainty at this moment
+	// return undefined to indicate our uncertainty at this moment
 }
 
-let 	trip_ids = [],
-		stop_ids = [];
+let trip_ids = [],
+	stop_ids = [];
 /**
  * create Light Rail only JSON files
  * @param  {string} sourceFile File to be stripped to lightrail only info
@@ -93,9 +93,7 @@ let 	trip_ids = [],
 
 function addLightRailData(sourceFile, filterFN, dbFunc, dbModel,list, testKey) {
 	const stream = StreamFilteredArray.make({objectFilter: filterFN});
-	// May no longer need counter
-	let 	counter = 0,
-			docs = [];
+	let	docs = [];
 	
 	return new Promise((resolve,reject) => {
 		const errorHandlerRead = (error) => {
@@ -122,7 +120,6 @@ function addLightRailData(sourceFile, filterFN, dbFunc, dbModel,list, testKey) {
 				let newDoc = dbFunc(object.value);
 				
 				docs.push(newDoc);
-				counter++;
 			})
 			.on("error", errorHandlerRead)
 			.on("end", function(){
@@ -238,9 +235,9 @@ function filterLightRail() {
 				return ({lightRailDataSuccess: false, msg: "addLightRailData('stops.json',stopsFilter,createStopFromJson,Stop,false,false); or call above failed"});
 			} else {
 				lists.push(data.msg);
-				let 	t2 = Date.now(),
-						totalTime = t2-t1,
-						d = new Date(totalTime);
+				let t2 = Date.now(),
+					totalTime = t2-t1,
+					d = new Date(totalTime);
 				console.log("filterLightRail took " + d.getUTCMinutes() + ' mins & ' + d.getUTCSeconds() + ' seconds');
 				
 				return ({lightRailDataSuccess: true, msg: lists});
