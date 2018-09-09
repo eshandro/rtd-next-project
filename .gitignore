@@ -1,3 +1,9 @@
+# feed files
+feed/
+feed-temp/
+src/testing-files
+
+
 # Logs
 logs
 *.log
@@ -56,10 +62,5 @@ typings/
 
 # dotenv environment variables file
 .env
-
-# feed files
-feed/
-feed-temp/
-src/testing-files
 
 

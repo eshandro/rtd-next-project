@@ -2,7 +2,7 @@
   "name": "rtd-project",
   "version": "0.0.1",
   "description": "RTD Next Ride finder",
-  "main": "index.js",
+  "private": true,
   "repository": "https://github.com/eshandro/rtd-next-project.git",
   "author": "eshandro <erik843@gmail.com>",
   "license": "MIT",
@@ -11,17 +11,26 @@
     "forceUpdateFeed": "node src/scripts/static_feed/initUpdateStaticFeed.js true",
     "test": "NODE_ENV=test nodemon --exec 'mocha --recursive'",
     "production": "NODE_ENV=production node src/scripts/index.js",
-    "lint": "./node_modules/.bin/eslint src"
+    "lint": "./node_modules/.bin/eslint src",
+    "start": "webpack --mode development",
+    "build": "webpack --mode production",
+    "startWebpackServer": "node ./node_modules/webpack-dev-server/bin/webpack-dev-server.js"
   },
   "devDependencies": {
-    "babel-eslint": "^8.2.3",
-    "eslint": "^4.19.1",
+    "@babel/core": "^7.0.0",
+    "@babel/preset-env": "^7.0.0",
+    "babel-eslint": "^9.0.0",
+    "babel-loader": "^8.0.2",
+    "eslint": "^5.5.0",
     "eslint-plugin-react": "^7.9.1",
     "mocha": "^5.0.1",
     "nodemon": "^1.15.1",
-    "webpack": "^4.9.1"
+    "webpack": "^4.17.1",
+    "webpack-cli": "^3.1.0",
+    "webpack-dev-server": "^3.1.7"
   },
   "dependencies": {
+    "@babel/preset-react": "^7.0.0",
     "fs-readfile-promise": "^3.0.0",
     "mongoose": "^5.0.7",
     "node-fetch": "^2.1.2",
