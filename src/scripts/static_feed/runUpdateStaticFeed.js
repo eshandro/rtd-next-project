@@ -47,7 +47,8 @@ mongoose.connection
 	});
 
 function runUpdateStaticFeed(force) {
-	console.log('runUpdateStaticFeed called with ', force);
+	console.log('runUpdateStaticFeed called with ',force);
+	console.log("update Started at ", new Date().toLocaleString("en-US", {timezone: "America/Denver"}));
 	/**
 	 * Runs updateStaticFeed to:
 	 * 1. determine if feed needs updating. if yes, then:
@@ -97,6 +98,7 @@ function runUpdateStaticFeed(force) {
 			} else {
 				mongoose.connection.close(() => {
 					console.log("mongoose connection closed, updateStaticFeed: true, msg: ", data.msg);
+					console.log("update finished at ", new Date().toLocaleString("en-US", {timezone: "America/Denver"}));
 				});
 				return ({success: true, msg:`updateStaticFeed a sucess ${data.msg}`});	
 			}
