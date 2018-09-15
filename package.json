@@ -13,8 +13,7 @@
     "production": "NODE_ENV=production node src/scripts/index.js",
     "lint": "./node_modules/.bin/eslint src",
     "start": "webpack-dev-server --open --mode development",
-    "build": "webpack --mode production",
-    "startWebpackServer": "node ./node_modules/webpack-dev-server/bin/webpack-dev-server.js"
+    "build": "webpack --mode production"
   },
   "devDependencies": {
     "@babel/core": "^7.0.0",

@@ -18,7 +18,7 @@ module.exports = {
     ],
     "rules": {
         "indent": [
-            "warn",
+            "off",
             "tab",
             {"MemberExpression":1}
         ],
