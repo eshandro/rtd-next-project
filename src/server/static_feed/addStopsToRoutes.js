@@ -1,5 +1,5 @@
-const	Route = require('../../../database/models/route'),
-		Stop = require('../../../database/models/stop');
+const	Route = require('../database/models/route'),
+		Stop = require('../database/models/stop');
 
 
 function getStops(stopIdsList) {

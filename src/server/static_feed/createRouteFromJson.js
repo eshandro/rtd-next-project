@@ -1,4 +1,4 @@
-const Route = require('../../../database/models/route');
+const Route = require('../database/models/route');
 /** json obj **/
 // "route_id":"101C"
 // "route_short_name":"C"

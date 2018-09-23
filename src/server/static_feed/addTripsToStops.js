@@ -1,5 +1,5 @@
-const	Trip = require('../../../database/models/trip'),
-		Stop = require('../../../database/models/stop');
+const	Trip = require('../database/models/trip'),
+		Stop = require('../database/models/stop');
 
 
 function getTrips(tripsList) {

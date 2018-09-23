@@ -1,4 +1,4 @@
-const CalendarDates = require('../../../database/models/calendar_dates');
+const CalendarDates = require('../database/models/calendar_dates');
 /** json obj **/
 // "service_id": "WK_merged_112042900,
 // "date": "20180528",

@@ -1,5 +1,5 @@
-const	Trip = require('../../../database/models/trip'),
-		Route = require('../../../database/models/route');
+const	Trip = require('../database/models/trip'),
+		Route = require('../database/models/route');
 
 
 function getTrips(routeID) {

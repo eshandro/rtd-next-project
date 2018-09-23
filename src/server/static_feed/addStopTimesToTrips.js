@@ -1,5 +1,5 @@
-const	StopTime = require('../../../database/models/stop_time'),
-		Trip = require('../../../database/models/trip');
+const	StopTime = require('../database/models/stop_time'),
+		Trip = require('../database/models/trip');
 
 
 function getStopTimes(tripID) {

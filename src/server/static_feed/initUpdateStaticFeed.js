@@ -1,7 +1,7 @@
 const 	{fork} = require('child_process'),
 		forceUpdate = process.argv[2];
 
-const start = fork('./src/scripts/static_feed/runUpdateStaticFeed.js');
+const start = fork('./src/server/static_feed/runUpdateStaticFeed.js');
 
 
 start.on('message', (msg) => {

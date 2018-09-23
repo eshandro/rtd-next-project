@@ -1,4 +1,4 @@
-const Stop = require('../../../database/models/stop');
+const Stop = require('../database/models/stop');
 /** json obj **/
 // {"stop_id":"34467"
 // "stop_code":"34467"

@@ -1,4 +1,4 @@
-const StopTime = require('../../../database/models/stop_time');
+const StopTime = require('../database/models/stop_time');
 const dateHelpers = require('../dateHelpers');
 /** json obj **/
 // {"trip_id":"111674563"

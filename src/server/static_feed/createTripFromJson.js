@@ -1,4 +1,4 @@
-const Trip = require('../../../database/models/trip');
+const Trip = require('../database/models/trip');
 /** json obj **/
 // "block_id": "b_109  8",
 // "route_id": "109L",

@@ -7,12 +7,12 @@
   "author": "eshandro <erik843@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "updateFeed": "node src/scripts/static_feed/initUpdateStaticFeed.js",
-    "forceUpdateFeed": "node src/scripts/static_feed/initUpdateStaticFeed.js true",
+    "updateFeed": "node src/server/static_feed/initUpdateStaticFeed.js",
+    "forceUpdateFeed": "node src/server/static_feed/initUpdateStaticFeed.js true",
     "test": "NODE_ENV=test nodemon --exec 'mocha --recursive'",
-    "production": "NODE_ENV=production node src/scripts/index.js",
+    "production": "NODE_ENV=production node src/client/index.js",
     "lint": "./node_modules/.bin/eslint src",
-    "start": "webpack-dev-server --open --mode development",
+    "start": "webpack-dev-server --open --mode development && nodemon --exec node src/server/server.js",
     "build": "webpack --mode production"
   },
   "devDependencies": {

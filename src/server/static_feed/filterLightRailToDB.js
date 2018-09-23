@@ -32,12 +32,12 @@ const 	StreamFilteredArray = require("stream-json/utils/StreamFilteredArray"),
 		createCalendarFromJson = require("./createCalendarFromJson"),
 		createCalendarDatesFromJson = require("./createCalendarDatesFromJson"),
 
-		Trip = require('../../../database/models/trip'),
-		Route = require('../../../database/models/route'),
-		Stop = require('../../../database/models/stop'),
-		StopTime = require('../../../database/models/stop_time'),
-		Calendar = require('../../../database/models/calendar'),
-		CalendarDates = require('../../../database/models/calendar_dates'),
+		Trip = require('../database/models/trip'),
+		Route = require('../database/models/route'),
+		Stop = require('../database/models/stop'),
+		StopTime = require('../database/models/stop_time'),
+		Calendar = require('../database/models/calendar'),
+		CalendarDates = require('../database/models/calendar_dates'),
 
 		globals = require('../globals');
 
