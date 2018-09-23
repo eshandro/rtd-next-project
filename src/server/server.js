@@ -17,7 +17,15 @@ mongoose.connect(serverConfig.mongoURL, (error) => {
 		console.log(`MongoDB connection error: ${error}`);
 		throw error;
 	}
-})
+});
+
+const staticFeedRoutes = require('./routes/static-feed-routes');
+
+app.use(bodyParser.json({limit: '20mb'}));
+app.use(bodyParser.urlencoded({limit: '20mb', extended: false }));
+app.use(Express.static(path.resolve(__dirname, '../dist')));
+app.use('/api/staticfeed', staticFeedRoutes);
+
 
 app.listen(serverConfig.port, (error) => {
 	if (!error) {
