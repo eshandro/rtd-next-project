@@ -39,7 +39,7 @@ const 	StreamFilteredArray = require("stream-json/utils/StreamFilteredArray"),
 		Calendar = require('../database/models/calendar'),
 		CalendarDates = require('../database/models/calendar_dates'),
 
-		globals = require('../globals');
+		globals = require('../utils/globals');
 
 
 /**

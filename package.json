@@ -12,7 +12,9 @@
     "test": "NODE_ENV=test nodemon --exec 'mocha --recursive'",
     "production": "NODE_ENV=production node src/client/index.js",
     "lint": "./node_modules/.bin/eslint src",
-    "start": "webpack-dev-server --open --mode development && nodemon --exec node src/server/server.js",
+    "startWebpackDev": "webpack-dev-server --open --mode development",
+    "startServer": "nodemon --exec node src/server/server.js",
+    "start": "concurrently --kill-others-on-fail \"npm:startWebpackDev\" \"npm:startServer\"",
     "build": "webpack --mode production"
   },
   "devDependencies": {
@@ -20,6 +22,7 @@
     "@babel/preset-env": "^7.0.0",
     "babel-eslint": "^9.0.0",
     "babel-loader": "^8.0.2",
+    "concurrently": "^4.0.1",
     "eslint": "^5.5.0",
     "eslint-plugin-react": "^7.9.1",
     "html-loader": "^0.5.5",
@@ -32,14 +35,14 @@
   },
   "dependencies": {
     "@babel/preset-react": "^7.0.0",
+    "body-parser": "^1.18.3",
+    "express": "^4.16.3",
     "fs-readfile-promise": "^3.0.0",
     "mongoose": "^5.0.7",
     "node-fetch": "^2.1.2",
     "path-reader": "^1.0.6",
     "react": "^16.4.2",
     "react-dom": "^16.4.2",
-    "react-redux": "^5.0.7",
-    "redux": "^4.0.0",
     "stream-json": "^0.5.2",
     "unzipper": "^0.9.2"
   }
