@@ -1,6 +1,6 @@
 const	Trip = require('../../database/models/trip'),
 		getServiceIdsForDate = require('../../database/queries/getServiceIdsForDate'),
-		dateHelpers = require('../../src/scripts/dateHelpers');
+		dateHelpers = require('../../utils/dateHelpers');
 
 /**
  * DB query to get list of trips for a given date, route, and direction

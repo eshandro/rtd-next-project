@@ -1,5 +1,5 @@
 const	Calendar = require('../../database/models/calendar'),
-		dateHelpers = require('../../src/scripts/dateHelpers');
+		dateHelpers = require('../../utils/dateHelpers');
 
 /**
  * DB query to get list of service ids for a given date
@@ -7,6 +7,9 @@ const	Calendar = require('../../database/models/calendar'),
  * @return {Array}       list of service_ids
  */
 function getServiceIdsForDate (date) {
+	if (typeof date === 'string') {
+		date = new Date(decodeURI(date))
+	}
 	let today = dateHelpers.convertCurrentDateToRTDFormat(date);
 	let day = dateHelpers.convertDayToDayName(date.getDay());
 
