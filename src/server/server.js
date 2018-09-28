@@ -21,12 +21,14 @@ mongoose.connect(serverConfig.mongoURL, (error) => {
 
 const staticFeedRoutes = require('./routes/static-feed-routes');
 const staticFeedServices = require('./routes/static-feed-services');
+const staticFeedTrips = require('./routes/static-feed-trips');
 
 app.use(bodyParser.json({limit: '20mb'}));
 app.use(bodyParser.urlencoded({limit: '20mb', extended: false }));
 app.use(Express.static(path.resolve(__dirname, '../dist')));
 app.use('/api/staticfeed/routes', staticFeedRoutes);
 app.use('/api/staticfeed/services', staticFeedServices);
+app.use('/api/staticfeed/trips',staticFeedTrips);
 
 
 app.listen(serverConfig.port, (error) => {
