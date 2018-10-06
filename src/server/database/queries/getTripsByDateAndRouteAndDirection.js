@@ -1,4 +1,5 @@
 const	Trip = require('../../database/models/trip'),
+		StopTime = require('../../database/models/stop_time'),
 		getServiceIdsForDate = require('../../database/queries/getServiceIdsForDate'),
 		dateHelpers = require('../../utils/dateHelpers');
 

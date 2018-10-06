@@ -3,9 +3,9 @@ const StaticFeedRoutesController = require('../controllers/static-feed/routes_co
 
 const router = new Router();
 
-router.route('/routes_list').get(StaticFeedRoutesController.getRoutesList);
+router.route('/routes_list').get(StaticFeedRoutesController.routesList);
 
-router.route('/routes_by_tripids/:tripids').get(StaticFeedRoutesController.getRoutesInfoByTripIds);
+router.route('/routes_by_tripids').post(StaticFeedRoutesController.routesInfoByTripIds);
 
 
 module.exports = router;

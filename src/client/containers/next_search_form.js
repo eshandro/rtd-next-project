@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-// import getServicesIdsForDate from '../../../database/queries/getServiceIdsForDate';
+import * as staticFeedAPI from '../api/static-feed';
 
 class NextSearchForm extends Component {
 	constructor(props) {
@@ -16,20 +16,27 @@ class NextSearchForm extends Component {
 		};
 	}
 
+	componentDidMount () {
+		if (!this.state.serviceIDs) {
+			this.setState(serviceIDs: staticFeedAPI.getServiceIDs(new Date()))
+		}
+	}
 
 
 	render() {
 		return (
-			<form>
-				<label for="stop-location">Stop Loction</label>
-				<select 
-					id="stop-location" 
-					type="text" 
-					value={this.state.stopLocation} 
-					onChange=""
-					title="Select Your Stop Location"> 
-				</select>
-			</form>
+			<p>Service IDs: {this.state.serviceIDs}</p>
+			<p>Routes: {this.state.routes}</p>
+			// <form>
+				// <label for="stop-location">Stop Loction</label>
+				// <select 
+					// id="stop-location" 
+					// type="text" 
+					// value={this.state.stopLocation} 
+					// onChange=""
+					// title="Select Your Stop Location"> 
+				// </select>
+			// </form>
 		);
 	}
 

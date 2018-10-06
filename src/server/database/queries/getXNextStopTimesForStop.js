@@ -1,4 +1,5 @@
 const 	Stop = require('../../database/models/stop'),
+		StopTime = require('../../database/models/stop_time'),
 		dateHelpers = require('../../utils/dateHelpers');
 
 /**

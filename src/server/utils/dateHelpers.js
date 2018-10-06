@@ -50,6 +50,14 @@ let dateHelpers = {
 			dayName = "saturday";
 		}
 		return dayName;
+	},
+
+	convertDateStringToDateObject (dateString) {
+		// Convert datestring to Date Obj
+		// datestring must be in format: '2018-09-24'
+		// add T00:00 to force locale time vs UTC time
+		let dateObj = new Date(dateString+'T00:00');
+		return dateObj;
 	}
 
 };
