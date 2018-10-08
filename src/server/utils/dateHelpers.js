@@ -55,8 +55,13 @@ let dateHelpers = {
 	convertDateStringToDateObject (dateString) {
 		// Convert datestring to Date Obj
 		// datestring must be in format: '2018-09-24'
-		// add T00:00 to force locale time vs UTC time
-		let dateObj = new Date(dateString+'T00:00');
+		// if no T present add T00:00 to force locale time vs UTC time
+		let dateObj;
+		if (dateString.indexOf('T') === -1 ) {
+			dateObj = new Date(dateString+'T00:00');
+		} else {
+			dateObj = new Date(dateString)
+		}
 		return dateObj;
 	}
 

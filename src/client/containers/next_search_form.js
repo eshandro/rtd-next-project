@@ -6,6 +6,7 @@ class NextSearchForm extends Component {
 		super(props);
 
 		this.state = { 
+			thing: "hello",
 			serviceIDs: [],
 			tripIDs: [],
 			routes: [],
@@ -17,16 +18,29 @@ class NextSearchForm extends Component {
 	}
 
 	componentDidMount () {
-		if (!this.state.serviceIDs) {
-			this.setState(serviceIDs: staticFeedAPI.getServiceIDs(new Date()))
+		if (this.state.serviceIDs.length < 1) {
+			let d = new Date();
+			d = d.toISOString();
+			staticFeedAPI.getServiceIDs(d)
+			.then((result) => {
+				this.setState({ serviceIDs: result.serviceids });
+			})
 		}
 	}
 
 
 	render() {
+		const len = this.state.serviceIDs.length;
 		return (
-			<p>Service IDs: {this.state.serviceIDs}</p>
-			<p>Routes: {this.state.routes}</p>
+			<div>
+				{ 
+					!len 
+					? 'Loading...'
+					: (
+						<p>First Service ID: {this.state.serviceIDs[0]}</p>
+					) 
+				}
+			</div>
 			// <form>
 				// <label for="stop-location">Stop Loction</label>
 				// <select 
