@@ -23,6 +23,7 @@ class NextSearchForm extends Component {
 			d = d.toISOString();
 			staticFeedAPI.getServiceIDs(d)
 			.then((result) => {
+				console.log("result: ", result); 
 				this.setState({ serviceIDs: result.serviceids });
 			})
 		}

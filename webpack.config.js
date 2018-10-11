@@ -1,10 +1,12 @@
 const path = require('path');
+const CleanWebpackPlugin = require("clean-webpack-plugin");
 const HtmlWebPackPlugin = require("html-webpack-plugin");
 
 const htmlPlugin = new HtmlWebPackPlugin({
-	template: "./src/index.html",
-	filename: "../index.html"
+	// template: "./src/index.html",
+	filename: "./dist/index.html"
 })
+const cleanPlugin = new CleanWebpackPlugin(["dist/scripts"]);
 
 module.exports = {
 	entry: ["./src/client/index.js"],
@@ -32,8 +34,11 @@ module.exports = {
 			}
 		]
 	},
-	plugins: [htmlPlugin],
 	devServer: {
-		contentBase: "./dist/"
-	}
+		contentBase: "./dist/",
+		proxy: {
+			"/api": "http://localhost:8000"
+		}
+	},
+	plugins: [htmlPlugin]
 };
