@@ -1,5 +1,5 @@
 const assert = require('assert');
-const Stop = require('../database/models/stop');
+const Stop = require('../src/server/database/models/stop');
 	// stop_id: Number,
 	// name: String,
 	// desc: String,

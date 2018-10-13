@@ -22,7 +22,8 @@ Then, we can filter stop_times to only include trip_ids that are in filtered lig
 Then, we can filter stops to on include stop_ids that are in filtered stop_times.
 
  */
-const 	StreamFilteredArray = require("stream-json/utils/StreamFilteredArray"),
+const 	{parser} = require('stream-json'),
+		{streamArray} = require('stream-json/streamers/StreamArray'),
 		fs = require('fs'),
 
 		createTripFromJson = require("./createTripFromJson"),
@@ -48,30 +49,39 @@ const 	StreamFilteredArray = require("stream-json/utils/StreamFilteredArray"),
 **/
 function tripsFilter(assembler) {
 	// test only top-level objects in the array:
-	if(assembler.stack.length == 2 && assembler.key === null){
-		if(assembler.current.hasOwnProperty("route_id")){
-			// "true" to accept, "false" to reject
-			return globals.lightRailRoutesRegex.test(assembler.current.route_id);
+	if(assembler.stack.length == 2 && assembler.key === null && assembler.current){
+		if(assembler.current instanceof Array){
+			return false;
 		}
+		// "true" to accept, "false" to reject
+		if ( globals.lightRailRoutesRegex.test(assembler.current.route_id) ) {
+			return true;
+		} 
 	}
 	// return undefined to indicate our uncertainty at this moment
 }
 
 function stopTimesFilter(assembler) {
-	if(assembler.stack.length == 2 && assembler.key === null){
-		if(assembler.current.hasOwnProperty("trip_id")){
+	if(assembler.stack.length == 2 && assembler.key === null && assembler.current){
+		if(assembler.current instanceof Array){
+			return false;
+		}
+		if( trip_ids.includes(assembler.current.trip_id) ){
 			// "true" to accept, "false" to reject
-			return trip_ids.includes(assembler.current.trip_id);
+			return true;
 		}
 	}
 	// return undefined to indicate our uncertainty at this moment
 }
 
 function stopsFilter(assembler) {
-	if(assembler.stack.length == 2 && assembler.key === null){
-		if(assembler.current.hasOwnProperty("stop_id")){
+	if(assembler.stack.length == 2 && assembler.key === null && assembler.current){
+		if(assembler.current instanceof Array){
+			return false;
+		}
+		if( stop_ids.includes(assembler.current.stop_id) ){
 			// "true" to accept, "false" to reject
-			return stop_ids.includes(assembler.current.stop_id);
+			return true;
 		}
 	}
 	// return undefined to indicate our uncertainty at this moment
@@ -92,9 +102,8 @@ let trip_ids = [],
  */
 
 function addLightRailData(sourceFile, filterFN, dbFunc, dbModel,list, testKey) {
-	const stream = StreamFilteredArray.make({objectFilter: filterFN});
 	let	docs = [];
-	
+
 	return new Promise((resolve,reject) => {
 		const errorHandlerRead = (error) => {
 			console.log("errorHandlerRead in addLightRailData promise");
@@ -102,35 +111,30 @@ function addLightRailData(sourceFile, filterFN, dbFunc, dbModel,list, testKey) {
 			reject(errMsg);
 		};
 
-		let read = fs.createReadStream(globals.extractedFolder + "/json/" + sourceFile);
-		read.pipe(stream.input);
+		let read = fs.createReadStream(globals.extractedFolder + "json/" + sourceFile)
+			.pipe(parser())
+			.pipe(streamArray({objectFilter: filterFN}))
 		
 		read.on('error', errorHandlerRead);
 
-		stream.input
-			.on('error', errorHandlerRead);
-
-		stream.output
-			.on("data", function(object){
-				if(list && testKey) {
-					if(!list.includes(object.value[testKey])) {
-						list.push(object.value[testKey]);
-					}
+		read.on("data", function(object){
+			if(list && testKey) {
+				if(!list.includes(object.value[testKey])) {
+					list.push(object.value[testKey]);
 				}
-				let newDoc = dbFunc(object.value);
-				
-				docs.push(newDoc);
-			})
-			.on("error", errorHandlerRead)
-			.on("end", function(){
-				dbModel.insertMany(docs, (err, documents) => {
-					if (err) {
-						console.log("err in insertMany ",err);
-					}
-					read.unpipe();
-					resolve({lightRailDataSuccess: true, msg:list ? list : sourceFile});
-				});
+			}
+			let newDoc = dbFunc(object.value);
+			docs.push(newDoc);
+		})
+		.on("end", function(){
+			dbModel.insertMany(docs, (err, documents) => {
+				if (err) {
+					console.log("err in insertMany ",err);
+				}
+				read.unpipe();
+				resolve({lightRailDataSuccess: true, msg:list ? list : sourceFile});
 			});
+		});
 
 	})
 	.then((data) => {

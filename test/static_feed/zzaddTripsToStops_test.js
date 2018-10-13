@@ -1,7 +1,7 @@
-const	Stop = require('../../database/models/stop'),
-		// StopTime = require('../../database/models/stop_time'),
-		Trip = require('../../database/models/trip'),
-		addTripsToStops = require('../../src/scripts/static_feed/addTripsToStops'),
+const	Stop = require('../../src/server/database/models/stop'),
+		// StopTime = require('../../src/server/database/models/stop_time'),
+		Trip = require('../../src/server/database/models/trip'),
+		addTripsToStops = require('../../src/server/static_feed/addTripsToStops'),
 		assert = require('assert');
 
 describe("Add Trips to each Stop", () => {

@@ -1,6 +1,6 @@
-const	Stop = require('../../database/models/stop'),
-		StopTime = require('../../database/models/stop_time'),
-		addStopTimesToStops = require('../../src/scripts/static_feed/addStopTimesToStops'),
+const	Stop = require('../../src/server/database/models/stop'),
+		StopTime = require('../../src/server/database/models/stop_time'),
+		addStopTimesToStops = require('../../src/server/static_feed/addStopTimesToStops'),
 		assert = require('assert');
 
 describe("Add StopTimes to each Stop", () => {

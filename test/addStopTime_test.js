@@ -1,5 +1,5 @@
 const assert = require('assert');
-const StopTime = require('../database/models/stop_time');
+const StopTime = require('../src/server/database/models/stop_time');
 	// time: String,
 	// stop_id: Number,
 	// trip_id: Number,

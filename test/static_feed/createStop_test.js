@@ -1,5 +1,5 @@
 const assert = require('assert');
-const createStop = require('../../src/scripts/static_feed/createStopFromJson');
+const createStop = require('../../src/server/static_feed/createStopFromJson');
 
 describe('Create a new Stop from JSON', () => {
 	let json, newStop;

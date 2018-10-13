@@ -1,5 +1,5 @@
 const assert = require('assert'),
-		filterLightRail = require('../../src/scripts/static_feed/filterLightRailToDB');
+		filterLightRail = require('../../src/server/static_feed/filterLightRailToDB');
 
 // Because this file drops all collections prior to running filter functionality,
 // the only way to successfully run this test is to run all other tests, but comment out the 
@@ -12,7 +12,7 @@ describe("Filter all data JSON to Light Rail only and persist to DB", () => {
 	xit('reads and lists JSON filtered to include light rail only data', (done) => {
 		filterLightRail()
 			.then((returned) => {
-				// console.log('returned:', returned )
+				console.log('returned:', returned )
 				assert(returned.lightRailDataSuccess)
 				done();
 			});

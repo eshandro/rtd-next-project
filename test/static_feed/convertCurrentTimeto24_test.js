@@ -1,5 +1,5 @@
 const assert = require('assert');
-const dateHelpers = require('../../src/scripts/dateHelpers');
+const dateHelpers = require('../../src/server/utils/datehelpers');
 
 describe('Take a JS date and convert to 24 hour time string', () => {
 	it('converts JS date object to String with length of 4', (done) => {

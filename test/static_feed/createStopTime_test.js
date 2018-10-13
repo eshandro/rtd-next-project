@@ -1,5 +1,5 @@
 const assert = require('assert');
-const createStopTime = require('../../src/scripts/static_feed/createStopTimeFromJson');
+const createStopTime = require('../../src/server/static_feed/createStopTimeFromJson');
 
 describe('Create a new StopTime from JSON', () => {
 	let json, newStopTime;

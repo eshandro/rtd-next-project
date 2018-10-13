@@ -1,6 +1,6 @@
-const	Trip = require('../../database/models/trip'),
-		Route = require('../../database/models/route'),
-		addTripsToRoutes = require('../../src/scripts/static_feed/addTripsToRoutes'),
+const	Trip = require('../../src/server/database/models/trip'),
+		Route = require('../../src/server/database/models/route'),
+		addTripsToRoutes = require('../../src/server/static_feed/addTripsToRoutes'),
 		assert = require('assert');
 
 describe("Add Trips to each Route", () => {

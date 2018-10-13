@@ -1,7 +1,7 @@
-const	Stop = require('../../database/models/stop'),
+const	Stop = require('../../src/server/database/models/stop'),
 		// StopTime = require('../../database/models/stop_time'),
-		Route = require('../../database/models/route'),
-		addStopsToRoutes = require('../../src/scripts/static_feed/addStopsToRoutes'),
+		Route = require('../../src/server/database/models/route'),
+		addStopsToRoutes = require('../../src/server/static_feed/addStopsToRoutes'),
 		assert = require('assert');
 
 describe("Add Stops to Routes", () => {

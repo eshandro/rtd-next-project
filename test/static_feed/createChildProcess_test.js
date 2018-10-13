@@ -1,4 +1,4 @@
-// const runUpdateStaticFeed = require('../../src/scripts/static_feed/runUpdateStaticFeed')
+// const runUpdateStaticFeed = require('../../src/server/static_feed/runUpdateStaticFeed')
 const {fork} = require('child_process');
 
 

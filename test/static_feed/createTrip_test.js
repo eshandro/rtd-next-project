@@ -1,5 +1,5 @@
 const assert = require('assert');
-const createTrip = require('../../src/scripts/static_feed/createTripFromJson');
+const createTrip = require('../../src/server/static_feed/createTripFromJson');
 
 describe('Create a new Trip from JSON', () => {
 	let json, newTrip;

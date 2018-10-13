@@ -1,5 +1,5 @@
 const assert = require('assert');
-const Trip = require('../database/models/trip');
+const Trip = require('../src/server/database/models/trip');
 
 describe('Create a Trip', () => {
 	let newTrip;

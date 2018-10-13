@@ -1,18 +1,18 @@
 const assert = require('assert');
-const Trip = require('../../database/models/trip'),
-		Route = require('../../database/models/route'),
-		Stop = require('../../database/models/stop'),
-		StopTime = require('../../database/models/stop_time'),
-		Calendar = require('../../database/models/calendar'),
-		CalendarDates = require('../../database/models/calendar_dates'),
-		getTripsByDateAndRoute = require('../../database/queries/getTripsByDateAndRoute'),
-		getTripsByDateAndRouteAndDirection = require('../../database/queries/getTripsByDateAndRouteAndDirection'),
-		getServiceIdsForDate = require('../../database/queries/getServiceIdsForDate'),
-		getTripIdsByServiceIds = require('../../database/queries/getTripIdsByServiceIds'),
-		getXNextStopTimesForStop = require('../../database/queries/getXNextStopTimesForStop'),
-		getRoutesInfoByTripIds = require('../../database/queries/getRoutesInfoByTripIds'),
-		dateHelpers = require('../../src/scripts/dateHelpers'),
-		globals = require('../../src/scripts/globals');
+const Trip = require('../../src/server/database/models/trip'),
+		Route = require('../../src/server/database/models/route'),
+		Stop = require('../../src/server/database/models/stop'),
+		StopTime = require('../../src/server/database/models/stop_time'),
+		Calendar = require('../../src/server/database/models/calendar'),
+		CalendarDates = require('../../src/server/database/models/calendar_dates'),
+		getTripsByDateAndRoute = require('../../src/server/database/queries/getTripsByDateAndRoute'),
+		getTripsByDateAndRouteAndDirection = require('../../src/server/database/queries/getTripsByDateAndRouteAndDirection'),
+		getServiceIdsForDate = require('../../src/server/database/queries/getServiceIdsForDate'),
+		getTripIdsByServiceIds = require('../../src/server/database/queries/getTripIdsByServiceIds'),
+		getXNextStopTimesForStop = require('../../src/server/database/queries/getXNextStopTimesForStop'),
+		getRoutesInfoByTripIds = require('../../src/server/database/queries/getRoutesInfoByTripIds'),
+		dateHelpers = require('../../src/server/utils/datehelpers'),
+		globals = require('../../src/server/utils/globals');
 
 
 // We know that Routes are correctly filtered using the route_ids regexp (/101.|103W|^A$|107R|113B|109L/).
@@ -21,7 +21,7 @@ const Trip = require('../../database/models/trip'),
 
 
 
-describe.only('Confirms we\'ve filtered Light Rail Data correct', () => {
+describe('Confirms we\'ve filtered Light Rail Data correct', () => {
 	let trip_idsList, stop_idsList;
 	xit('can confirm Trips only includes route_ids from regexp', (done) => {
 		let count1, count2;

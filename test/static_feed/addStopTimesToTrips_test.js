@@ -1,6 +1,6 @@
-const	Trip = require('../../database/models/trip'),
-		StopTime = require('../../database/models/stop_time'),
-		addStopTimesToTrips = require('../../src/scripts/static_feed/addStopTimesToTrips'),
+const	Trip = require('../../src/server/database/models/trip'),
+		StopTime = require('../../src/server/database/models/stop_time'),
+		addStopTimesToTrips = require('../../src/server/static_feed/addStopTimesToTrips'),
 		assert = require('assert');
 
 describe("Add StopTimes to each Trip", () => {

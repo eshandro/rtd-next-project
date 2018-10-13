@@ -2,10 +2,10 @@ const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 
 
-const Trip = require('../database/models/trip'),
-		Route = require('../database/models/route'),
-		Stop = require('../database/models/stop'),
-		StopTime = require('../database/models/stop_time');
+const Trip = require('../src/server/database/models/trip'),
+		Route = require('../src/server/database/models/route'),
+		Stop = require('../src/server/database/models/stop'),
+		StopTime = require('../src/server/database/models/stop_time');
 
 before((done) => {
 	mongoose.connect('mongodb://localhost/rtdNextTrain_test');

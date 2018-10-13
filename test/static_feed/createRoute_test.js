@@ -1,5 +1,5 @@
 const assert = require('assert');
-const createRoute = require('../../src/scripts/static_feed/createRouteFromJson');
+const createRoute = require('../../src/server/static_feed/createRouteFromJson');
 
 describe('Create a new Route from JSON', () => {
 	let json, newRoute;

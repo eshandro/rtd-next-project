@@ -1,5 +1,5 @@
 const assert = require('assert');
-const Route = require('../database/models/route');
+const Route = require('../src/server/database/models/route');
 	// route_id: String,
 	// name: String,
 	// shortName: String,
