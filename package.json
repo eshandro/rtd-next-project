@@ -10,12 +10,12 @@
     "updateFeed": "node src/server/static_feed/initUpdateStaticFeed.js",
     "forceUpdateFeed": "node src/server/static_feed/initUpdateStaticFeed.js true",
     "test": "NODE_ENV=test nodemon --exec 'mocha --recursive'",
-    "production": "NODE_ENV=production node src/client/index.js",
+    "build:dev": "webpack --mode development",
+    "build:prod": "webpack --mode production",
     "lint": "./node_modules/.bin/eslint src",
     "client": "webpack-dev-server --open --colors --mode development",
     "server": "nodemon --exec node src/server/server.js",
-    "start": "concurrently --kill-others-on-fail \"npm:server\" \"npm:client\"",
-    "build": "webpack --mode production"
+    "start:dev": "concurrently --kill-others-on-fail \"npm:server\" \"npm:client\""
   },
   "devDependencies": {
     "@babel/core": "^7.1.2",
