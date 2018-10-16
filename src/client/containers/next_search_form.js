@@ -23,30 +23,49 @@ class NextSearchForm extends Component {
 			d = d.toISOString();
 			staticFeedAPI.getServiceIDs(d)
 			.then((result) => {
-				console.log("result: ", result); 
+				console.log("serviceids: ", result); 
 				this.setState({ serviceIDs: result.serviceids });
 			})
+			.catch((err) => {
+				console.log("err in serviceIDs get:", err);
+				this.setState({serviceIDs: []})
+			})
 		}
+		if (this.state.routes.length < 1) {
+			staticFeedAPI.getRoutesList()
+			.then((result) => {
+				console.log("routes: ", result); 
+				this.setState({ routes: result.routesList });
+			})
+			.catch((err) => {
+				console.log("err in routes get:", err);
+				this.setState({routes: []})
+			})
+		}
+
 	}
 
 
 	render() {
-		const len = this.state.serviceIDs.length;
+		const routesLoaded = this.state.routes.length;
 		return (
 			<div>
-				{ 
-					!len 
-					? 'Loading...'
-					: (
-						<p>First Service ID: {this.state.serviceIDs[0]}</p>
-					) 
-				}
+				<h2>Next Train!</h2>
+				<form> 
+						<label htmlFor="route-select">Choose Route</label>
+						<select 
+							id="route-select" 
+							title="Select your route" >
+						{this.state.routes.map((item) => 
+							<option key={item._id} value={item.route_id}>{item.shortName} ({item.name})</option>
+						)}
+						</select>
+				</form>
 			</div>
 			// <form>
 				// <label for="stop-location">Stop Loction</label>
 				// <select 
 					// id="stop-location" 
-					// type="text" 
 					// value={this.state.stopLocation} 
 					// onChange=""
 					// title="Select Your Stop Location"> 

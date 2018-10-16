@@ -5,8 +5,8 @@ module.exports = {
 	serviceIdsForDate (req, res, next) {
 		let date = req.params.date;
 		let dateObj = dateHelpers.convertDateStringToDateObject(date);
-		if (dateObj == 'Invalid Date') {
-			res.status(500).send('Invalid Date');
+		if (!dateObj || dateObj == 'Invalid Date') {
+			res.status(500).send({ "err": "Invalid Date" });
 			return;
 		} 
 		getServiceIdsForDate(dateObj)
