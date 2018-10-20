@@ -1,4 +1,5 @@
 const getXNextStopTimesForStop = require('../../database/queries/getXNextStopTimesForStop');
+const getStopsListByRoute = require('../../database/queries/getStopsListByRoute');
 
 module.exports = {
 
@@ -16,5 +17,11 @@ module.exports = {
 		})
 	},
 
+	getStopsByRoute(req,res,next) {
+		let routeid = req.param.route;
 
+		getStopsListByRoute(routeid)
+		.then(stops => res.json({stops}))
+		.catch(err => res.status(500).send(err))
+	}
 };

@@ -20,7 +20,7 @@ module.exports = {
 	tripsByDateAndRoute (req, res, next) {
 		let date = req.params.date;
 		let route = req.params.route;
-		let dateObj  = dateHelpers.convertDateStringToDateObject(date);
+		let dateObj  = dateHelpers.convertISODateStringToDateObject(date);
 		if (dateObj == 'Invalid Date') {
 			res.status(500).send('Invalid Date');
 			return;
@@ -38,7 +38,7 @@ module.exports = {
 		let date = req.params.date;
 		let route = req.params.route;
 		let direction = req.params.direction;
-		let dateObj  = dateHelpers.convertDateStringToDateObject(date);
+		let dateObj  = dateHelpers.convertISODateStringToDateObject(date);
 		if (dateObj == 'Invalid Date') {
 			res.status(500).send('Invalid Date');
 			return;

@@ -33,6 +33,7 @@ const staticFeedStops = require('./routes/static-feed-stops');
  * /api/staticfeed/trips/trips_by_date_route/:date/:route
  * /api/staticfeed/trips/trips_by_date_route_direction/:date/:route/:direction
  * /api/staticfeed/stops/next_x_stoptimes_for_stop
+ * /api/staticfeed/stops/stops_for_route/:route
  * 
 **/
 

@@ -27,7 +27,7 @@ let dateHelpers = {
 
 	convertDayToDayName (day) {
 		let dayName;
-		switch (new Date().getDay()) {
+		switch (day) {
 		case 0:
 			dayName = "sunday";
 			break;
@@ -50,19 +50,30 @@ let dateHelpers = {
 			dayName = "saturday";
 		}
 		return dayName;
+
 	},
 
-	convertDateStringToDateObject (dateString) {
+	convertISODateStringToDateObject (datestring) {
 		// Convert datestring to Date Obj
 		// datestring must be in format: '2018-09-24'
 		// if no T present add T00:00 to force locale time vs UTC time
 		let dateObj;
-		if (dateString.indexOf('T') === -1 ) {
-			dateObj = new Date(dateString+'T00:00');
+		if (datestring.indexOf('T') === -1 ) {
+			dateObj = new Date(datestring+'T00:00');
 		} else {
-			dateObj = new Date(dateString)
+			dateObj = new Date(datestring.replace(/T.*$/,'T00:00'));
 		}
 		return dateObj;
+	},
+
+	convertDateObjToLocalISOString (dateObj) {
+	    function pad(n) { return n < 10 ? '0' + n : n }
+		return	dateObj.getFullYear() + '-'
+		        + pad(dateObj.getMonth() + 1) + '-'
+		        + pad(dateObj.getDate()) + 'T'
+		        + pad(dateObj.getHours()) + ':'
+		        + pad(dateObj.getMinutes()) + ':'
+		        + pad(dateObj.getSeconds())
 	}
 
 };
