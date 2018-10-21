@@ -35,15 +35,16 @@ module.exports = {
 	},
 
 	tripsByDateAndRouteAndDirection (req,res, next) {
-		let date = req.params.date;
-		let route = req.params.route;
-		let direction = req.params.direction;
+		let date = req.body.date;
+		let route = req.body.route;
+		let direction = req.body.direction;
+		let serviceids = req.body.serviceids;
 		let dateObj  = dateHelpers.convertISODateStringToDateObject(date);
 		if (dateObj == 'Invalid Date') {
 			res.status(500).send('Invalid Date');
 			return;
 		}
-		getTripsByDateAndRouteAndDirection(dateObj, route, direction)
+		getTripsByDateAndRouteAndDirection(dateObj, route, direction, serviceids)
 		.then((trips) => {
 			res.json({ trips });
 		})
