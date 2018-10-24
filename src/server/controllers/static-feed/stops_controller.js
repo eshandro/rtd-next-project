@@ -1,5 +1,6 @@
 const getXNextStopTimesForStop = require('../../database/queries/getXNextStopTimesForStop');
-const getStopsList = require('../../database/queries/getStopsList');
+const getStopsListByIds = require('../../database/queries/getStopsListByIds');
+const getStopsListByDirection = require('../../database/queries/getStopsListByDirection');
 
 module.exports = {
 
@@ -17,10 +18,18 @@ module.exports = {
 		})
 	},
 
-	getStopsList(req,res,next) {
+	stopsByIds(req,res,next) {
 		let stopids = req.body.stopids;
-		console.log("stopids in stop_controller getStopsList ",stopids);
-		getStopsList(stopids)
+		console.log("stopids in stop_controller stopsByIds ",stopids);
+		getStopsListByIds(stopids)
+		.then(stops => res.json({stops}))
+		.catch(err => res.status(500).send(err))
+	},
+
+	stopsByDirection(req,res,next) {
+		let dir = req.params.dir;
+		console.log("dir in stop_controller stopsByDirection ",dir);
+		getStopsListByDirection(dir)
 		.then(stops => res.json({stops}))
 		.catch(err => res.status(500).send(err))
 	}

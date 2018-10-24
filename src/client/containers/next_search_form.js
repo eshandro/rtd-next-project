@@ -11,7 +11,7 @@ class NextSearchForm extends Component {
 			serviceIDs: [],
 			trips: [],
 			routes: [],
-			stops: [],
+			stops: {0:[],1:[]},
 			directions: [],
 			route: null,
 			stop: null,
@@ -26,7 +26,7 @@ class NextSearchForm extends Component {
 		this.handleStopSelect = this.handleStopSelect.bind(this);
 		this.getServiceIDs = this.getServiceIDs.bind(this);
 		this.getTrips = this.getTrips.bind(this);
-		this.getStops = this.getStops.bind(this);
+		this.getStopsByDirection = this.getStopsByDirection.bind(this);
 
 	}
 
@@ -44,6 +44,12 @@ class NextSearchForm extends Component {
 				console.log("err in routes get:", err);
 				this.setState({routes: []})
 			})
+		}
+		if (this.state.stops[0].length < 1 ) {
+			this.getStopsByDirection(0);
+		}
+		if (this.state.stops[1].length < 1) {
+			this.getStopsByDirection(1);
 		}
 
 	}
@@ -98,21 +104,17 @@ class NextSearchForm extends Component {
 		})
 	}
 
-	getStops() {
-		let stopids = [];
-		this.state.trips.map((item, index) => {
-			item.stop_times.map((item2,index2) => {
-				if (!stopids.includes(item2.stop_id)) stopids.push(item2.stop_id);
-			})
-		});
-		staticFeedAPI.getStops(stopids)
-		.then(results => {
-			console.log("results from getStops ",results);
-			this.setState({ stops: results.stops })
+	getStopsByDirection(dir=this.state.direction) {
+		console.log("dir ",dir);
+		console.log("this.state.stops[dir].length ",this.state.stops[dir].length);
+		staticFeedAPI.getStopsByDirection(dir)
+		.then( results => {
+			console.log("results from staticFeedAPI.getStopsByDirection ",results);
+			this.setState({ stops: [dir] = results.stops});
 		})
-		.catch(err => {
-			console.log('err in getStops ', err);
-			this.setState({ stops: [] })
+		.catch( err => {
+			console.log("err in staticFeedAPI.getStopsByDirection ",err);
+			this.setState({stops: [dir] = []});
 		})
 	}
 
