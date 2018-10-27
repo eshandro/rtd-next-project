@@ -11,7 +11,8 @@ class NextSearchForm extends Component {
 			serviceIDs: [],
 			trips: [],
 			routes: [],
-			stops: {0:[],1:[]},
+			stops_dir0: [],
+			stops_dir1: [],
 			directions: [],
 			route: null,
 			stop: null,
@@ -42,13 +43,13 @@ class NextSearchForm extends Component {
 			})
 			.catch((err) => {
 				console.log("err in routes get:", err);
-				this.setState({routes: []})
-			})
+				this.setState({routes: []});
+			});
 		}
-		if (this.state.stops[0].length < 1 ) {
+		if (this.state.stops_dir0.length < 1 ) {
 			this.getStopsByDirection(0);
 		}
-		if (this.state.stops[1].length < 1) {
+		if (this.state.stops_dir1.length < 1) {
 			this.getStopsByDirection(1);
 		}
 
@@ -81,8 +82,8 @@ class NextSearchForm extends Component {
 		})
 		.catch((err) => {
 			console.log("err in serviceIDs get:", err);
-			this.setState({serviceIDs: []})
-		})		
+			this.setState({serviceIDs: []});
+		});
 	}
 
 	getTrips() {
@@ -96,26 +97,25 @@ class NextSearchForm extends Component {
 		staticFeedAPI.getTrips(d, this.state.route,this.state.direction,this.state.serviceIDs)
 		.then( results => {
 			console.log("results from getTrips fetch ",results);
-			this.setState({trips: results.trips}, () => this.getStops() );
+			this.setState({trips: results.trips}, () => this.getStopsByDirection() );
 		})
 		.catch(err => {
 			console.log("err in getTrips:", err);
 			this.setState({ trips: [] });
-		})
+		});
 	}
 
 	getStopsByDirection(dir=this.state.direction) {
-		console.log("dir ",dir);
-		console.log("this.state.stops[dir].length ",this.state.stops[dir].length);
+		let key = "stops_dir" + dir;
 		staticFeedAPI.getStopsByDirection(dir)
 		.then( results => {
 			console.log("results from staticFeedAPI.getStopsByDirection ",results);
-			this.setState({ stops: [dir] = results.stops});
+			this.setState({ [key]: results.stops});
 		})
 		.catch( err => {
 			console.log("err in staticFeedAPI.getStopsByDirection ",err);
-			this.setState({stops: [dir] = []});
-		})
+			this.setState({[key]: []});
+		});
 	}
 
 	handleRouteSelect(e) {
@@ -140,7 +140,7 @@ class NextSearchForm extends Component {
 	}
 
 	handleDatePicker(d) {
-		this.setState({date: d}, this.getServiceIDs)
+		this.setState({date: d}, this.getServiceIDs);
 	}
 
 	handleStopSelect(e) {
@@ -209,7 +209,7 @@ class NextSearchForm extends Component {
 							title="Select your direction" 
 							value={this.state.stop || ""}
 							onChange={this.handleStopSelect} >
-							{this.state.stops.map((item,index) => 
+							{	this.state[`stops_dir${this.state.direction}`].map((item,index) => 
 								<option key={item.stop_id} value={item.stop_id}>{item.name}</option>
 							)}
 						</select>

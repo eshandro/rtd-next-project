@@ -1,0 +1,7 @@
+Each Route object has a list of Trips. Each Trip object has a list of Stop_Times and Stop_Times have a stop_id.
+
+So, either through an aggregate db query or by just looping through the data, we should be able to build a list of stop_ids for a given route.
+
+The stop_ids list would not be unique, so would need to figure out how to make the list only contain unique stop_ids.
+
+Each Route object would then have a list of stop_ids as part of its model.

@@ -28,7 +28,6 @@ module.exports = {
 
 	stopsByDirection(req,res,next) {
 		let dir = req.params.dir;
-		console.log("dir in stop_controller stopsByDirection ",dir);
 		getStopsListByDirection(dir)
 		.then(stops => res.json({stops}))
 		.catch(err => res.status(500).send(err))
