@@ -3,6 +3,8 @@ feed/
 feed-temp/
 src/testing-files
 
+# database backups
+src/server/database/backups
 
 # Logs
 logs
