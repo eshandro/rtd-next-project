@@ -1,5 +1,7 @@
 const Express = require('express');
 const mongoose = require('mongoose');
+const {CronJob} = require('cron');
+const mongoBackup = require('./database/mongodb_backup');
 const bodyParser = require('body-parser');
 const path = require('path');
 const serverConfig = require('./config');
@@ -16,8 +18,18 @@ mongoose.connect(serverConfig.mongoURL, (error) => {
 	if (error) {
 		console.log(`MongoDB connection error: ${error}`);
 		throw error;
+	} else {
+		// create mongo backup every morning at 1:45 a.m.
+		const job = new CronJob('45 1 * * *', function() {
+			mongoBackup();
+			console.log("mongoBackup runs");
+		});
+		job.start();
 	}
 });
+// Run mongobackup
+// NOTE: In testing this caused continual restarting of server because nodemon saw changes
+// mongoBackup();
 
 const staticFeedRoutes = require('./routes/static-feed-routes');
 const staticFeedServices = require('./routes/static-feed-services');
