@@ -8,7 +8,8 @@ const Trip = require('../src/server/database/models/trip'),
 		StopTime = require('../src/server/database/models/stop_time');
 
 before((done) => {
-	mongoose.connect('mongodb://localhost/rtdNextTrain_test');
+	// mongoose.connect('mongodb://localhost/rtdNextTrain_test');
+	mongoose.connect('mongodb://localhost/rtdNextTrain');
 	// mongoose.set("debug", true);
 	mongoose.connection
 	.once('open', () => { 

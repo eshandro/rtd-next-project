@@ -1,9 +1,9 @@
 const assert = require('assert');
 const trips = require('./trips_data');
-const getStops = require('../src/server/database/queries/getStopsList')
+// const getStops = require('../src/server/database/queries/getStopsList')
 
 
-describe.only('Trips list is used to get stops', () => {
+describe('Trips list is used to get stops', () => {
 	let stops = [];
 	let stopids = [];
 	it('Can get stopids from trips', () => {
