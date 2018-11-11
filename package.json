@@ -7,7 +7,9 @@
   "author": "eshandro <erik843@gmail.com>",
   "license": "MIT",
   "nodemonConfig": {
-      "ignore": ["src/server/database/backups/*", "test/*"]
+    "ignore": [
+      "src/server/database/backups/*"
+    ]
   },
   "scripts": {
     "updateFeed": "node src/server/static_feed/initUpdateStaticFeed.js",
@@ -21,23 +23,23 @@
     "start:dev": "concurrently --kill-others-on-fail \"npm:server\" \"npm:client\""
   },
   "devDependencies": {
-    "@babel/core": "^7.1.2",
-    "@babel/preset-env": "^7.1.0",
+    "@babel/core": "^7.1.5",
+    "@babel/preset-env": "^7.1.5",
     "babel-eslint": "^9.0.0",
     "babel-loader": "^8.0.4",
     "clean-webpack-plugin": "^0.1.19",
     "concurrently": "^4.0.1",
-    "css-loader": "^1.0.0",
-    "eslint": "^5.6.1",
+    "css-loader": "^1.0.1",
+    "eslint": "^5.9.0",
     "eslint-plugin-react": "^7.9.1",
     "html-loader": "^0.5.5",
     "html-webpack-plugin": "^3.2.0",
     "mocha": "^5.0.1",
-    "nodemon": "^1.15.1",
+    "nodemon": "^1.18.6",
     "style-loader": "^0.23.1",
-    "webpack": "^4.20.2",
+    "webpack": "^4.25.1",
     "webpack-cli": "^3.1.2",
-    "webpack-dev-server": "^3.1.9"
+    "webpack-dev-server": "^3.1.10"
   },
   "dependencies": {
     "@babel/preset-react": "^7.0.0",
@@ -45,12 +47,12 @@
     "cron": "^1.5.0",
     "express": "^4.16.4",
     "fs-readfile-promise": "^3.0.0",
-    "mongoose": "^5.3.2",
-    "node-fetch": "^2.1.2",
+    "mongoose": "^5.3.11",
+    "node-fetch": "^2.2.1",
     "path-reader": "^1.0.6",
-    "react": "^16.5.2",
+    "react": "^16.6.1",
     "react-date-picker": "^7.0.0",
-    "react-dom": "^16.5.2",
+    "react-dom": "^16.6.1",
     "stream-json": "^1.1.3",
     "unzipper": "^0.9.4"
   }

@@ -2,6 +2,7 @@ const assert = require('assert');
 const Route = require('../src/server/database/models/route');
 const getStopsListByIds = require('../src/server/database/queries/getStopsListByIds');
 const getServiceIdsForDate = require('../src/server/database/queries/getServiceIdsForDate');
+const getStops = require('../src/server/database/queries/getStopsListByRouteAndDirection');
 	// route_id: String,
 	// name: String,
 	// shortName: String,
@@ -17,7 +18,7 @@ const getServiceIdsForDate = require('../src/server/database/queries/getServiceI
 	// }]
 	// {"route_id":"101C","route_short_name":"C","route_long_name":"Union Station to Littleton-Mineral Station","route_desc":"This Route Travels Northbound & Southbound","route_type":"0","route_url":"http://www.rtd-denver.com/Schedules.shtml","route_color":"F79239","route_text_color":"FFFFFF"}
 describe.only('Use a Route and its trips to create a list of a route\'s stops', () => {
-	it('gets a Route and its trips', (done) => {
+	xit('gets a Route and its trips', (done) => {
 		Route.find({route_id: '101D'}).lean()
 		.populate({
 			path: 'trips',
@@ -30,7 +31,7 @@ describe.only('Use a Route and its trips to create a list of a route\'s stops', 
 			done();
 		});
 	})
-	it('gets a Route and its trips and its stop_times', (done) => {
+	xit('gets a Route and its trips and its stop_times', (done) => {
 		getServiceIdsForDate(new Date())
 		.then(ids => {
 			// console.log("ids ",ids);
@@ -68,7 +69,7 @@ describe.only('Use a Route and its trips to create a list of a route\'s stops', 
 			done();
 		})
 	})
-	it('gets a Route\'s list of unique stop_ids', done => {
+	xit('gets a Route\'s list of unique stop_ids', done => {
 		let stopidsList = [];
 		getServiceIdsForDate(new Date())
 		.then(ids => {
@@ -197,6 +198,12 @@ describe.only('Use a Route and its trips to create a list of a route\'s stops', 
 			console.log(`stops[0] sorted by ${coordType}`,stops[0]);
 			console.log(`stops[stops.length-1] sorted by ${coordType}`,stops[stops.length-1]);
 			done();
+		})
+	})
+	xit('uses db query to get stops', done => {
+		getStops('101D',0)
+		.then(stops => {
+			console.log("stops ",stops);
 		})
 	})
 

@@ -186,7 +186,7 @@ function filterLightRail() {
 			console.log("CalendarDates collection dropped");
 			t1 = new Date();
 			console.log("start filterLightRail after drops ",t1.toLocaleString("en-US", {timezone: "America/Denver"}));
-			return addLightRailData('routes.json',tripsFilter,createRouteFromJson,Route,false,false);
+			return addLightRailData('routes.json',tripsFilter,createRouteFromJson,Route,false,false)
 		})
 		.then((data) => {
 			if (!data.lightRailDataSuccess) {

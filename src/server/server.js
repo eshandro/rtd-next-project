@@ -15,7 +15,7 @@ const app = new Express();
 mongoose.Promise = global.Promise;
 // mongoose.set('debug', true);
 
-mongoose.connect(serverConfig.mongoURL, (error) => {
+mongoose.connect(serverConfig.mongoURL, { useNewUrlParser: true, useCreateIndex: true }, (error) => {
 	if (error) {
 		console.log(`MongoDB connection error: ${error}`);
 		throw error;

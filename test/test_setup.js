@@ -9,7 +9,7 @@ const Trip = require('../src/server/database/models/trip'),
 
 before((done) => {
 	// mongoose.connect('mongodb://localhost/rtdNextTrain_test');
-	mongoose.connect('mongodb://localhost/rtdNextTrain');
+	mongoose.connect('mongodb://localhost/rtdNextTrain',{ useNewUrlParser: true, useCreateIndex: true });
 	// mongoose.set("debug", true);
 	mongoose.connection
 	.once('open', () => { 
