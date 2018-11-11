@@ -6,6 +6,9 @@
   "repository": "https://github.com/eshandro/rtd-next-project.git",
   "author": "eshandro <erik843@gmail.com>",
   "license": "MIT",
+  "nodemonConfig": {
+      "ignore": ["src/server/database/backups/*", "test/*"]
+  },
   "scripts": {
     "updateFeed": "node src/server/static_feed/initUpdateStaticFeed.js",
     "forceUpdateFeed": "node src/server/static_feed/initUpdateStaticFeed.js true",

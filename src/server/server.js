@@ -2,6 +2,7 @@ const Express = require('express');
 const mongoose = require('mongoose');
 const {CronJob} = require('cron');
 const mongoBackup = require('./database/mongodb_backup');
+const {exec} = require('child_process');
 const bodyParser = require('body-parser');
 const path = require('path');
 const serverConfig = require('./config');
@@ -19,17 +20,27 @@ mongoose.connect(serverConfig.mongoURL, (error) => {
 		console.log(`MongoDB connection error: ${error}`);
 		throw error;
 	} else {
-		// create mongo backup every morning at 1:45 a.m.
+		// mongo db backup every morning at 1:45 a.m.
 		const job = new CronJob('45 1 * * *', function() {
-			mongoBackup();
 			console.log("mongoBackup runs");
+			mongoBackup();
+		});
+		// // static feed update every morning at 4:45 a.m.
+		const job2 = new CronJob('45 4 * * *', function() {
+			console.log("staticfeed update runs");
+			exec("node ./src/server/static_feed/initUpdateStaticFeed.js", function(error, stdout, stderr){
+				if (error) {
+					console.error(`exec error in initUpdateStaticFeed ran in server.js: ${error}`);
+					return;
+				}
+				console.log(`stdout: ${stdout}`);
+				console.log(`stderr: ${stderr}`);
+			});
 		});
 		job.start();
+		job2.start();
 	}
 });
-// Run mongobackup
-// NOTE: In testing this caused continual restarting of server because nodemon saw changes
-// mongoBackup();
 
 const staticFeedRoutes = require('./routes/static-feed-routes');
 const staticFeedServices = require('./routes/static-feed-services');
