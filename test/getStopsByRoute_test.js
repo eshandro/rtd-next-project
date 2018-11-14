@@ -17,7 +17,7 @@ const getStops = require('../src/server/database/queries/getStopsListByRouteAndD
 	// 	ref: 'trip'
 	// }]
 	// {"route_id":"101C","route_short_name":"C","route_long_name":"Union Station to Littleton-Mineral Station","route_desc":"This Route Travels Northbound & Southbound","route_type":"0","route_url":"http://www.rtd-denver.com/Schedules.shtml","route_color":"F79239","route_text_color":"FFFFFF"}
-describe.only('Use a Route and its trips to create a list of a route\'s stops', () => {
+describe('Use a Route and its trips to create a list of a route\'s stops', () => {
 	xit('gets a Route and its trips', (done) => {
 		Route.find({route_id: '101D'}).lean()
 		.populate({
@@ -132,13 +132,13 @@ describe.only('Use a Route and its trips to create a list of a route\'s stops', 
 			done();
 		})
 	})
-	it('gets a Route\'s list of unique stop_ids and sorts them based on the directions', done => {
+	xit('gets a Route\'s list of unique stop_ids and sorts them based on the directions', done => {
 		let stopidsList = [];
 		let coordType = "";
 		getServiceIdsForDate(new Date())
 		.then(ids => {
 			return Route.findOne({
-				route_id: 'A'
+				route_id: '101D'
 			})
 			.populate({
 				path: 'trips',
@@ -168,6 +168,7 @@ describe.only('Use a Route and its trips to create a list of a route\'s stops', 
 			})
 		})
 		.then(route => {
+			console.log("route.trips[0] ",route.trips[0]);
 			let len = route.trips.length;
 			let i = 0;
 			for (; i < len; i++) {

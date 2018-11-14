@@ -51,7 +51,7 @@ function addStopsToRoutes() {
 				return getStops(stopIdsList);
 			})
 			.then((stops) => {
-				return doc.update({stops: stops});
+				return doc.updateOne({stops: stops});
 			});
 	})
 	.then(() => {

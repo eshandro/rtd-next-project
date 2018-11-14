@@ -12,13 +12,9 @@ function addStopTimesToStops() {
 	let stopsCursor = Stop.find({},'stop_id stop_times').cursor();
 
 	return stopsCursor.eachAsync((doc) => {
-		// First clear out existing stop_times
-		doc.update({stop_times: []})
-		.then(() => {
-			return getStopTimes(doc.stop_id);
-		})
+		return getStopTimes(doc.stop_id)
 		.then((stoptimes) => {
-			return doc.update({stop_times: stoptimes});
+			return doc.updateOne({stop_times: stoptimes});
 		});
 	
 	})

@@ -74,19 +74,34 @@ function runUpdateStaticFeed(force) {
 			} else {
 				let t1 = new Date();
 				console.log("start Promise.all after filterLightRail ",t1.toLocaleString("en-US", {timezone: "America/Denver"}));
-				return Promise.all([addTripsToRoutes(), addStopTimesToStops(), addStopTimesToTrips()])
-					.then((results) => {
-						console.log("Promise.all([addTripsToRoutes(), addStopTimesToStops(), addStopTimesToTrips()]) results ",results);
-						let t2 = Date.now(),
-							totalTime = t2-t1,
-							d = new Date(totalTime);
-						console.log("Promise.all took " + d.getUTCMinutes() + ' mins & ' + d.getUTCSeconds() + ' seconds');
-						return ({updateStaticFeed:true,msg:"References added to collections in Promise.all"});
-					})
-					.catch((err) => {
-						console.log("Promise.all([addTripsToRoutes(), addStopTimesToStops(), addStopTimesToTrips()]) err ",err);
-						return ({complete: false, msg: err});
-					});
+				// return Promise.all([addTripsToRoutes(), addStopTimesToStops(), addStopTimesToTrips()])
+				// 	.then((results) => {
+				// 		console.log("Promise.all([addTripsToRoutes(), addStopTimesToStops(), addStopTimesToTrips()]) results ",results);
+				// 		let t2 = Date.now(),
+				// 			totalTime = t2-t1,
+				// 			d = new Date(totalTime);
+				// 		console.log("Promise.all took " + d.getUTCMinutes() + ' mins & ' + d.getUTCSeconds() + ' seconds');
+				// 		return ({updateStaticFeed:true,msg:"References added to collections in Promise.all"});
+				// 	})
+				// 	.catch((err) => {
+				// 		console.log("Promise.all([addTripsToRoutes(), addStopTimesToStops(), addStopTimesToTrips()]) err ",err);
+				// 		return ({complete: false, msg: err});
+				// 	});
+				return addTripsToRoutes()
+				.then(data => {
+					return addStopTimesToStops()
+				})
+				.then(data => {
+					return addStopTimesToTrips()
+				})
+				.then(data => {
+					console.log("Promise.all([addTripsToRoutes(), addStopTimesToStops(), addStopTimesToTrips()]) results ",results);
+					let t2 = Date.now(),
+						totalTime = t2-t1,
+						d = new Date(totalTime);
+					console.log("Promise.all took " + d.getUTCMinutes() + ' mins & ' + d.getUTCSeconds() + ' seconds');
+					return ({updateStaticFeed: true, msg: "References added to collections"})
+				})
 			}
 		})
 		.then((data) => {

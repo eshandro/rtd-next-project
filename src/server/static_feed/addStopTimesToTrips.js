@@ -9,18 +9,13 @@ function getStopTimes(tripID) {
 
 function addStopTimesToTrips() {
 
-	let tripsCursor = Trip.find({},'trip_id stop_times').cursor();
+	let tripsCursor = Trip.find({},'trip_id stop_times route_id').cursor();
 
 	return tripsCursor.eachAsync((doc) => {
-		// First clear out existing stop_times
-		doc.update({stop_times: []})
-		.then(() => {
-			return getStopTimes(doc.trip_id);
-		})
+		return getStopTimes(doc.trip_id)
 		.then((stoptimes) => {
-			return doc.update({stop_times: stoptimes});
+			return doc.updateOne({stop_times: stoptimes});
 		});
-	
 	})
 	.then(() => {
 		console.log('tripsCursor in addStopTimesToTrips done!');

@@ -12,13 +12,9 @@ function addTripsToRoutes() {
 	let routesCursor = Route.find({},'route_id trips').cursor();
 
 	return routesCursor.eachAsync((doc) => {
-		// First clear out existing trips
-		doc.update({trips: []})
-		.then(() => {
-			return getTrips(doc.route_id);
-		})
+		return getTrips(doc.route_id)
 		.then((trips) => {
-			return doc.update({trips: trips});
+			return doc.updateOne({trips: trips});
 		});
 	
 	})

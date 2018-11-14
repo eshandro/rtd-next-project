@@ -18,13 +18,9 @@ function addTripsToStops() {
 		// Then, we use the spread operator to turn it back into an Array from a Set
 		tripList = [... new Set(tripsList)];
 		
-		// clear out existing trips before adding trips
-		doc.update({trips: []})
-		.then(() => {
-			return getTrips(tripsList);
-		})
+		return getTrips(tripsList)
 		.then((trips) => {
-			return doc.update({trips: trips});
+			return doc.updateOne({trips: trips});
 		});
 	
 	})
