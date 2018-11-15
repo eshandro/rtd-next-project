@@ -73,7 +73,7 @@ function runUpdateStaticFeed(force) {
 				return ({updateStaticFeed: false, msg:data.msg});
 			} else {
 				let t1 = new Date();
-				console.log("start Promise.all after filterLightRail ",t1.toLocaleString("en-US", {timezone: "America/Denver"}));
+				console.log("start adding references ",t1.toLocaleString("en-US", {timezone: "America/Denver"}));
 				// return Promise.all([addTripsToRoutes(), addStopTimesToStops(), addStopTimesToTrips()])
 				// 	.then((results) => {
 				// 		console.log("Promise.all([addTripsToRoutes(), addStopTimesToStops(), addStopTimesToTrips()]) results ",results);
@@ -95,11 +95,11 @@ function runUpdateStaticFeed(force) {
 					return addStopTimesToTrips()
 				})
 				.then(data => {
-					console.log("Promise.all([addTripsToRoutes(), addStopTimesToStops(), addStopTimesToTrips()]) results ",results);
+					console.log("data from adding references via addTripsToRoutes(), addStopTimesToStops(), & addStopTimesToTrips()",data);
 					let t2 = Date.now(),
 						totalTime = t2-t1,
 						d = new Date(totalTime);
-					console.log("Promise.all took " + d.getUTCMinutes() + ' mins & ' + d.getUTCSeconds() + ' seconds');
+					console.log("adding references took " + d.getUTCMinutes() + ' mins & ' + d.getUTCSeconds() + ' seconds');
 					return ({updateStaticFeed: true, msg: "References added to collections"})
 				})
 			}

@@ -14,10 +14,11 @@
   "scripts": {
     "updateFeed": "node src/server/static_feed/initUpdateStaticFeed.js",
     "forceUpdateFeed": "node src/server/static_feed/initUpdateStaticFeed.js true",
+    "backupDB": "node src/server/database/run_mongodb_backup.js",
     "test": "NODE_ENV=test nodemon --exec 'mocha --recursive'",
+    "lint": "./node_modules/.bin/eslint src",
     "build:dev": "webpack --mode development",
     "build:prod": "webpack --mode production",
-    "lint": "./node_modules/.bin/eslint src",
     "client": "webpack-dev-server --open --colors --mode development",
     "server": "nodemon --watch src/server node src/server/server.js",
     "start:dev": "concurrently --kill-others-on-fail \"npm:server\" \"npm:client\""
