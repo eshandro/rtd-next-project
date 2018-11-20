@@ -17,7 +17,7 @@ const getStops = require('../src/server/database/queries/getStopsListByRouteAndD
 	// 	ref: 'trip'
 	// }]
 	// {"route_id":"101C","route_short_name":"C","route_long_name":"Union Station to Littleton-Mineral Station","route_desc":"This Route Travels Northbound & Southbound","route_type":"0","route_url":"http://www.rtd-denver.com/Schedules.shtml","route_color":"F79239","route_text_color":"FFFFFF"}
-describe('Use a Route and its trips to create a list of a route\'s stops', () => {
+describe.only('Use a Route and its trips to create a list of a route\'s stops', () => {
 	xit('gets a Route and its trips', (done) => {
 		Route.find({route_id: '101D'}).lean()
 		.populate({
@@ -201,10 +201,13 @@ describe('Use a Route and its trips to create a list of a route\'s stops', () =>
 			done();
 		})
 	})
-	xit('uses db query to get stops', done => {
-		getStops('101D',0)
+	it('uses db query to get stops', done => {
+		getStops('103W',0,[ 'BVSD', 'DPS', 'FR', 'WK' ])
 		.then(stops => {
-			console.log("stops ",stops);
+			for (let i=0, len=stops.length; i < len; i++) {
+				console.log("stops[i].name ",stops[i].name);
+			}
+			done();
 		})
 	})
 

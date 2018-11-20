@@ -5,3 +5,13 @@ So, either through an aggregate db query or by just looping through the data, we
 The stop_ids list would not be unique, so would need to figure out how to make the list only contain unique stop_ids.
 
 Each Route object would then have a list of stop_ids as part of its model.
+
+
+Routes with correct stops list
+101C, 101D, 101E, 101F, 113B, A, 107R,
+
+Routes with issues
+101H -- stops out of order because curves back to the north
+103W -- Auraria West and Bronco Stadium switched in order. And, on Eastbound Auraria West displays twice -- stop_id: 25427 & 25431 (this ID has the wrong direction)
+	The 2nd issue is fixed by only returning unique stops from getStopsListByRouteAndDirection, which could have other consequences.
+109L -- southbound only, 18th & Stout is before 20th & Welton

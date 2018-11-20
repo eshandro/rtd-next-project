@@ -1,20 +1,14 @@
 const Route = require('../models/route');
-const getStopsListByIds = require('../../database/queries/getStopsListByIds');
+const getStopsList = require('../../database/queries/getStopsListByIdsAndDirection');
+// const getStopsList = require('../../database/queries/getStopsListByIds');
 const getServiceIdsForDate = require('../../database/queries/getServiceIdsForDate');
 
-function getStopsByRouteAndDirection(routeid,direction,serviceids,date) {
+function getStopsByRouteAndDirection(routeid,direction,serviceids,date = new Date()) {
 	if (!serviceids) {
-		if (!date) {
-			getServiceIdsForDate(new Date())
-			.then(ids => {
-				return getStops(ids,routeid,direction)
-			})
-		} else {
-			getServiceIdsForDate(date)
-			.then(ids => {
-				return getStops(ids,routeid,direction)
-			})
-		}
+		return getServiceIdsForDate(date)
+		.then(ids => {
+			return getStops(ids,routeid,direction)
+		})
 	} else {
 		return getStops(serviceids,routeid,direction)
 	}
@@ -22,6 +16,9 @@ function getStopsByRouteAndDirection(routeid,direction,serviceids,date) {
 	function getStops(ids,id,dir) {
 		let stopidsList = [];
 		let coordType = "";
+		let uniqueStops = [];
+		let stopsDict = {}
+		
 		console.log("ids ",ids);
 		console.log("id ",id);
 		console.log("dir ",dir);
@@ -55,7 +52,7 @@ function getStopsByRouteAndDirection(routeid,direction,serviceids,date) {
 				}
 			})
 			.then(route => {
-				console.log("route ",route);
+				// console.log("route ",route);
 				let len = route.trips.length;
 				let i = 0;
 				for (; i < len; i++) {
@@ -68,13 +65,13 @@ function getStopsByRouteAndDirection(routeid,direction,serviceids,date) {
 				return stopidsList;
 			})
 			.then(stopids => {
-				return getStopsListByIds(stopids)
+				return getStopsList(stopids,dir)
 			})
 			.then(stops => {
 				let regex = /^north|^south/i;
 				coordType = regex.test(coordType) ? "lat" : "lng";
 				console.log("coordType ",coordType);
-				if (stops[0].direction == 0) {
+				if ( dir == 0 ) {
 					stops.sort((a,b) => {
 						return a[coordType] - b[coordType];
 					});
@@ -83,8 +80,13 @@ function getStopsByRouteAndDirection(routeid,direction,serviceids,date) {
 						return b[coordType] - a[coordType];
 					});		
 				}
-				console.log(`stops[0] sorted by ${coordType}`,stops[0]);
-				console.log(`stops[stops.length-1] sorted by ${coordType}`,stops[stops.length-1]);
+				// stops.forEach(item => {
+				// 	if (!stopsDict[item.name]) {
+				// 		uniqueStops.push(item);
+				// 		stopsDict[item.name] = true;
+				// 	}
+				// })
+				// return uniqueStops;
 				return stops;
 			})
 	}

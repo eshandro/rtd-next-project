@@ -3,9 +3,9 @@ const	Trip = require('../../src/server/database/models/trip'),
 		addStopTimesToTrips = require('../../src/server/static_feed/addStopTimesToTrips'),
 		assert = require('assert');
 
-describe.only("Add StopTimes to each Trip", () => {
+describe("Add StopTimes to each Trip", () => {
 
-	it("calls the addStopTimesToTrips fn and adds stop_times to all Trips", (done) => {
+	xit("calls the addStopTimesToTrips fn and adds stop_times to all Trips", (done) => {
 		addStopTimesToTrips()
 		.then((val) => {
 			console.log("val in addStopTimesToTrips ",val);
