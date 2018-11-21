@@ -1,5 +1,6 @@
 const assert = require('assert');
 const Route = require('../src/server/database/models/route');
+const Trip = require('../src/server/database/models/trip');
 const getStopsListByIds = require('../src/server/database/queries/getStopsListByIds');
 const getServiceIdsForDate = require('../src/server/database/queries/getServiceIdsForDate');
 const getStops = require('../src/server/database/queries/getStopsListByRouteAndDirection');
@@ -202,11 +203,22 @@ describe.only('Use a Route and its trips to create a list of a route\'s stops', 
 		})
 	})
 	it('uses db query to get stops', done => {
-		getStops('103W',0,[ 'BVSD', 'DPS', 'FR', 'WK' ])
+		getStops('103W',0,[ 'FR' ])
 		.then(stops => {
 			for (let i=0, len=stops.length; i < len; i++) {
 				console.log("stops[i].name ",stops[i].name);
 			}
+			done();
+		})
+	})
+	it('gets problematic trip_id', done => {
+		Trip.findOne({trip_id: '112268609'})
+		.populate({
+			path: 'stop_times',
+			model: 'stoptime',
+		})
+		.then(trip => {
+			console.log("trip ",trip);
 			done();
 		})
 	})

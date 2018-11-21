@@ -1,8 +1,18 @@
 const Route = require('../models/route');
-const getStopsList = require('../../database/queries/getStopsListByIdsAndDirection');
-// const getStopsList = require('../../database/queries/getStopsListByIds');
+// const getStopsList = require('../../database/queries/getStopsListByIdsAndDirection');
+const getStopsList = require('../../database/queries/getStopsListByIds');
 const getServiceIdsForDate = require('../../database/queries/getServiceIdsForDate');
 
+
+/**
+ * Gets a list of stops for a given route and direction. 
+ * The list is a list of all possible stops on a route and not specific to a particular trip
+ * @param  {string} routeid    
+ * @param  {number} direction  
+ * @param  {array} serviceids *optional
+ * @param  {Date}   date      *optional
+ * @return {array}            array of stops objects
+ */
 function getStopsByRouteAndDirection(routeid,direction,serviceids,date = new Date()) {
 	if (!serviceids) {
 		return getServiceIdsForDate(date)
@@ -15,9 +25,7 @@ function getStopsByRouteAndDirection(routeid,direction,serviceids,date = new Dat
 
 	function getStops(ids,id,dir) {
 		let stopidsList = [];
-		let coordType = "";
-		let uniqueStops = [];
-		let stopsDict = {}
+		let currRoute = '';
 		
 		console.log("ids ",ids);
 		console.log("id ",id);
@@ -45,14 +53,16 @@ function getStopsByRouteAndDirection(routeid,direction,serviceids,date = new Dat
 					select: 'stop_id -_id',
 					options: {
 						sort: {
-							time: 1,
+							stop_sequence: 1,
+							// time: 1,
 						},
 						lean: true
 					}
 				}
 			})
 			.then(route => {
-				// console.log("route ",route);
+				currRoute = route.route_id;
+				console.log("route.trips[0].stop_times ",route.trips[0].stop_times);
 				let len = route.trips.length;
 				let i = 0;
 				for (; i < len; i++) {
@@ -61,32 +71,32 @@ function getStopsByRouteAndDirection(routeid,direction,serviceids,date = new Dat
 					}
 				}
 				console.log("stopidsList ",stopidsList);
-				coordType = route.directions[0];
 				return stopidsList;
 			})
 			.then(stopids => {
-				return getStopsList(stopids,dir)
+				return getStopsList(stopids)
 			})
 			.then(stops => {
-				let regex = /^north|^south/i;
-				coordType = regex.test(coordType) ? "lat" : "lng";
-				console.log("coordType ",coordType);
-				if ( dir == 0 ) {
-					stops.sort((a,b) => {
-						return a[coordType] - b[coordType];
-					});
-				} else {
-					stops.sort((a,b) => {
-						return b[coordType] - a[coordType];
-					});		
+				// stopidsList is sorted by stop_sequence, but when using that array in the $in select  
+				// of the DB query we can't control the order of stops, so lets use stopidsList to 
+				// sort stops returned from the DB
+				console.log("stops:");
+				for(let j=0; j<stops.length;j++) {
+					console.log(stops[j].stop_id)
 				}
-				// stops.forEach(item => {
-				// 	if (!stopsDict[item.name]) {
-				// 		uniqueStops.push(item);
-				// 		stopsDict[item.name] = true;
-				// 	}
-				// })
-				// return uniqueStops;
+				let sortObj = {};
+				for (let i=0, len = stopidsList.length; i < len; i++) {
+					sortObj[stopidsList[i]] = i;
+				}
+				console.log("sortObj ",sortObj);
+				stops.sort((a,b) => {
+					return sortObj[a.stop_id] - sortObj[b.stop_id]
+				});
+				console.log("sorted stops:");
+				for(let k=0; k<stops.length;k++) {
+					console.log(stops[k].stop_id)
+				}
+
 				return stops;
 			})
 	}
