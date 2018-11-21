@@ -1,14 +1,11 @@
 /* 
 Static Feed Light Rail Info:
+-route_id = A for A-line to airport
 -route_id = 101 + rail line for C, D, E, F, H, e.g. 101C
 -route_id = 103W  for W line
--route_id = A for A-line to airport
--route_id = 113B for B Line
 -route_id = 107R for R Line
--route_id = 109L for L Line (new line starting 1/4/18 - affects D Line; D Line will stop at 18th and the L Line will 
-				be a seperate line that takes over the D Line's 18th & Stout to 30th and Downing stretch. The L Line will 
-				also do a loop 14th - 19th on California and on Stout. Stops will be at 16th & 18th at the existing stops 
-				for the D, F, H Lines. The L Line will eventually connect up to the A Line at 38th and Downing.)
+-route_id = 109L for L Line (new line starting 1/4/18 The L Line will eventually connect up to the A Line at 38th and Downing.)
+-route_id = 113B for B Line
 
 1/2018 10 light rail lines
 -route_type = 0 includes 8 lines -- C,D,E,F,H,L,R,W

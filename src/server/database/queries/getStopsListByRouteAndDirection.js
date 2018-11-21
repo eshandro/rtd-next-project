@@ -5,41 +5,26 @@ const getServiceIdsForDate = require('../../database/queries/getServiceIdsForDat
 
 
 /**
+ * This function never quite worked ... see notes in gettingstopsfromroutes.txt file -- stops out of order
+ * Ended up adding a list of stops to globals.js
  * Gets a list of stops for a given route and direction. 
  * The list is a list of all possible stops on a route and not specific to a particular trip
  * @param  {string} routeid    
- * @param  {number} direction  
- * @param  {array} serviceids *optional
- * @param  {Date}   date      *optional
- * @return {array}            array of stops objects
+ * @param  {number} dir 
+ * @return {array}  array of stops objects
  */
-function getStopsByRouteAndDirection(routeid,direction,serviceids,date = new Date()) {
-	if (!serviceids) {
-		return getServiceIdsForDate(date)
-		.then(ids => {
-			return getStops(ids,routeid,direction)
-		})
-	} else {
-		return getStops(serviceids,routeid,direction)
-	}
-
-	function getStops(ids,id,dir) {
+function getStopsByRouteAndDirection(routeid,dir) {
 		let stopidsList = [];
-		let currRoute = '';
 		
-		console.log("ids ",ids);
-		console.log("id ",id);
+		console.log("routeid ",routeid);
 		console.log("dir ",dir);
 		return Route.findOne({
-				route_id: id
+				route_id: routeid
 			})
 			.populate({
 				path: 'trips',
 				model: 'trip',
 				match: {
-					service_id: {
-						$in: ids
-					},
 					direction_id: dir
 				},
 				options: {
@@ -61,8 +46,6 @@ function getStopsByRouteAndDirection(routeid,direction,serviceids,date = new Dat
 				}
 			})
 			.then(route => {
-				currRoute = route.route_id;
-				console.log("route.trips[0].stop_times ",route.trips[0].stop_times);
 				let len = route.trips.length;
 				let i = 0;
 				for (; i < len; i++) {
@@ -96,10 +79,18 @@ function getStopsByRouteAndDirection(routeid,direction,serviceids,date = new Dat
 				for(let k=0; k<stops.length;k++) {
 					console.log(stops[k].stop_id)
 				}
+				let uniqueStops = [];
+				let stopsDict = {};
+				stops.forEach(item => {
+					if (!stopsDict[item.name]) {
+						uniqueStops.push(item);
+						stopsDict[item.name] = true;
+					}
+				})
+				return uniqueStops;
 
-				return stops;
+				// return stops;
 			})
-	}
 }
 
 module.exports = getStopsByRouteAndDirection;

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import DatePicker from 'react-date-picker'; 
 import * as staticFeedAPI from '../api/static-feed';
 import dateHelpers from '../../server/utils/dateHelpers';
+import {stops} from '../../server/utils/globals';
 
 class NextSearchForm extends Component {
 	constructor(props) {
@@ -10,11 +11,13 @@ class NextSearchForm extends Component {
 		this.state = { 
 			serviceIDs: [],
 			trips: [],
+			trips_ids: [],
 			routes: [],
 			stops_dir0: [],
 			stops_dir1: [],
 			directions: [],
 			route: null,
+			stop_name:null,
 			stop: null,
 			direction: null,
 			date: new Date(),
@@ -27,6 +30,7 @@ class NextSearchForm extends Component {
 		this.handleStopSelect = this.handleStopSelect.bind(this);
 		this.getServiceIDs = this.getServiceIDs.bind(this);
 		this.getTrips = this.getTrips.bind(this);
+		this.getTripsIdsList = this.getTripsIdsList.bind(this);
 		this.getStopsByDirection = this.getStopsByDirection.bind(this);
 
 	}
@@ -104,18 +108,31 @@ class NextSearchForm extends Component {
 			this.setState({ trips: [] });
 		});
 	}
+	getTripsIdsList() {
+		let d;
+		if (!this.state.date) {
+			d = new Date();
+		} else {
+			d = this.state.date;
+		}
+		d = dateHelpers.convertDateObjToLocalISOString(d);
+		staticFeedAPI.getTripsIds(d, this.state.route,this.state.direction,this.state.serviceIDs)
+		.then( results => {
+			console.log("results from getTrips fetch ",results);
+			this.setState({trips_ids: results.trips}, () => this.getStopsByDirection() );
+		})
+		.catch(err => {
+			console.log("err in getTrips:", err);
+			this.setState({ trips_ids: [] });
+		});		
+	}
 
 	getStopsByDirection(dir=this.state.direction) {
-		let key = "stops_dir" + dir;
-		staticFeedAPI.getStopsByDirection(dir)
-		.then( results => {
-			console.log("results from staticFeedAPI.getStopsByDirection ",results);
-			this.setState({ [key]: results.stops});
-		})
-		.catch( err => {
-			console.log("err in staticFeedAPI.getStopsByDirection ",err);
-			this.setState({[key]: []});
-		});
+		if(this.state.route) {
+			let stateKey = "stops_dir" + dir;
+			let stopsKey = this.state.route + '-' + dir;
+			this.setState({ [stateKey]: stops[stopsKey] }) ;
+		}
 	}
 
 	handleRouteSelect(e) {
@@ -124,7 +141,7 @@ class NextSearchForm extends Component {
 			if (item.route_id === e.target.value) {
 				this.setState({directions: item.directions}, function() {
 					this.setState({direction: "0"}, function() {
-						this.getTrips();
+						this.getTripsIdsList();
 					});					
 				});
 				return;
@@ -134,7 +151,7 @@ class NextSearchForm extends Component {
 
 	handleDirectionSelect(e) {
 		this.setState({direction: e.target.value}, function() {
-			this.getTrips();
+			this.getTripsIdsList();
 		});
 
 	}
@@ -144,7 +161,15 @@ class NextSearchForm extends Component {
 	}
 
 	handleStopSelect(e) {
-		this.setState({stop: e.target.value});
+		let name = e.target.value;
+		let dir = this.state.direction;
+		this.setState({stop_name:name});
+		staticFeedAPI.getStopByNameAndDirection(name,dir)
+		.then( stop => {
+			console.log("stop from api ",stop);
+			console.log("stop.stop_id ",stop.stop_id);
+			this.setState({stop: stop.stop_id });
+		})
 	}
 
 
@@ -206,11 +231,11 @@ class NextSearchForm extends Component {
 						<label htmlFor="stop-select">Choose a Stop: </label>
 						<select 
 							id="stop-select" 
-							title="Select your direction" 
-							value={this.state.stop || ""}
+							title="Select your stop" 
+							value={this.state.stop_name || ""}
 							onChange={this.handleStopSelect} >
 							{	this.state[`stops_dir${this.state.direction}`].map((item,index) => 
-								<option key={item.stop_id} value={item.stop_id}>{item.name}</option>
+								<option key={index} value={item}>{item}</option>
 							)}
 						</select>
 					</div>

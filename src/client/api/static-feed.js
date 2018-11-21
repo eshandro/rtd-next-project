@@ -33,6 +33,23 @@ export function getTrips(date, route, direction, serviceids) {
 		.catch(err => err)
 }
 
+export function getTripsIds(date, route, direction, serviceids) {
+	let data = {
+		date,
+		route,
+		direction,
+		serviceids
+	}
+	return fetch(`${staticfeedBaseUrl}trips/tripsidslist_by_date_route_direction`,{
+		method: 'POST',
+		headers: { 'Content-Type':'application/JSON'},
+		body: JSON.stringify(data)
+		})
+		.then(res => res.json())
+		.then(trips => trips)
+		.catch(err => err)
+}
+
 export function getStopsByIds(stopids) {
 	let data = {
 		stopids
@@ -44,6 +61,17 @@ export function getStopsByIds(stopids) {
 		})
 		.then(res => res.json())
 		.then(stops => stops)
+		.catch(err => err)
+}
+
+export function getStopByNameAndDirection(name,dir) {
+
+	return fetch(`${staticfeedBaseUrl}stops/stop_by_name_direction/${name}/${dir}`,{
+		method: 'GET',
+		headers: { 'Content-Type': 'application/JSON'},
+		})
+		.then(res => res.json())
+		.then(stop => stop)
 		.catch(err => err)
 }
 

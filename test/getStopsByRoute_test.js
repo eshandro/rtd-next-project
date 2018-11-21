@@ -1,9 +1,11 @@
 const assert = require('assert');
 const Route = require('../src/server/database/models/route');
 const Trip = require('../src/server/database/models/trip');
+const Stop = require('../src/server/database/models/stop');
 const getStopsListByIds = require('../src/server/database/queries/getStopsListByIds');
 const getServiceIdsForDate = require('../src/server/database/queries/getServiceIdsForDate');
 const getStops = require('../src/server/database/queries/getStopsListByRouteAndDirection');
+const globals = require('../src/server/utils/globals');
 	// route_id: String,
 	// name: String,
 	// shortName: String,
@@ -18,7 +20,7 @@ const getStops = require('../src/server/database/queries/getStopsListByRouteAndD
 	// 	ref: 'trip'
 	// }]
 	// {"route_id":"101C","route_short_name":"C","route_long_name":"Union Station to Littleton-Mineral Station","route_desc":"This Route Travels Northbound & Southbound","route_type":"0","route_url":"http://www.rtd-denver.com/Schedules.shtml","route_color":"F79239","route_text_color":"FFFFFF"}
-describe.only('Use a Route and its trips to create a list of a route\'s stops', () => {
+describe('Use a Route and its trips to create a list of a route\'s stops', () => {
 	xit('gets a Route and its trips', (done) => {
 		Route.find({route_id: '101D'}).lean()
 		.populate({
@@ -202,8 +204,8 @@ describe.only('Use a Route and its trips to create a list of a route\'s stops', 
 			done();
 		})
 	})
-	it('uses db query to get stops', done => {
-		getStops('103W',0,[ 'FR' ])
+	xit('uses db query to get stops', done => {
+		getStops('113B',1)
 		.then(stops => {
 			for (let i=0, len=stops.length; i < len; i++) {
 				console.log("stops[i].name ",stops[i].name);
@@ -211,7 +213,7 @@ describe.only('Use a Route and its trips to create a list of a route\'s stops', 
 			done();
 		})
 	})
-	it('gets problematic trip_id', done => {
+	xit('gets problematic trip_id', done => {
 		Trip.findOne({trip_id: '112268609'})
 		.populate({
 			path: 'stop_times',
@@ -219,6 +221,27 @@ describe.only('Use a Route and its trips to create a list of a route\'s stops', 
 		})
 		.then(trip => {
 			console.log("trip ",trip);
+			done();
+		})
+	})
+	xit('gets stops by name', done => {
+		Stop.find({name: {$in:globals.stops["101D"]}, direction: 0}, 'name stop_id -_id')
+		.then(stops => {
+			console.log("stops:");
+			for(let j=0; j<stops.length;j++) {
+				console.log(stops[j].stop_id, stops[j].name)
+			}
+			let sortObj = {};
+			for (let i=0, len = globals.stops["101D"].length; i < len; i++) {
+				sortObj[globals.stops["101D"][i]] = i;
+			}
+			stops.sort((a,b) => {
+				return sortObj[a.name] - sortObj[b.name]
+			});
+			console.log("sorted stops:");
+			for(let k=0; k<stops.length;k++) {
+				console.log(stops[k].stop_id, stops[k].name)
+			}
 			done();
 		})
 	})

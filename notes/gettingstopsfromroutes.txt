@@ -14,7 +14,6 @@ Routes with issues
 101D -- On Southbound only, stops out of order -- caused by random times that Southbound D starts at Englewood instead of 18th & Stout 
 101E -- On Southbound only, stops out of order -- caused by random times that Southbound E starts at Evans instead of Union Station 
 101H -- On Southbound only, stops out of order -- caused by random times that Southbound H starts at Evans instead of Union Station 
-103W -- On Eastbound only, Auraria West displays twice -- stop_id: 25427 & 25431 (last ID has the wrong direction and comes from trip_id: 112268609)
-	This issue can be fixed by using direction in addition to stop_ids when getting stops from db, but causes issues with other lines.
+103W -- On Eastbound only, Auraria West displays twice -- stop_id: 25427 & 25431 (last ID has the wrong direction and comes from trip_id: 112268609) This issue is fixed by only returning unique stops, but does this cause other issues?
 
 
