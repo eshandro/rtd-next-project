@@ -14,19 +14,22 @@ const	Trip = require('../../database/models/trip'),
 function getTripsIdsListByDateAndRouteAndDirection (date, route, direction,serviceIDs) {
 	let today = dateHelpers.convertCurrentDateToRTDFormat(date);
 	let day = dateHelpers.convertDayToDayName(date.getDay());
+	let tripsidsList = [];
 
 	if (!serviceIDs) {
 		return getServiceIdsForDate(date)
 		.then((ids) => {
 			return Trip.find({service_id: {$in: ids},route_id: route, direction_id: direction}, 'trip_id -_id').lean()
 			.then((trips) => {
-				return trips;		
+				tripsidsList = trips.map((item,index) => item.trip_id)
+				return tripsidsList;		
 			});
 		});
 	} else {
 		return Trip.find({service_id: {$in: serviceIDs},route_id: route, direction_id: direction}, 'trip_id -_id').lean()
 		.then((trips) => {
-			return trips;		
+			tripsidsList = trips.map((item,index) => item.trip_id)
+			return tripsidsList;		
 		});
 	}
 }

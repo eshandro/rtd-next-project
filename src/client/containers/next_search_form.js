@@ -21,7 +21,9 @@ class NextSearchForm extends Component {
 			stop: null,
 			direction: null,
 			date: new Date(),
-			numResults: 3
+			numResults: 3,
+			stoptimes: [],
+			canSearch: false
 		};
 
 		this.handleRouteSelect = this.handleRouteSelect.bind(this);
@@ -32,6 +34,8 @@ class NextSearchForm extends Component {
 		this.getTrips = this.getTrips.bind(this);
 		this.getTripsIdsList = this.getTripsIdsList.bind(this);
 		this.getStopsByDirection = this.getStopsByDirection.bind(this);
+		this.handleNumResultsInput = this.handleNumResultsInput.bind(this);
+		this.handleSubmit = this.handleSubmit.bind(this);
 
 	}
 
@@ -43,19 +47,22 @@ class NextSearchForm extends Component {
 			staticFeedAPI.getRoutesList()
 			.then((result) => {
 				console.log("routes: ", result); 
-				this.setState({ routes: result.routesList });
+				this.setState( { routes: result.routesList } );
+				this.setState( { route: result.routesList[0].route_id } );
+				this.setState( { directions: result.routesList[0].directions}, () => {
+					this.setState( {direction: "0"}, () => {
+						if (this.state.stops_dir0.length < 1) this.getStopsByDirection(0);
+						if (this.state.stops_dir1.length < 1) this.getStopsByDirection(1);
+						if (this.state.trips_ids.length < 1) this.getTripsIdsList();
+					}) 
+				});
 			})
 			.catch((err) => {
 				console.log("err in routes get:", err);
 				this.setState({routes: []});
 			});
 		}
-		if (this.state.stops_dir0.length < 1 ) {
-			this.getStopsByDirection(0);
-		}
-		if (this.state.stops_dir1.length < 1) {
-			this.getStopsByDirection(1);
-		}
+
 
 	}
 
@@ -118,11 +125,11 @@ class NextSearchForm extends Component {
 		d = dateHelpers.convertDateObjToLocalISOString(d);
 		staticFeedAPI.getTripsIds(d, this.state.route,this.state.direction,this.state.serviceIDs)
 		.then( results => {
-			console.log("results from getTrips fetch ",results);
+			console.log("results from getTripsIds fetch ",results);
 			this.setState({trips_ids: results.trips}, () => this.getStopsByDirection() );
 		})
 		.catch(err => {
-			console.log("err in getTrips:", err);
+			console.log("err in getTripsIds:", err);
 			this.setState({ trips_ids: [] });
 		});		
 	}
@@ -131,7 +138,11 @@ class NextSearchForm extends Component {
 		if(this.state.route) {
 			let stateKey = "stops_dir" + dir;
 			let stopsKey = this.state.route + '-' + dir;
-			this.setState({ [stateKey]: stops[stopsKey] }) ;
+			this.setState({ [stateKey]: stops[stopsKey] });
+			if (dir == this.state.direction) {
+				this.setState( { stop_name: this.state[stateKey][0] } );
+				this.setState( { canSearch: true } );
+			}
 		}
 	}
 
@@ -142,6 +153,8 @@ class NextSearchForm extends Component {
 				this.setState({directions: item.directions}, function() {
 					this.setState({direction: "0"}, function() {
 						this.getTripsIdsList();
+						this.getStopsByDirection();
+						this.getStopsByDirection(this.state.direction == 0 ? "1" : "0")
 					});					
 				});
 				return;
@@ -164,12 +177,48 @@ class NextSearchForm extends Component {
 		let name = e.target.value;
 		let dir = this.state.direction;
 		this.setState({stop_name:name});
-		staticFeedAPI.getStopByNameAndDirection(name,dir)
+		staticFeedAPI.getStopByNameAndDirection(encodeURIComponent(name),dir)
 		.then( stop => {
-			console.log("stop from api ",stop);
-			console.log("stop.stop_id ",stop.stop_id);
-			this.setState({stop: stop.stop_id });
+			this.setState( {canSearch: true})
+			this.setState( {stop: stop.stop_id} );
 		})
+	}
+
+	handleNumResultsInput(e) {
+		this.setState( {numResults: e.target.value} );
+	}
+
+	handleSubmit(e) {
+		e.preventDefault();
+		let stopid;
+		let tripsids = this.state.trips_ids;
+		let num = this.state.numResults
+		if (this.state.stop) {
+			console.log("if");
+			stopid = this.state.stop;
+			console.log("stopid ",stopid);
+			console.log("tripsids ",tripsids);
+			console.log("num ",num);
+			staticFeedAPI.getXStopTimesForStop(stopid,tripsids,num)
+			.then(results => {
+				this.setState( {stoptimes: results.stoptimes})
+			}) 
+		} else {
+			console.log("else")
+			console.log("this.state.stop_name ",this.state.stop_name);
+			console.log("this.state.direction ",this.state.direction);
+			staticFeedAPI.getStopByNameAndDirection(encodeURIComponent(this.state.stop_name), this.state.direction)
+			.then( stop => {
+				console.log("stop ",stop);
+				this.setState( {stop: stop.stop_id}, () => {
+					stopid = this.state.stop;
+					staticFeedAPI.getXStopTimesForStop(stopid,tripsids,num)
+					.then(results => {
+						this.setState( {stoptimes: results.stoptimes})
+					}) 
+				});
+			})
+		}
 	}
 
 
@@ -177,11 +226,13 @@ class NextSearchForm extends Component {
 		let routesLoaded = this.state.routes.length;
 		let routeChosen = this.state.route;
 		let directionChosen = this.state.direction;
+		let stopChosen = this.state.stop;
+		let canSearch = this.state.canSearch;
 
 		return (
 			<div>
 				<h2>Next Train!</h2>
-				<form> 
+				<form id="next-train-form" name="next-train-form" onSubmit={this.handleSubmit}> 
 					<div>
 						<label htmlFor="date-picker">Date: </label>
 						<DatePicker 
@@ -199,6 +250,7 @@ class NextSearchForm extends Component {
 							<label htmlFor="route-select">Choose Route: </label>
 							<select 
 								id="route-select" 
+								name="route-select" 
 								title="Select your route" 
 								value={this.state.route || ""} 
 								onChange = {this.handleRouteSelect} >
@@ -241,7 +293,41 @@ class NextSearchForm extends Component {
 					</div>
 					)	
 				}
+				{
+					(
+					<div>
+						<label htmlFor="num-results-input">Number of results (1-6): </label>
+						<input 
+							id="num-results-input" 
+							type="number" 
+							min="1" 
+							max="6" 
+							title="input number of results to show" 
+							value={this.state.numResults || ""}
+							onChange={this.handleNumResultsInput} >
+						</input>
+					</div>
+					)	
+				}
+				{
+					canSearch && (
+					<div>
+						<button type="submit">Next Train</button>
+					</div>
+					)	
+				}
 				</form>
+				<div id="results">
+					{
+						this.state.stoptimes.length > 0 && (
+							<ul id="results-list">
+								{this.state.stoptimes.map((item,index) => 
+									<li className="results-item" key={index} >{item}</li>
+								)}
+							</ul>
+						)
+					}
+				</div>
 			</div>
 
 		);

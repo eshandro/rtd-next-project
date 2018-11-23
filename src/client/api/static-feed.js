@@ -82,3 +82,20 @@ export function getStopsByDirection(dir) {
 		.then(stops => stops)
 		.catch(err => err)
 }
+
+export function getXStopTimesForStop(stopid, tripids, num) {
+	let data = {
+		stopid,
+		tripids,
+		num
+	}
+
+	return fetch(`${staticfeedBaseUrl}stoptimes/next_x_stoptimes_for_stop`, {
+		method: 'POST',
+		headers: {'Content-Type': 'application/JSON'},
+		body: JSON.stringify(data)
+		})
+		.then(res => res.json())
+		.then(results => results)
+		.catch(err => err)
+}

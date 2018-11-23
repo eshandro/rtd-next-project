@@ -42,10 +42,11 @@ mongoose.connect(serverConfig.mongoURL, { useNewUrlParser: true, useCreateIndex:
 	}
 });
 
-const staticFeedRoutes = require('./routes/static-feed-routes');
-const staticFeedServices = require('./routes/static-feed-services');
-const staticFeedTrips = require('./routes/static-feed-trips');
-const staticFeedStops = require('./routes/static-feed-stops');
+const staticFeedRoutes = require('./routes/static-feed-routes_routes');
+const staticFeedServices = require('./routes/static-feed-services_routes');
+const staticFeedTrips = require('./routes/static-feed-trips_routes');
+const staticFeedStops = require('./routes/static-feed-stops_routes');
+const staticFeedStopTimes = require('./routes/static-feed-stoptimes_routes');
 
 /**
  * API routes:
@@ -55,9 +56,9 @@ const staticFeedStops = require('./routes/static-feed-stops');
  * /api/staticfeed/trips/tripids_by_serviceids - POST
  * /api/staticfeed/trips/trips_by_date_route/:date/:route
  * /api/staticfeed/trips/trips_by_date_route_direction/:date/:route/:direction
- * /api/staticfeed/stops/next_x_stoptimes_for_stop
  * /api/staticfeed/stops/stops_by_stopids/ - POST
  * /api/staticfeed/stops/stops_by_direction/:dir
+ * /api/staticfeed/stoptimes/next_x_stoptimes_for_stop
  * 
 **/
 
@@ -68,6 +69,7 @@ app.use('/api/staticfeed/routes', staticFeedRoutes);
 app.use('/api/staticfeed/services', staticFeedServices);
 app.use('/api/staticfeed/trips',staticFeedTrips);
 app.use('/api/staticfeed/stops',staticFeedStops);
+app.use('/api/staticfeed/stoptimes',staticFeedStopTimes);
 
 
 app.listen(serverConfig.port, (error) => {
