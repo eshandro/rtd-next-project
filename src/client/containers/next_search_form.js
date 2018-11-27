@@ -147,7 +147,9 @@ class NextSearchForm extends Component {
 	}
 
 	handleRouteSelect(e) {
-		this.setState({route: e.target.value});
+		this.setState( {route: e.target.value} );
+		this.setState( {stoptimes: []} );
+		this.setState( {stop:''} );
 		this.state.routes.map(item => {
 			if (item.route_id === e.target.value) {
 				this.setState({directions: item.directions}, function() {
@@ -163,6 +165,8 @@ class NextSearchForm extends Component {
 	}
 
 	handleDirectionSelect(e) {
+		this.setState( {stoptimes: []} );
+		this.setState( {stop:''} );
 		this.setState({direction: e.target.value}, function() {
 			this.getTripsIdsList();
 		});
@@ -170,6 +174,7 @@ class NextSearchForm extends Component {
 	}
 
 	handleDatePicker(d) {
+		this.setState( {stoptimes: []} );
 		this.setState({date: d}, this.getServiceIDs);
 	}
 
@@ -177,6 +182,7 @@ class NextSearchForm extends Component {
 		let name = e.target.value;
 		let dir = this.state.direction;
 		this.setState({stop_name:name});
+		this.setState( {stoptimes: []} );
 		staticFeedAPI.getStopByNameAndDirection(encodeURIComponent(name),dir)
 		.then( stop => {
 			this.setState( {canSearch: true})
@@ -186,30 +192,27 @@ class NextSearchForm extends Component {
 
 	handleNumResultsInput(e) {
 		this.setState( {numResults: e.target.value} );
+		this.setState( {stoptimes: []} );
 	}
 
 	handleSubmit(e) {
 		e.preventDefault();
+		this.setState( {stoptimes: []} );
 		let stopid;
 		let tripsids = this.state.trips_ids;
 		let num = this.state.numResults
 		if (this.state.stop) {
-			console.log("if");
 			stopid = this.state.stop;
 			console.log("stopid ",stopid);
-			console.log("tripsids ",tripsids);
-			console.log("num ",num);
 			staticFeedAPI.getXStopTimesForStop(stopid,tripsids,num)
 			.then(results => {
 				this.setState( {stoptimes: results.stoptimes})
 			}) 
 		} else {
-			console.log("else")
 			console.log("this.state.stop_name ",this.state.stop_name);
 			console.log("this.state.direction ",this.state.direction);
 			staticFeedAPI.getStopByNameAndDirection(encodeURIComponent(this.state.stop_name), this.state.direction)
 			.then( stop => {
-				console.log("stop ",stop);
 				this.setState( {stop: stop.stop_id}, () => {
 					stopid = this.state.stop;
 					staticFeedAPI.getXStopTimesForStop(stopid,tripsids,num)
@@ -233,6 +236,7 @@ class NextSearchForm extends Component {
 			<div>
 				<h2>Next Train!</h2>
 				<form id="next-train-form" name="next-train-form" onSubmit={this.handleSubmit}> 
+					{ /*
 					<div>
 						<label htmlFor="date-picker">Date: </label>
 						<DatePicker 
@@ -242,6 +246,7 @@ class NextSearchForm extends Component {
 							onChange={this.handleDatePicker} >
 						</DatePicker>
 					</div>
+					*/}
 				{ 
 					!routesLoaded
 					? 'Loading ...'
@@ -320,11 +325,16 @@ class NextSearchForm extends Component {
 				<div id="results">
 					{
 						this.state.stoptimes.length > 0 && (
-							<ul id="results-list">
-								{this.state.stoptimes.map((item,index) => 
-									<li className="results-item" key={index} >{item}</li>
-								)}
-							</ul>
+							<div>
+								<h2>{`Next ${this.state.numResults > 1 ? this.state.numResults + ' trains': 'train'} for the 
+								${this.state.directions[this.state.direction]} ${this.state.route} Line at stop 
+								${this.state.stop_name}:`}</h2>
+								<ul id="results-list">
+									{this.state.stoptimes.map((item,index) => 
+										<li className="results-item" key={index} >{dateHelpers.convertDBTimeTo12(item)}</li>
+									)}
+								</ul>
+							</div>
 						)
 					}
 				</div>
