@@ -2,18 +2,26 @@ const path = require('path');
 const CleanWebpackPlugin = require("clean-webpack-plugin");
 const HtmlWebPackPlugin = require("html-webpack-plugin");
 
+const PATHS = {
+	client: path.join(__dirname, 'src/client'),
+	src: path.join(__dirname, 'src'),
+	dist: path.join(__dirname,'dist')
+}
+
 const htmlPlugin = new HtmlWebPackPlugin({
-	template: path.resolve(__dirname,"src/index.html"),
-	filename: path.resolve(__dirname,"dist/index.html")
+	template: `${PATHS.src}/index.html`,
+	filename: `${PATHS.dist}/index.html`
 })
-const cleanPlugin = new CleanWebpackPlugin(["dist/scripts", "dist/index.html"]);
+const cleanPlugin = new CleanWebpackPlugin([`${PATHS.dist}/scripts`, `${PATHS.dist}/index.html`]);
 
 module.exports = {
-	entry: ["./src/client/index.js"],
+	entry: {
+		bundle:	[`${PATHS.client}/index.js`]
+	},
 	output: {
-		path: path.resolve(__dirname,"dist"),
+		path: PATHS.dist,
 		publicPath: "/",
-		filename: "scripts/bundle.js"
+		filename: "scripts/[name].js"
 	},
 	module: {
 		rules: [
@@ -23,6 +31,10 @@ module.exports = {
 	    		use: {
 					loader: "babel-loader"
 	    		}
+			},
+			{
+				test: /\.scss$/,
+				use: ['style-loader', 'css-loader', 'sass-loader']
 			},
 			{
 				test: /\.css$/,
@@ -39,7 +51,7 @@ module.exports = {
 		]
 	},
 	devServer: {
-		contentBase: path.resolve(__dirname,"dist"),
+		contentBase: PATHS.dist,
 		watchContentBase: true,
 		publicPath: "/",
 		proxy: {

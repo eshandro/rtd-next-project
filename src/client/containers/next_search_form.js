@@ -251,10 +251,11 @@ class NextSearchForm extends Component {
 					!routesLoaded
 					? 'Loading ...'
 					: (
-						<div>
-							<label htmlFor="route-select">Choose Route: </label>
+						<div className='form-group'>
+							<label className='form-label' htmlFor="route-select">Choose Route: </label>
 							<select 
 								id="route-select" 
+								className='form-select' 
 								name="route-select" 
 								title="Select your route" 
 								value={this.state.route || ""} 
@@ -268,10 +269,11 @@ class NextSearchForm extends Component {
 				}
 				{
 					routeChosen && (
-					<div>
-						<label htmlFor="direction-select">Choose Direction: </label>
+					<div className='form-group'>
+						<label className='form-label' htmlFor="direction-select">Choose Direction: </label>
 						<select 
 							id="direction-select" 
+							className='form-select' 
 							title="Select your direction" 
 							value={this.state.direction || ""}
 							onChange={this.handleDirectionSelect} >
@@ -284,10 +286,11 @@ class NextSearchForm extends Component {
 				}
 				{
 					directionChosen && (
-					<div>
-						<label htmlFor="stop-select">Choose a Stop: </label>
+					<div className='form-group'>
+						<label className='form-label' htmlFor="stop-select">Choose a Stop: </label>
 						<select 
 							id="stop-select" 
+							className='form-select' 
 							title="Select your stop" 
 							value={this.state.stop_name || ""}
 							onChange={this.handleStopSelect} >
@@ -300,10 +303,11 @@ class NextSearchForm extends Component {
 				}
 				{
 					(
-					<div>
-						<label htmlFor="num-results-input">Number of results (1-6): </label>
+					<div className='form-group'>
+						<label className='form-label' htmlFor="num-results-input">Number of results (1-6): </label>
 						<input 
 							id="num-results-input" 
+							className='form-input' 
 							type="number" 
 							min="1" 
 							max="6" 
@@ -317,7 +321,7 @@ class NextSearchForm extends Component {
 				{
 					canSearch && (
 					<div>
-						<button type="submit">Next Train</button>
+						<button className='btn btn-primary' type="submit">Next Train</button>
 					</div>
 					)	
 				}
