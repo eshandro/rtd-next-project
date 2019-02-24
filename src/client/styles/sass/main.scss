@@ -1,0 +1,20 @@
+// Import Spectre source code
+@import "node_modules/spectre.css/src/spectre-icons";
+@import "node_modules/spectre.css/src/spectre";
+
+// Override default variables here
+$base-font-family: 'Open Sans', sans-serif;
+
+// Custom variables here
+$headers-font-family: 'Josefin Sans', $base-font-family;
+$text-font-family: 'Cormorant', serif;
+
+
+// Override Spectre styles here
+h1,h2,h3,h4,h5,h6 {
+	font-family: $headers-font-family;
+}
+
+.form-select, .form-input {
+	-webkit-appearance: none;
+}

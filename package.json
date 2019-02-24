@@ -18,13 +18,14 @@
     "test": "NODE_ENV=test nodemon --exec 'mocha --recursive'",
     "lint": "./node_modules/.bin/eslint src",
     "build:dev": "webpack --mode development",
-    "build:prod": "webpack --mode production",
+    "build:prod": "NODE_ENV=production webpack --mode production",
     "client": "webpack-dev-server --open --colors --mode development",
     "server": "nodemon --watch src/server node src/server/server.js",
     "start:dev": "concurrently --kill-others-on-fail \"npm:server\" \"npm:client\""
   },
   "devDependencies": {
     "@babel/core": "^7.3.3",
+    "@babel/plugin-syntax-dynamic-import": "^7.2.0",
     "@babel/preset-env": "^7.3.1",
     "babel-eslint": "^10.0.0",
     "babel-loader": "^8.0.5",
@@ -35,6 +36,7 @@
     "eslint-plugin-react": "^7.12.4",
     "html-loader": "^0.5.5",
     "html-webpack-plugin": "^3.2.0",
+    "mini-css-extract-plugin": "^0.5.0",
     "mocha": "^6.0.1",
     "node-sass": "^4.11.0",
     "nodemon": "^1.18.10",
@@ -56,6 +58,7 @@
     "react": "^16.8.3",
     "react-date-picker": "^7.2.0",
     "react-dom": "^16.8.3",
+    "spectre.css": "^0.5.8",
     "stream-json": "^1.1.4",
     "unzipper": "^0.9.11"
   }

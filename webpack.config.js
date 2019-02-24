@@ -1,6 +1,11 @@
 const path = require('path');
+const webpack = require('webpack');
+
 const CleanWebpackPlugin = require("clean-webpack-plugin");
 const HtmlWebPackPlugin = require("html-webpack-plugin");
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+
+const devMode = process.env.NODE_ENV !== 'production';
 
 const PATHS = {
 	client: path.join(__dirname, 'src/client'),
@@ -11,8 +16,17 @@ const PATHS = {
 const htmlPlugin = new HtmlWebPackPlugin({
 	template: `${PATHS.src}/index.html`,
 	filename: `${PATHS.dist}/index.html`
-})
-const cleanPlugin = new CleanWebpackPlugin([`${PATHS.dist}/scripts`, `${PATHS.dist}/index.html`]);
+});
+
+const cleanPlugin = new CleanWebpackPlugin([`${PATHS.dist}/scripts`, `${PATHS.dist}/styles`, `${PATHS.dist}/index.html`]);
+
+const miniCssPlugin = new MiniCssExtractPlugin({
+	filename: devMode ? 'styles/[name].css' : 'styles/[name].[contenthash].css',
+	chunkFilename: devMode ? 'styles/[name].css' : 'styles/[name].[contenthash].css'
+});
+
+const hashedModuleIdsPlugin = new webpack.HashedModuleIdsPlugin();
+
 
 module.exports = {
 	entry: {
@@ -20,8 +34,23 @@ module.exports = {
 	},
 	output: {
 		path: PATHS.dist,
-		publicPath: "/",
-		filename: "scripts/[name].js"
+		publicPath: '/',
+		filename: devMode ? 'scripts/[name].js' : 'scripts/[name].[contenthash].js',
+		chunkFilename: devMode ? 'scripts/[name].js' : 'scripts/[name].[contenthash].js'
+	},
+	optimization: {
+		runtimeChunk: 'single',
+		splitChunks: {
+			cacheGroups: {
+				default: false,
+				vendors: false,
+				vendor: {
+					name: 'vendor',
+					chunks: 'all',
+					test: /node_modules/
+				}
+			}
+		}
 	},
 	module: {
 		rules: [
@@ -33,13 +62,17 @@ module.exports = {
 	    		}
 			},
 			{
-				test: /\.scss$/,
-				use: ['style-loader', 'css-loader', 'sass-loader']
+				test: /\.(sa|sc|c)ss$/,
+				use: [
+						devMode ? 'style-loader' : MiniCssExtractPlugin.loader, 
+						'css-loader', 
+						'sass-loader'
+					]
 			},
-			{
-				test: /\.css$/,
-				use: ['style-loader', 'css-loader']
-			}
+			// {
+			// 	test: /\.css$/,
+			// 	use: ['style-loader', 'css-loader']
+			// }
 			// {
 			// 	test: /\.html?/,
 			// 	use: [
@@ -60,6 +93,8 @@ module.exports = {
 	},
 	plugins: [
 		 cleanPlugin,
-		 htmlPlugin
+		 htmlPlugin,
+		 miniCssPlugin,
+		 hashedModuleIdsPlugin
 	]
 };

@@ -233,8 +233,8 @@ class NextSearchForm extends Component {
 		let canSearch = this.state.canSearch;
 
 		return (
-			<div>
-				<h2>Next Train!</h2>
+			<div className="container">
+				<h1>Next Train!</h1>
 				<form id="next-train-form" name="next-train-form" onSubmit={this.handleSubmit}> 
 					{ /*
 					<div>
@@ -330,9 +330,9 @@ class NextSearchForm extends Component {
 					{
 						this.state.stoptimes.length > 0 && (
 							<div>
-								<h2>{`Next ${this.state.numResults > 1 ? this.state.numResults + ' trains': 'train'} for the 
+								<h3>{`Next ${this.state.numResults > 1 ? this.state.numResults + ' trains': 'train'} for the 
 								${this.state.directions[this.state.direction]} ${this.state.route} Line at stop 
-								${this.state.stop_name}:`}</h2>
+								${this.state.stop_name}:`}</h3>
 								<ul id="results-list">
 									{this.state.stoptimes.map((item,index) => 
 										<li className="results-item" key={index} >{dateHelpers.convertDBTimeTo12(item)}</li>
