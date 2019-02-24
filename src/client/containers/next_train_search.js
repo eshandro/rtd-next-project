@@ -4,7 +4,13 @@ import * as staticFeedAPI from '../api/static-feed';
 import dateHelpers from '../../server/utils/dateHelpers';
 import {stops} from '../../server/utils/globals';
 
-class NextSearchForm extends Component {
+import RouteSelect from '../components/routeSelect';
+import DirectionSelect from '../components/directionSelect';
+import StopSelect from '../components/stopSelect';
+import NumResultsInput from '../components/numResultsInput';
+import SearchResults from '../components/searchResults';
+
+class NextTrainSearch extends Component {
 	constructor(props) {
 		super(props);
 
@@ -218,6 +224,8 @@ class NextSearchForm extends Component {
 					staticFeedAPI.getXStopTimesForStop(stopid,tripsids,num)
 					.then(results => {
 						this.setState( {stoptimes: results.stoptimes})
+						let resultsEle = document.getElementById('results');
+						resultsEle.scrollIntoView({behavior: 'smooth'});
 					}) 
 				});
 			})
@@ -233,115 +241,88 @@ class NextSearchForm extends Component {
 		let canSearch = this.state.canSearch;
 
 		return (
-			<div className="container">
+			<div>
+			<header className="container grid-lg">
+				{ /* <nav></nav> */}
 				<h1>Next Train!</h1>
-				<form id="next-train-form" name="next-train-form" onSubmit={this.handleSubmit}> 
-					{ /*
-					<div>
-						<label htmlFor="date-picker">Date: </label>
-						<DatePicker 
-							id="date-picker" 
-							type="text" 
-							value={this.state.date} 
-							onChange={this.handleDatePicker} >
-						</DatePicker>
-					</div>
-					*/}
-				{ 
-					!routesLoaded
-					? 'Loading ...'
-					: (
-						<div className='form-group'>
-							<label className='form-label' htmlFor="route-select">Choose Route: </label>
-							<select 
-								id="route-select" 
-								className='form-select' 
-								name="route-select" 
-								title="Select your route" 
-								value={this.state.route || ""} 
-								onChange = {this.handleRouteSelect} >
-								{this.state.routes.map(item => 
-									<option key={item._id} value={item.route_id}>{item.shortName} ({item.name})</option>
-								)}
-							</select>
+			</header>
+
+			<main>
+				<div className="container grid-lg">
+					<div className="columns">
+						<div className="column col-7 col-md-12"> 
+							<form id="next-train-form" name="next-train-form" onSubmit={this.handleSubmit}> 
+								{ /*
+								<div className='form-group'>
+									<label className='form-label' htmlFor="date-picker">Date: </label>
+									<DatePicker 
+										id="date-picker" 
+										type="text" 
+										value={this.state.date} 
+										onChange={this.handleDatePicker} >
+									</DatePicker>
+								</div>
+								*/}
+							{ 
+								!routesLoaded
+								? 'Loading ...'
+								: (
+									<RouteSelect 
+										route = {this.state.route || ""} 
+										routes = {this.state.routes} 
+										handleRouteSelect = {this.handleRouteSelect} />
+								)
+							}
+							{
+								routeChosen && (
+									<DirectionSelect 
+										direction = {this.state.direction || ""} 
+										directions = {this.state.directions} 
+										handleDirectionSelect = {this.handleDirectionSelect} />
+								)	
+							}
+							{
+								directionChosen && (
+									<StopSelect 
+										stop_name = {this.stop_name || ""} 
+										direction = {this.state.direction} 
+										stops = {this.state[`stops_dir${this.state.direction}`]} 
+										handleStopSelect = {this.handleStopSelect} />
+								)	
+							}
+							{
+								(
+									<NumResultsInput 
+										numResults = {this.state.numResults || ""} 
+										handleNumResultsInput = {this.handleNumResultsInput} />
+								)	
+							}
+							{
+								canSearch && (
+								<div>
+									<button className='btn btn-primary' type="submit">Next Train</button>
+								</div>
+								)	
+							}
+							</form>
 						</div>
-					)
-				}
-				{
-					routeChosen && (
-					<div className='form-group'>
-						<label className='form-label' htmlFor="direction-select">Choose Direction: </label>
-						<select 
-							id="direction-select" 
-							className='form-select' 
-							title="Select your direction" 
-							value={this.state.direction || ""}
-							onChange={this.handleDirectionSelect} >
-							{this.state.directions.map((item,index) => 
-								<option key={item} value={index}>{item}</option>
-							)}
-						</select>
+						<div id="results" className="column col-5 col-md-12">
+							{
+								this.state.stoptimes.length > 0 && (
+									<div>
+										<h4>{`Next ${this.state.numResults > 1 ? this.state.numResults + ' trains': 'train'} for the 
+										${this.state.directions[this.state.direction]} ${this.state.route} Line at stop 
+										${this.state.stop_name}:`}</h4>
+										<SearchResults 
+											stoptimes = {this.state.stoptimes} />
+									</div>
+								)
+							}
+						</div>
 					</div>
-					)	
-				}
-				{
-					directionChosen && (
-					<div className='form-group'>
-						<label className='form-label' htmlFor="stop-select">Choose a Stop: </label>
-						<select 
-							id="stop-select" 
-							className='form-select' 
-							title="Select your stop" 
-							value={this.state.stop_name || ""}
-							onChange={this.handleStopSelect} >
-							{	this.state[`stops_dir${this.state.direction}`].map((item,index) => 
-								<option key={index} value={item}>{item}</option>
-							)}
-						</select>
-					</div>
-					)	
-				}
-				{
-					(
-					<div className='form-group'>
-						<label className='form-label' htmlFor="num-results-input">Number of results (1-6): </label>
-						<input 
-							id="num-results-input" 
-							className='form-input' 
-							type="number" 
-							min="1" 
-							max="6" 
-							title="input number of results to show" 
-							value={this.state.numResults || ""}
-							onChange={this.handleNumResultsInput} >
-						</input>
-					</div>
-					)	
-				}
-				{
-					canSearch && (
-					<div>
-						<button className='btn btn-primary' type="submit">Next Train</button>
-					</div>
-					)	
-				}
-				</form>
-				<div id="results">
-					{
-						this.state.stoptimes.length > 0 && (
-							<div>
-								<h3>{`Next ${this.state.numResults > 1 ? this.state.numResults + ' trains': 'train'} for the 
-								${this.state.directions[this.state.direction]} ${this.state.route} Line at stop 
-								${this.state.stop_name}:`}</h3>
-								<ul id="results-list">
-									{this.state.stoptimes.map((item,index) => 
-										<li className="results-item" key={index} >{dateHelpers.convertDBTimeTo12(item)}</li>
-									)}
-								</ul>
-							</div>
-						)
-					}
 				</div>
+			</main>
+			<footer></footer>
 			</div>
 
 		);
@@ -349,4 +330,4 @@ class NextSearchForm extends Component {
 
 }
 
-export default NextSearchForm;
+export default NextTrainSearch;

@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import NextSearchForm from './next_search_form';
+import NextTrainSearch from '../containers/next_train_search';
 
 const App = () => {
 	return (
-		<NextSearchForm />
+		<NextTrainSearch />
 	)
 }
 

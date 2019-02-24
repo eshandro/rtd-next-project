@@ -22,7 +22,7 @@ const cleanPlugin = new CleanWebpackPlugin([`${PATHS.dist}/scripts`, `${PATHS.di
 
 const miniCssPlugin = new MiniCssExtractPlugin({
 	filename: devMode ? 'styles/[name].css' : 'styles/[name].[contenthash].css',
-	chunkFilename: devMode ? 'styles/[name].css' : 'styles/[name].[contenthash].css'
+	chunkFilename: devMode ? 'styles/[id].css' : 'styles/[id].[contenthash].css'
 });
 
 const hashedModuleIdsPlugin = new webpack.HashedModuleIdsPlugin();
