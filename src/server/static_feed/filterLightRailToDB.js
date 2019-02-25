@@ -37,7 +37,8 @@ const 	{parser} = require('stream-json'),
 		Calendar = require('../database/models/calendar'),
 		CalendarDates = require('../database/models/calendar_dates'),
 
-		globals = require('../utils/globals');
+		globals = require('../utils/globals')
+		dbBackup = require('../database/mongodb_backup');
 
 
 /**

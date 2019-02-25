@@ -1,7 +1,6 @@
 const 	fetch = require('node-fetch'),
 		handleFetchErrors = require('./handleFetchErrors'),
-		lastModifiedDate = require('./lastModifiedDate'),
-		lastModifiedFile = "./lastModified.json";
+		lastModifiedDate = require('./lastModifiedDate');
 
 /**
  * Pulls Date from RTD static feed page's html
@@ -55,17 +54,18 @@ function getFeedDate(url) {
  */
 function checkFeed(url, forceUpdate) {
 	// let lastModified, feedDate, needUpdate;
-	let fileDatePromise = lastModifiedDate.getLastModified(lastModifiedFile);
+	let fileDatePromise = lastModifiedDate.getLastModified();
 	let htmlDatePromise = getFeedDate(url);
 
 	return Promise.all([htmlDatePromise, fileDatePromise])
 		.then((values) => {
 			// console.log("values in checkFeed:",values);
-			let htmlDate = values[0], fileDate = values[1];
+			let htmlDate = values[0], 
+				savedDate = values[1].date;
 			let checkFeedErr = '';
 			if (typeof htmlDate === "object" || !htmlDate || htmlDate === '')
 				checkFeedErr += 'checkFeed error getting HTML Date';		
-			if (typeof fileDate !== 'string' || fileDate.indexOf('Error') !== -1) {
+			if (typeof savedDate !== 'string' || savedDate.indexOf('Error') !== -1) {
 				if(checkFeedErr !== '') {
 					checkFeedErr += 'and error getting File Date';
 				} else {
@@ -76,8 +76,8 @@ function checkFeed(url, forceUpdate) {
 				console.log("checkFeedErr ",checkFeedErr);
 				return {needUpdate: false, msg: checkFeedErr};
 			}
-			if (htmlDate !== fileDate || forceUpdate) {
-				lastModifiedDate.updateLastModified(lastModifiedFile, htmlDate,fileDate);
+			if (htmlDate !== savedDate || forceUpdate) {
+				lastModifiedDate.updateLastModified(htmlDate,savedDate);
 				return {needUpdate: true, msg: "RTD has updated feed"};
 			} else {
 				return {needUpdate: false, msg: "RTD has NOT updated feed"};
