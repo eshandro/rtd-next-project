@@ -1,9 +1,9 @@
-import React, { Component } from 'react';
-import DatePicker from 'react-date-picker'; 
+import React, { Component } from 'react'; 
 import * as staticFeedAPI from '../api/static-feed';
 import dateHelpers from '../../server/utils/dateHelpers';
 import {stops} from '../../server/utils/globals';
 
+import DateInput from '../components/dateInput';
 import RouteSelect from '../components/routeSelect';
 import DirectionSelect from '../components/directionSelect';
 import StopSelect from '../components/stopSelect';
@@ -71,14 +71,6 @@ class NextTrainSearch extends Component {
 
 
 	}
-
-	// shouldComponentUpdate(nextProps, nextState) {
-	// 	console.log("nextProps ",nextProps);
-	// 	console.log("nextState", nextState);
-	// 	console.log("this.props ",this.props);
-	// 	console.log("this.state ",this.state);
-	// 	return true;
-	// }
 
 	componentDidUpdate () {
 
@@ -225,7 +217,7 @@ class NextTrainSearch extends Component {
 					.then(results => {
 						this.setState( {stoptimes: results.stoptimes})
 						let resultsEle = document.getElementById('results');
-						resultsEle.scrollIntoView({behavior: 'smooth'});
+						resultsEle.scrollIntoView({behavior: 'smooth', block: 'start'});
 					}) 
 				});
 			})
@@ -253,15 +245,8 @@ class NextTrainSearch extends Component {
 						<div className="column col-7 col-md-12"> 
 							<form id="next-train-form" name="next-train-form" onSubmit={this.handleSubmit}> 
 								{ /*
-								<div className='form-group'>
-									<label className='form-label' htmlFor="date-picker">Date: </label>
-									<DatePicker 
-										id="date-picker" 
-										type="text" 
-										value={this.state.date} 
-										onChange={this.handleDatePicker} >
-									</DatePicker>
-								</div>
+								<DateInput date = {this.state.date || ""} handleDatePicker = {this.handleDatePicker} />
+								TODO: Add react-time-picker
 								*/}
 							{ 
 								!routesLoaded
@@ -313,8 +298,7 @@ class NextTrainSearch extends Component {
 										<h4>{`Next ${this.state.numResults > 1 ? this.state.numResults + ' trains': 'train'} for the 
 										${this.state.directions[this.state.direction]} ${this.state.route} Line at stop 
 										${this.state.stop_name}:`}</h4>
-										<SearchResults 
-											stoptimes = {this.state.stoptimes} />
+										<SearchResults stoptimes = {this.state.stoptimes} />
 									</div>
 								)
 							}

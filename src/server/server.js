@@ -64,12 +64,17 @@ const staticFeedStopTimes = require('./routes/static-feed-stoptimes_routes');
 
 app.use(bodyParser.json({limit: '20mb'}));
 app.use(bodyParser.urlencoded({limit: '20mb', extended: false }));
-app.use(Express.static(path.resolve(__dirname, '../dist')));
+app.use(Express.static(path.join(__dirname, '../../dist')));
 app.use('/api/staticfeed/routes', staticFeedRoutes);
 app.use('/api/staticfeed/services', staticFeedServices);
 app.use('/api/staticfeed/trips',staticFeedTrips);
 app.use('/api/staticfeed/stops',staticFeedStops);
 app.use('/api/staticfeed/stoptimes',staticFeedStopTimes);
+
+// may need this for react-router in the future
+// app.get('*', (req,res) => {
+// 	res.sendFile(path.join(__dirname, '../../dist/index.html'));
+// });
 
 
 app.listen(serverConfig.port, (error) => {
