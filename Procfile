@@ -1,1 +1,1 @@
-web: "npm run start:prod"
+web: NODE_ENV=production MONGO_URL=mongodb://heroku_8ndgnl03:dbjk5bpgh6o33ambo2nst8nlbp@ds153495.mlab.com:53495/heroku_8ndgnl03 node src/server/server.js

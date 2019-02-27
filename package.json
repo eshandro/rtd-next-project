@@ -6,6 +6,9 @@
   "repository": "https://github.com/eshandro/rtd-next-project.git",
   "author": "eshandro <erik843@gmail.com>",
   "license": "MIT",
+  "engines": {
+    "node": "10.15.1"
+  },
   "nodemonConfig": {
     "ignore": [
       "src/server/database/backups/*"
