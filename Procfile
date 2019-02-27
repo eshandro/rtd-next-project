@@ -1,1 +1,1 @@
-web: "nodemon --watch src/server node src/server/server.js"
+web: "npm run start:prod"
