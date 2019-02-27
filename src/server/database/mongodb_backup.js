@@ -73,7 +73,7 @@ function dbAutoBackup () {
 				if (!dbOptions.user || !dbOptions.pass) {
 					cmd2 = `mongorestore --host ${dbOptions.host} --port ${dbOptions.port} --db ${dbOptions.backup_database} --drop ${newBackupPath}/${dbOptions.database}/`; 
 				} else {
-					cmd2 = `mongorestore --host ${dbOptions.host} --port ${dbOptions.port} --db ${dbOptions.backup_database} --username ${dbOptions.user} --password  ${dbOptions.pass} --drop ${newBackupPath}/${dbOptions.database}/; 
+					cmd2 = `mongorestore --host ${dbOptions.host} --port ${dbOptions.port} --db ${dbOptions.backup_database} --username ${dbOptions.user} --password  ${dbOptions.pass} --drop ${newBackupPath}/${dbOptions.database}/`; 
 				}
 				exec(cmd2,function(error,stdout,stderr) {
 					console.log("error ",error);

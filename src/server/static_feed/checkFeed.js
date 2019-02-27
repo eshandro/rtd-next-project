@@ -59,7 +59,7 @@ function checkFeed(url, forceUpdate) {
 
 	return Promise.all([htmlDatePromise, fileDatePromise])
 		.then((values) => {
-			// console.log("values in checkFeed:",values);
+			console.log("values in checkFeed:",values);
 			let htmlDate = values[0], 
 				savedDate = values[1].date;
 			let checkFeedErr = '';

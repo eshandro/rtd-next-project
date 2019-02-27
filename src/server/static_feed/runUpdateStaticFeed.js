@@ -3,7 +3,8 @@ const	filterLightRail = require('./filterLightRailToDB'),
 		addTripsToRoutes = require('./addTripsToRoutes'),
 		addStopTimesToStops = require('./addStopTimesToStops'),
 		addStopTimesToTrips = require('./addStopTimesToTrips'),
-		globals = require('../utils/globals');
+		globals = require('../utils/globals')
+		serverConfig = require('../config');
 
 
 // DB Connection
@@ -13,7 +14,7 @@ mongoose.Promise = global.Promise;
 
 // In the future likely won't need this db connection and corresponding code, because 
 // db connection will be active in the app
-mongoose.connect('mongodb://localhost/rtdNextTrain', { useNewUrlParser: true, useCreateIndex: true });
+mongoose.connect(serverConfig.mongoURL, { useNewUrlParser: true, useCreateIndex: true });
 
 mongoose.connection
 	.once('open', () => { 
