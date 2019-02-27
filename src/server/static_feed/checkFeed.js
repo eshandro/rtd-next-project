@@ -61,7 +61,7 @@ function checkFeed(url, forceUpdate) {
 		.then((values) => {
 			console.log("values in checkFeed:",values);
 			let htmlDate = values[0], 
-				savedDate = values[1].date;
+				savedDate = values[1] ? values[1].date : "";
 			let checkFeedErr = '';
 			if (typeof htmlDate === "object" || !htmlDate || htmlDate === '')
 				checkFeedErr += 'checkFeed error getting HTML Date';		
