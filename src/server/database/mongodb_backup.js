@@ -1,17 +1,21 @@
 const fs = require('fs');
 const exec = require('child_process').exec;
+const serverConfig = require('../config');
+
 
 const dbOptions = {
 	user: '',
 	pass: '',
-	host: 'localhost',
-	port: 27017,
+	host: serverConfig.mongoHost,
+	port: serverConfig.mongoPort,
 	database: 'rtdNextTrain',
+	backup_database: 'rtdNextTrain_backup',
 	autoBackup: true,
 	removeOldBackup: true,
 	keepLastDaysBackup: 2,
 	autoBackupPath: './src/server/database/backups/' 
 };
+// console.table(dbOptions);
 
 /* return if variable is empty or not. */
 function emptyCheck (mixedvar) {
@@ -58,11 +62,26 @@ function dbAutoBackup () {
 		exec(cmd, function(error, stdout, stderr) {
 			if (emptyCheck(error)) {
 				// check for remove old backup after keeping # of days given in configuration
+				console.log("no error ");
 				if (dbOptions.removeOldBackup == true) {
 					if (fs.existsSync(oldBackupPath)) {
 						exec("rm -rf " + oldBackupPath, function(err) {});
 					}
 				}
+				// use newbackup to create backup database
+				let cmd2;
+				if (!dbOptions.user || !dbOptions.pass) {
+					cmd2 = `mongorestore --host ${dbOptions.host} --port ${dbOptions.port} --db ${dbOptions.backup_database} --drop ${newBackupPath}/${dbOptions.database}/`; 
+				} else {
+					cmd2 = `mongorestore --host ${dbOptions.host} --port ${dbOptions.port} --db ${dbOptions.backup_database} --username ${dbOptions.user} --password  ${dbOptions.pass} --drop ${newBackupPath}/${dbOptions.database}/; 
+				}
+				exec(cmd2,function(error,stdout,stderr) {
+					console.log("error ",error);
+					console.log("stdout ",stdout);
+					console.log("stderr ",stderr);
+				});				
+			} else {
+				console.log("error in dbbackup exec: ",error);
 			}
 		});
 	}
