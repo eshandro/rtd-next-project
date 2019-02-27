@@ -58,7 +58,7 @@ mongoose.connect(serverConfig.mongoURL, { useNewUrlParser: true, useCreateIndex:
 				});				
 
 			}
-		}
+		});
 	}
 });
 
