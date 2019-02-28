@@ -47,6 +47,23 @@ mongoose.connection
 		console.warn('Error in DB connection in runUpdateStaticFeed', error);
 	});
 
+const fs = require('fs');
+const path = require('path');
+
+function deleteJsonFiles(directory) {
+	fs.readdir(directory, (err, files) => {
+	  if (err) throw err;
+
+	  for (const file of files) {
+	    fs.unlink(path.join(directory, file), err => {
+	      if (err) throw err;
+	    });
+	  }
+	});
+}
+
+
+
 function runUpdateStaticFeed(force) {
 	console.log('runUpdateStaticFeed called with ',force);
 	console.log("update Started at ", new Date().toLocaleString("en-US", {timezone: "America/Denver"}));
@@ -58,6 +75,7 @@ function runUpdateStaticFeed(force) {
 	 * 4. filter JSON files to light rail only JSON files
 	 * 5. add light rail JSON data to db
 	 * 6. add subdocuments to light rail collections
+	 * 7. delete json files when done
 	 * 
 	 */
 	return updateStaticFeed(globals.mainFeedUrl,force)
@@ -71,6 +89,7 @@ function runUpdateStaticFeed(force) {
 		})
 		.then((data)=> {
 			if (!data.lightRailDataSuccess) {
+				deleteJsonFiles(path.join(__dirname, '../../../feed/json/'));
 				return ({updateStaticFeed: false, msg:data.msg});
 			} else {
 				let t1 = new Date();
@@ -101,6 +120,7 @@ function runUpdateStaticFeed(force) {
 						totalTime = t2-t1,
 						d = new Date(totalTime);
 					console.log("adding references took " + d.getUTCMinutes() + ' mins & ' + d.getUTCSeconds() + ' seconds');
+					deleteJsonFiles(path.join(__dirname, '../../../feed/json/'));
 					return ({updateStaticFeed: true, msg: "References added to collections"})
 				})
 			}

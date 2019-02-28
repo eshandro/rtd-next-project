@@ -1,10 +1,11 @@
 # feed files
-feed/
+#feed/
 #feed-temp/
 src/testing-files
+old-scripts
 
 # database backups
-src/server/database/backups/
+#src/server/database/backups/
 
 # Logs
 logs
