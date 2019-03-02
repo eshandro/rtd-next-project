@@ -1,3 +1,8 @@
+const { DateTime } = require('luxon');
+const  globals = require('./globals');
+// NOTE: using luxon on server side only to avoid polyfills etc. on client side to deal with browser inconsistencies
+// See conversion functions below.
+
 let dateHelpers = {
 
 	convertRTDTimeTo24 (rtdTime) {
@@ -7,6 +12,7 @@ let dateHelpers = {
 
 	convertCurrentTimeTo24 (current) {
 		// current should be a JS Date object
+		current = this.convertJSDateTimeZone(current);
 		let h = current.getHours().toString();
 		if (h.length === 1) {h = '0' + h;}
 		let m = current.getMinutes().toString();
@@ -26,6 +32,7 @@ let dateHelpers = {
 
 	convertCurrentDateToRTDFormat (currentDate) {
 		//currentDate should be a JS Date object
+		currentDate = this.convertJSDateTimeZone(currentDate);
 		var y,m,d;
 		y = currentDate.getFullYear().toString();
 		m = (currentDate.getMonth()+1).toString();
@@ -66,24 +73,26 @@ let dateHelpers = {
 	convertISODateStringToDateObject (datestring) {
 		// Convert datestring to Date Obj
 		// datestring must be in format: '2018-09-24'
-		// if no T present add T00:00 to force locale time vs UTC time
-		let dateObj;
-		if (datestring.indexOf('T') === -1 ) {
-			dateObj = new Date(datestring+'T00:00');
-		} else {
-			dateObj = new Date(datestring.replace(/T.*$/,'T00:00'));
-		}
+		let dt = DateTime.fromISO(datestring).setZone(globals.timezone);
+		let iso = dt.toISO();
+		// iso format is 2019-03-02T10:30:28.566-08:00 and with -08:00 passed to new Date() you'll always
+		// get the local time
+		let dateObj = new Date(iso.substring(0,iso.lastIndexOf('-')));
 		return dateObj;
 	},
 
-	convertDateObjToLocalISOString (dateObj) {
-	    function pad(n) { return n < 10 ? '0' + n : n }
-		return	dateObj.getFullYear() + '-'
-		        + pad(dateObj.getMonth() + 1) + '-'
-		        + pad(dateObj.getDate()) + 'T'
-		        + pad(dateObj.getHours()) + ':'
-		        + pad(dateObj.getMinutes()) + ':'
-		        + pad(dateObj.getSeconds())
+	convertDateObjToLocalISOString (dateObj,timezone=globals.timezone) {
+		// dateObj is js date object
+		let iso = DateTime.fromJSDate(dateObj, {zone: timezone}).toISO();
+		return iso;
+	},
+
+	convertJSDateTimeZone(dateObj,timezone=globals.timezone) {
+		let iso = this.convertDateObjToLocalISOString(dateObj,timezone);
+		// iso format is 2019-03-02T10:30:28.566-08:00 and with -08:00 passed to new Date() you'll always
+		// get the local time
+		dateObj = new Date(iso.substring(0,iso.lastIndexOf('-')));
+		return dateObj;
 	}
 
 };

@@ -4,6 +4,7 @@ module.exports = {
 	downloadFolder : __dirname + "/../../../feed-temp/",
 	extractedFolder : __dirname + "/../../../feed/",
 	filesToUpdate : ['routes.txt','stop_times.txt','stops.txt','trips.txt','calendar.txt','calendar_dates.txt'],
+	timezone: 'America/Denver',
 	lightRailRoutesRegex : /101.|103W|^A$|107R|113B|109L/,
 	stops: {
  		"A-0":["Union Station Track 1","38th & Blake Station Track 1","40th & Colorado Station Track 1","Central Park Station Track 1","Peoria Station Track 1","40th Ave & Airport Blvd - Gateway Park Station Track 1","61st & Pena Station Track 1","Denver Airport Station"],

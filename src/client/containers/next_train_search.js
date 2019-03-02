@@ -26,7 +26,7 @@ class NextTrainSearch extends Component {
 			stop_name:null,
 			stop: null,
 			direction: null,
-			date: new Date(),
+			date: dateHelpers.convertJSDateTimeZone(new Date()),
 			numResults: 3,
 			stoptimes: [],
 			canSearch: false
@@ -172,6 +172,7 @@ class NextTrainSearch extends Component {
 	}
 
 	handleDatePicker(d) {
+		d = dateHelpers.convertJSDateTimeZone(d);
 		this.setState( {stoptimes: []} );
 		this.setState({date: d}, this.getServiceIDs);
 	}

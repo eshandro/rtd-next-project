@@ -24,3 +24,13 @@ function convertFileExt(file, newExt) {
 	return newFile;
 }
 
+	convertDateObjToLocalISOString (dateObj) {
+		// dateObj is js date object
+	    function pad(n) { return n < 10 ? '0' + n : n }
+		return	dateObj.getFullYear() + '-'
+		        + pad(dateObj.getMonth() + 1) + '-'
+		        + pad(dateObj.getDate()) + 'T'
+		        + pad(dateObj.getHours()) + ':'
+		        + pad(dateObj.getMinutes()) + ':'
+		        + pad(dateObj.getSeconds())
+	}

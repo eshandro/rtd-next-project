@@ -40,25 +40,26 @@ mongoose.connect(serverConfig.mongoURL, { useNewUrlParser: true, useCreateIndex:
 		job.start();
 		job2.start();
 
-		// Check if db has data and if not mongorestore backup. This is for initial app load.
-		const Routes = require('./database/models/route');
-		Routes.countDocuments({}).exec((err, count) => {
-			console.log("count ",count);
-			if (err) {
-				console.log("err in count for Routes ",err);
-				return;
-			}
-			if(count === 0) {
-				const exec = require('child_process').exec;
-				let cmd = "node src/server/static_feed/initUpdateStaticFeed.js true";
-				exec(cmd,function(error,stdout,stderr) {
-					console.log("error ",error);
-					console.log("stdout ",stdout);
-					console.log("stderr ",stderr);
-				});				
+		// Check if db has data and if not updateFeed . This is for initial app load with no data.
+		if (process.env.NODE_ENV === 'production') {
+			const Routes = require('./database/models/route');
+			Routes.countDocuments({}).exec((err, count) => {
+				if (err) {
+					console.log("err in count for Routes ",err);
+					return;
+				}
+				if(count === 0) {
+					const exec = require('child_process').exec;
+					let cmd = "node src/server/static_feed/initUpdateStaticFeed.js true";
+					exec(cmd,function(error,stdout,stderr) {
+						console.log("error in server.js cmd to initUpdateStaticFeed ",error);
+						console.log("stdout in server.js cmd to initUpdateStaticFeed",stdout);
+						console.log("stderr in server.js cmd to initUpdateStaticFeed",stderr);
+					});				
 
-			}
-		});
+				}
+			});
+		}
 	}
 });
 

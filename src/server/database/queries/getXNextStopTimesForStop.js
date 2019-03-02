@@ -1,6 +1,7 @@
 const 	Stop = require('../../database/models/stop'),
 		StopTime = require('../../database/models/stop_time'),
-		dateHelpers = require('../../utils/dateHelpers');
+		dateHelpers = require('../../utils/dateHelpers'),
+		DateTime = require('luxon');
 
 /**
  * gets x number of stoptimes for a given stop
@@ -12,6 +13,8 @@ const 	Stop = require('../../database/models/stop'),
 function getXNextStopTimesForStop(stop, tripIds, x = 3) {
 	let d = new Date(),
 	now = dateHelpers.convertCurrentTimeTo24(d);
+	// console.log("d ",d);
+	// console.log("now ",now);
 	return Stop.findOne({
 		stop_id: stop
 	}).lean()

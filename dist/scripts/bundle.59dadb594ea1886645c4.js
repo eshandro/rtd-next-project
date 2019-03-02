@@ -352,7 +352,7 @@ function (_Component) {
       stop_name: null,
       stop: null,
       direction: null,
-      date: new Date(),
+      date: dateHelpers_default.a.convertJSDateTimeZone(new Date()),
       numResults: 3,
       stoptimes: [],
       canSearch: false
@@ -572,6 +572,7 @@ function (_Component) {
   }, {
     key: "handleDatePicker",
     value: function handleDatePicker(d) {
+      d = dateHelpers_default.a.convertJSDateTimeZone(d);
       this.setState({
         stoptimes: []
       });
@@ -734,7 +735,14 @@ react_dom_default.a.render(react_default.a.createElement(app, null), document.ge
 /***/ }),
 
 /***/ "Rhd/":
-/***/ (function(module, exports) {
+/***/ (function(module, exports, __webpack_require__) {
+
+var _require = __webpack_require__("ExVU"),
+    DateTime = _require.DateTime;
+
+var globals = __webpack_require__("peC0"); // NOTE: using luxon on server side only to avoid polyfills etc. on client side to deal with browser inconsistencies
+// See conversion functions below.
+
 
 var dateHelpers = {
   convertRTDTimeTo24: function convertRTDTimeTo24(rtdTime) {
@@ -743,6 +751,7 @@ var dateHelpers = {
   },
   convertCurrentTimeTo24: function convertCurrentTimeTo24(current) {
     // current should be a JS Date object
+    current = this.convertJSDateTimeZone(current);
     var h = current.getHours().toString();
 
     if (h.length === 1) {
@@ -768,6 +777,7 @@ var dateHelpers = {
   },
   convertCurrentDateToRTDFormat: function convertCurrentDateToRTDFormat(currentDate) {
     //currentDate should be a JS Date object
+    currentDate = this.convertJSDateTimeZone(currentDate);
     var y, m, d;
     y = currentDate.getFullYear().toString();
     m = (currentDate.getMonth() + 1).toString();
@@ -813,23 +823,29 @@ var dateHelpers = {
   convertISODateStringToDateObject: function convertISODateStringToDateObject(datestring) {
     // Convert datestring to Date Obj
     // datestring must be in format: '2018-09-24'
-    // if no T present add T00:00 to force locale time vs UTC time
-    var dateObj;
+    var dt = DateTime.fromISO(datestring).setZone(globals.timezone);
+    var iso = dt.toISO(); // iso format is 2019-03-02T10:30:28.566-08:00 and with -08:00 passed to new Date() you'll always
+    // get the local time
 
-    if (datestring.indexOf('T') === -1) {
-      dateObj = new Date(datestring + 'T00:00');
-    } else {
-      dateObj = new Date(datestring.replace(/T.*$/, 'T00:00'));
-    }
-
+    var dateObj = new Date(iso.substring(0, iso.lastIndexOf('-')));
     return dateObj;
   },
   convertDateObjToLocalISOString: function convertDateObjToLocalISOString(dateObj) {
-    function pad(n) {
-      return n < 10 ? '0' + n : n;
-    }
+    var timezone = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : globals.timezone;
+    // dateObj is js date object
+    var iso = DateTime.fromJSDate(dateObj, {
+      zone: timezone
+    }).toISO();
+    console.log("iso in convert to ISO ", iso);
+    return iso;
+  },
+  convertJSDateTimeZone: function convertJSDateTimeZone(dateObj) {
+    var timezone = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : globals.timezone;
+    var iso = this.convertDateObjToLocalISOString(dateObj, timezone); // iso format is 2019-03-02T10:30:28.566-08:00 and with -08:00 passed to new Date() you'll always
+    // get the local time
 
-    return dateObj.getFullYear() + '-' + pad(dateObj.getMonth() + 1) + '-' + pad(dateObj.getDate()) + 'T' + pad(dateObj.getHours()) + ':' + pad(dateObj.getMinutes()) + ':' + pad(dateObj.getSeconds());
+    dateObj = new Date(iso.substring(0, iso.lastIndexOf('-')));
+    return dateObj;
   }
 };
 module.exports = dateHelpers;
@@ -859,6 +875,7 @@ module.exports = dateHelpers;
   downloadFolder: __dirname + "/../../../feed-temp/",
   extractedFolder: __dirname + "/../../../feed/",
   filesToUpdate: ['routes.txt', 'stop_times.txt', 'stops.txt', 'trips.txt', 'calendar.txt', 'calendar_dates.txt'],
+  timezone: 'America/Los_Angeles',
   lightRailRoutesRegex: /101.|103W|^A$|107R|113B|109L/,
   stops: {
     "A-0": ["Union Station Track 1", "38th & Blake Station Track 1", "40th & Colorado Station Track 1", "Central Park Station Track 1", "Peoria Station Track 1", "40th Ave & Airport Blvd - Gateway Park Station Track 1", "61st & Pena Station Track 1", "Denver Airport Station"],
