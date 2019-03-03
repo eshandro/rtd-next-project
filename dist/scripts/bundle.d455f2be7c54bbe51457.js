@@ -523,9 +523,26 @@ function (_Component) {
       }
     }
   }, {
+    key: "setStopTimes",
+    value: function setStopTimes(stopid, tripsids, num) {
+      var _this6 = this;
+
+      getXStopTimesForStop(stopid, tripsids, num).then(function (results) {
+        _this6.setState({
+          stoptimes: results.stoptimes
+        });
+
+        var resultsEle = document.getElementById('results');
+        resultsEle.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start'
+        });
+      });
+    }
+  }, {
     key: "handleRouteSelect",
     value: function handleRouteSelect(e) {
-      var _this6 = this;
+      var _this7 = this;
 
       this.setState({
         route: e.target.value
@@ -538,7 +555,7 @@ function (_Component) {
       });
       this.state.routes.map(function (item) {
         if (item.route_id === e.target.value) {
-          _this6.setState({
+          _this7.setState({
             directions: item.directions
           }, function () {
             this.setState({
@@ -583,7 +600,7 @@ function (_Component) {
   }, {
     key: "handleStopSelect",
     value: function handleStopSelect(e) {
-      var _this7 = this;
+      var _this8 = this;
 
       var name = e.target.value;
       var dir = this.state.direction;
@@ -594,11 +611,11 @@ function (_Component) {
         stoptimes: []
       });
       getStopByNameAndDirection(encodeURIComponent(name), dir).then(function (stop) {
-        _this7.setState({
+        _this8.setState({
           canSearch: true
         });
 
-        _this7.setState({
+        _this8.setState({
           stop: stop.stop_id
         });
       });
@@ -616,42 +633,77 @@ function (_Component) {
   }, {
     key: "handleSubmit",
     value: function handleSubmit(e) {
-      var _this8 = this;
+      var _this9 = this;
 
       e.preventDefault();
       this.setState({
         stoptimes: []
       });
-      var stopid;
+      var d;
+      var stopid = this.state.stop;
       var tripsids = this.state.trips_ids;
       var num = this.state.numResults;
 
-      if (this.state.stop) {
-        stopid = this.state.stop;
-        console.log("stopid ", stopid);
-        getXStopTimesForStop(stopid, tripsids, num).then(function (results) {
-          _this8.setState({
-            stoptimes: results.stoptimes
+      if (tripsids.length === 0) {
+        if (!this.state.date) {
+          d = new Date();
+        } else {
+          d = this.state.date;
+        }
+
+        d = dateHelpers_default.a.convertDateObjToLocalISOString(d);
+      }
+
+      if (stopid && tripsids.length > 0) {
+        // console.log("stopid && tripsids.length > 0");
+        this.setStopTimes(stopid, tripsids, num);
+      } else if (stopid && tripsids.length === 0) {
+        // console.log("stopid && tripsids.length === 0");
+        getTripsIds(d, this.state.route, this.state.direction, this.state.serviceIDs).then(function (results) {
+          console.log("results from getTripsIds fetch ", results);
+
+          _this9.setState({
+            trips_ids: results.trips
+          }, function () {
+            tripsids = _this9.state.trips_ids;
+
+            _this9.setStopTimes(stopid, tripsids, num);
+          });
+        }).catch(function (err) {
+          console.log("err in getTripsIds:", err);
+
+          _this9.setState({
+            trips_ids: []
+          });
+        });
+      } else if (!stopid && tripsids.length > 0) {
+        // console.log("!stopid && tripsids.length > 0");
+        getStopByNameAndDirection(encodeURIComponent(this.state.stop_name), this.state.direction).then(function (stop) {
+          _this9.setState({
+            stop: stop.stop_id
+          }, function () {
+            stopid = _this9.state.stop;
+
+            _this9.setStopTimes(stopid, tripsids, num);
           });
         });
       } else {
-        console.log("this.state.stop_name ", this.state.stop_name);
-        console.log("this.state.direction ", this.state.direction);
-        getStopByNameAndDirection(encodeURIComponent(this.state.stop_name), this.state.direction).then(function (stop) {
-          _this8.setState({
-            stop: stop.stop_id
-          }, function () {
-            stopid = _this8.state.stop;
-            getXStopTimesForStop(stopid, tripsids, num).then(function (results) {
-              _this8.setState({
-                stoptimes: results.stoptimes
-              });
+        Promise.all([getStopByNameAndDirection(encodeURIComponent(this.state.stop_name), this.state.direction), getTripsIds(d, this.state.route, this.state.direction, this.state.serviceIDs)]).then(function (values) {
+          var results1 = values[0],
+              results2 = values[1]; // console.log("results1 ",results1);
+          // console.log("results2 ",results2);
 
-              var resultsEle = document.getElementById('results');
-              resultsEle.scrollIntoView({
-                behavior: 'smooth',
-                block: 'start'
-              });
+          _this9.setState({
+            stop: results1.stop_id
+          }, function () {
+            stopid = _this9.state.stop;
+
+            _this9.setState({
+              trips_ids: results2.trips
+            }, function () {
+              tripsids = _this9.state.trips_ids;
+
+              _this9.setStopTimes(stopid, tripsids, num);
             });
           });
         });
@@ -836,7 +888,6 @@ var dateHelpers = {
     var iso = DateTime.fromJSDate(dateObj, {
       zone: timezone
     }).toISO();
-    console.log("iso in convert to ISO ", iso);
     return iso;
   },
   convertJSDateTimeZone: function convertJSDateTimeZone(dateObj) {
@@ -875,7 +926,7 @@ module.exports = dateHelpers;
   downloadFolder: __dirname + "/../../../feed-temp/",
   extractedFolder: __dirname + "/../../../feed/",
   filesToUpdate: ['routes.txt', 'stop_times.txt', 'stops.txt', 'trips.txt', 'calendar.txt', 'calendar_dates.txt'],
-  timezone: 'America/Los_Angeles',
+  timezone: 'America/Denver',
   lightRailRoutesRegex: /101.|103W|^A$|107R|113B|109L/,
   stops: {
     "A-0": ["Union Station Track 1", "38th & Blake Station Track 1", "40th & Colorado Station Track 1", "Central Park Station Track 1", "Peoria Station Track 1", "40th Ave & Airport Blvd - Gateway Park Station Track 1", "61st & Pena Station Track 1", "Denver Airport Station"],

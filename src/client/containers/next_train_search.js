@@ -144,6 +144,15 @@ class NextTrainSearch extends Component {
 		}
 	}
 
+	setStopTimes(stopid,tripsids,num) {
+		staticFeedAPI.getXStopTimesForStop(stopid,tripsids,num)
+		.then(results => {
+			this.setState( {stoptimes: results.stoptimes})
+			let resultsEle = document.getElementById('results');
+			resultsEle.scrollIntoView({behavior: 'smooth', block: 'start'});
+		}) 		
+	}
+
 	handleRouteSelect(e) {
 		this.setState( {route: e.target.value} );
 		this.setState( {stoptimes: []} );
@@ -197,31 +206,67 @@ class NextTrainSearch extends Component {
 	handleSubmit(e) {
 		e.preventDefault();
 		this.setState( {stoptimes: []} );
-		let stopid;
+		let d;
+		let stopid = this.state.stop;
 		let tripsids = this.state.trips_ids;
-		let num = this.state.numResults
-		if (this.state.stop) {
-			stopid = this.state.stop;
-			console.log("stopid ",stopid);
-			staticFeedAPI.getXStopTimesForStop(stopid,tripsids,num)
-			.then(results => {
-				this.setState( {stoptimes: results.stoptimes})
-			}) 
-		} else {
-			console.log("this.state.stop_name ",this.state.stop_name);
-			console.log("this.state.direction ",this.state.direction);
+		let num = this.state.numResults;
+
+		if (tripsids.length === 0) { 
+			if (!this.state.date) {
+				d = new Date();
+			} else {
+				d = this.state.date;
+			}
+			d = dateHelpers.convertDateObjToLocalISOString(d);
+		}
+
+		if (stopid && tripsids.length > 0) {
+			// console.log("stopid && tripsids.length > 0");
+			this.setStopTimes(stopid,tripsids,num);
+		
+		} else if (stopid && tripsids.length === 0) {
+			// console.log("stopid && tripsids.length === 0");
+			staticFeedAPI.getTripsIds(d, this.state.route,this.state.direction,this.state.serviceIDs)
+			.then( results => {
+				console.log("results from getTripsIds fetch ",results);
+				this.setState({trips_ids: results.trips}, () => {
+					tripsids = this.state.trips_ids;
+					this.setStopTimes(stopid,tripsids,num);
+				});
+			})
+			.catch(err => {
+				console.log("err in getTripsIds:", err);
+				this.setState({ trips_ids: [] });
+			});	
+
+		} else if (!stopid && tripsids.length > 0) {
+			// console.log("!stopid && tripsids.length > 0");
 			staticFeedAPI.getStopByNameAndDirection(encodeURIComponent(this.state.stop_name), this.state.direction)
 			.then( stop => {
 				this.setState( {stop: stop.stop_id}, () => {
 					stopid = this.state.stop;
-					staticFeedAPI.getXStopTimesForStop(stopid,tripsids,num)
-					.then(results => {
-						this.setState( {stoptimes: results.stoptimes})
-						let resultsEle = document.getElementById('results');
-						resultsEle.scrollIntoView({behavior: 'smooth', block: 'start'});
-					}) 
+					this.setStopTimes(stopid,tripsids,num);
 				});
 			})
+		
+		} else {
+			Promise.all([
+				staticFeedAPI.getStopByNameAndDirection(encodeURIComponent(this.state.stop_name), this.state.direction),
+				staticFeedAPI.getTripsIds(d, this.state.route,this.state.direction,this.state.serviceIDs)
+			])
+			.then((values) => {
+				let results1 = values[0], results2 = values[1];
+				// console.log("results1 ",results1);
+				// console.log("results2 ",results2);
+				this.setState( {stop: results1.stop_id }, () => {
+					stopid = this.state.stop;
+					this.setState( {trips_ids: results2.trips}, () => {
+						tripsids = this.state.trips_ids;
+						this.setStopTimes(stopid,tripsids,num);
+					})
+				})
+
+			});
 		}
 	}
 
