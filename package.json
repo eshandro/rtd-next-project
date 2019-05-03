@@ -7,7 +7,8 @@
   "author": "eshandro <erik843@gmail.com>",
   "license": "MIT",
   "engines": {
-    "node": "10.15.1"
+    "node": "10.15.1",
+    "npm": "6.8.0"
   },
   "nodemonConfig": {
     "ignore": [
@@ -28,44 +29,44 @@
     "start:prod": "NODE_ENV=production MONGO_URL=mongodb://heroku_8ndgnl03:dbjk5bpgh6o33ambo2nst8nlbp@ds153495.mlab.com:53495/heroku_8ndgnl03 nodemon --watch src/server node src/server/server.js"
   },
   "devDependencies": {
-    "@babel/core": "^7.3.3",
+    "@babel/core": "^7.4.4",
     "@babel/plugin-syntax-dynamic-import": "^7.2.0",
-    "@babel/preset-env": "^7.3.1",
+    "@babel/preset-env": "^7.4.4",
     "babel-eslint": "^10.0.0",
     "babel-loader": "^8.0.5",
-    "clean-webpack-plugin": "^1.0.1",
+    "clean-webpack-plugin": "^2.0.1",
     "concurrently": "^4.1.0",
-    "css-loader": "^2.0.0",
-    "eslint": "^5.14.1",
+    "css-loader": "^2.1.1",
+    "eslint": "^5.16.0",
     "eslint-plugin-react": "^7.12.4",
     "html-loader": "^0.5.5",
     "html-webpack-plugin": "^3.2.0",
-    "mini-css-extract-plugin": "^0.5.0",
-    "mocha": "^6.0.1",
-    "node-sass": "^4.11.0",
-    "nodemon": "^1.18.10",
+    "mini-css-extract-plugin": "^0.6.0",
+    "mocha": "^6.1.4",
+    "node-sass": "^4.12.0",
+    "nodemon": "^1.19.0",
     "optimize-css-assets-webpack-plugin": "^5.0.1",
     "sass-loader": "^7.1.0",
     "style-loader": "^0.23.1",
-    "webpack": "^4.29.5",
-    "webpack-cli": "^3.2.3",
-    "webpack-dev-server": "^3.2.0"
+    "webpack": "^4.30.0",
+    "webpack-cli": "^3.3.1",
+    "webpack-dev-server": "^3.3.1"
   },
   "dependencies": {
     "@babel/preset-react": "^7.0.0",
-    "body-parser": "^1.18.3",
-    "cron": "^1.6.0",
+    "body-parser": "^1.19.0",
+    "cron": "^1.7.1",
     "express": "^4.16.4",
     "fs-readfile-promise": "^3.0.0",
-    "luxon": "^1.11.3",
-    "mongoose": "^5.4.15",
-    "node-fetch": "^2.3.0",
+    "luxon": "^1.12.1",
+    "mongoose": "^5.5.5",
+    "node-fetch": "^2.5.0",
     "path-reader": "^1.0.6",
-    "react": "^16.8.3",
-    "react-date-picker": "^7.2.0",
-    "react-dom": "^16.8.3",
+    "react": "^16.8.6",
+    "react-date-picker": "^7.5.1",
+    "react-dom": "^16.8.6",
     "spectre.css": "^0.5.8",
-    "stream-json": "^1.1.4",
+    "stream-json": "^1.2.1",
     "unzipper": "^0.9.11"
   }
 }

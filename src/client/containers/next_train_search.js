@@ -60,7 +60,7 @@ class NextTrainSearch extends Component {
 						if (this.state.stops_dir0.length < 1) this.getStopsByDirection(0);
 						if (this.state.stops_dir1.length < 1) this.getStopsByDirection(1);
 						if (this.state.trips_ids.length < 1) this.getTripsIdsList();
-					}) 
+					}); 
 				});
 			})
 			.catch((err) => {
@@ -147,10 +147,10 @@ class NextTrainSearch extends Component {
 	setStopTimes(stopid,tripsids,num) {
 		staticFeedAPI.getXStopTimesForStop(stopid,tripsids,num)
 		.then(results => {
-			this.setState( {stoptimes: results.stoptimes})
+			this.setState( {stoptimes: results.stoptimes});
 			let resultsEle = document.getElementById('results');
 			resultsEle.scrollIntoView({behavior: 'smooth', block: 'start'});
-		}) 		
+		}); 		
 	}
 
 	handleRouteSelect(e) {
@@ -163,7 +163,7 @@ class NextTrainSearch extends Component {
 					this.setState({direction: "0"}, function() {
 						this.getTripsIdsList();
 						this.getStopsByDirection();
-						this.getStopsByDirection(this.state.direction == 0 ? "1" : "0")
+						this.getStopsByDirection(this.state.direction == 0 ? "1" : "0");
 					});					
 				});
 				return;
@@ -193,9 +193,9 @@ class NextTrainSearch extends Component {
 		this.setState( {stoptimes: []} );
 		staticFeedAPI.getStopByNameAndDirection(encodeURIComponent(name),dir)
 		.then( stop => {
-			this.setState( {canSearch: true})
+			this.setState( {canSearch: true});
 			this.setState( {stop: stop.stop_id} );
-		})
+		});
 	}
 
 	handleNumResultsInput(e) {
@@ -247,7 +247,7 @@ class NextTrainSearch extends Component {
 					stopid = this.state.stop;
 					this.setStopTimes(stopid,tripsids,num);
 				});
-			})
+			});
 		
 		} else {
 			Promise.all([
@@ -263,8 +263,8 @@ class NextTrainSearch extends Component {
 					this.setState( {trips_ids: results2.trips}, () => {
 						tripsids = this.state.trips_ids;
 						this.setStopTimes(stopid,tripsids,num);
-					})
-				})
+					});
+				});
 
 			});
 		}
