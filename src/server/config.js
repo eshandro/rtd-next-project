@@ -2,6 +2,9 @@ let uri;
 if (process.env.MONGO_URL) {
 	uri = process.env.MONGO_URL;
 }
+if (!uri && process.env.NODE_ENV === 'production') {
+	uri = "mongodb://heroku_8ndgnl03:dbjk5bpgh6o33ambo2nst8nlbp@ds153495.mlab.com:53495/heroku_8ndgnl03";
+}
 // console.log("uri ",uri);
 const config = {
 	mongoURL: uri || 'mongodb://localhost:27017/rtdNextTrain',
