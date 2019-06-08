@@ -98,9 +98,9 @@ module.exports = {
 		}
 	},
 	plugins: [
-		 cleanPlugin,
-		 htmlPlugin,
-		 miniCssPlugin,
-		 hashedModuleIdsPlugin
+		cleanPlugin,
+		htmlPlugin,
+		miniCssPlugin,
+		hashedModuleIdsPlugin
 	]
 };

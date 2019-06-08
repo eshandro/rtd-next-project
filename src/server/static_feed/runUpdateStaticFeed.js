@@ -3,7 +3,7 @@ const	filterLightRail = require('./filterLightRailToDB'),
 		addTripsToRoutes = require('./addTripsToRoutes'),
 		addStopTimesToStops = require('./addStopTimesToStops'),
 		addStopTimesToTrips = require('./addStopTimesToTrips'),
-		globals = require('../utils/globals')
+		globals = require('../utils/globals'),
 		serverConfig = require('../config');
 
 
