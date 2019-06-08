@@ -1,7 +1,7 @@
 const path = require('path');
 const webpack = require('webpack');
 
-const CleanWebpackPlugin = require("clean-webpack-plugin");
+const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const HtmlWebPackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin");
@@ -19,7 +19,9 @@ const htmlPlugin = new HtmlWebPackPlugin({
 	filename: `${PATHS.dist}/index.html`
 });
 
-const cleanPlugin = new CleanWebpackPlugin([`${PATHS.dist}/scripts`, `${PATHS.dist}/styles`, `${PATHS.dist}/index.html`]);
+// const cleanPlugin = new CleanWebpackPlugin([`${PATHS.dist}/scripts`, `${PATHS.dist}/styles`, `${PATHS.dist}/index.html`]);
+const cleanPlugin = new CleanWebpackPlugin();
+
 
 const miniCssPlugin = new MiniCssExtractPlugin({
 	filename: devMode ? 'styles/[name].css' : 'styles/[name].[contenthash].css',

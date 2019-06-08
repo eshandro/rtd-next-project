@@ -3,6 +3,8 @@
 #feed-temp/
 src/testing-files
 old-scripts
+dist/
+src/server/database/backups/
 
 # database backups
 #src/server/database/backups/

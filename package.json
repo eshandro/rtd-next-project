@@ -26,7 +26,8 @@
     "client": "webpack-dev-server --open --colors --mode development",
     "server": "nodemon --watch src/server node src/server/server.js",
     "start:dev": "concurrently --kill-others-on-fail \"npm:server\" \"npm:client\"",
-    "start:prod": "NODE_ENV=production MONGO_URL=mongodb://heroku_8ndgnl03:dbjk5bpgh6o33ambo2nst8nlbp@ds153495.mlab.com:53495/heroku_8ndgnl03 nodemon --watch src/server node src/server/server.js"
+    "start:prod": "NODE_ENV=production MONGO_URL=mongodb://heroku_8ndgnl03:dbjk5bpgh6o33ambo2nst8nlbp@ds153495.mlab.com:53495/heroku_8ndgnl03 nodemon --watch src/server node src/server/server.js",
+    "heroku-postbuild": "npm run backupDB && npm run updateFeed"
   },
   "devDependencies": {
     "@babel/core": "^7.4.5",
