@@ -4,7 +4,13 @@ function getLastModified() {
 	return FeedDates.findOne({},'-_id').lean();
 }
 function updateLastModified(newDate,oldDate) {
-	return FeedDates.findOne({}).then(doc => doc.updateOne({date:newDate, lastdate: oldDate}))
+	return FeedDates.findOne({}).then(doc => {
+		if (!doc) {
+			return FeedDates.insert({ date: newDate, lastdate: oldDate });
+		} else {
+			return doc.updateOne({ date:newDate, lastdate: oldDate });
+		}
+	});
 }
 module.exports = {
 	getLastModified: getLastModified,

@@ -52,13 +52,12 @@ const path = require('path');
 
 function deleteJsonFiles(directory) {
 	fs.readdir(directory, (err, files) => {
-	  if (err) throw err;
-
-	  for (const file of files) {
-	    fs.unlink(path.join(directory, file), err => {
-	      if (err) throw err;
-	    });
-	  }
+		if (err) throw err;
+		for (const file of files) {
+			fs.unlink(path.join(directory, file), err => {
+				if (err) throw err;
+			});
+		}
 	});
 }
 
@@ -109,10 +108,10 @@ function runUpdateStaticFeed(force) {
 				// 	});
 				return addTripsToRoutes()
 				.then(data => {
-					return addStopTimesToStops()
+					return addStopTimesToStops();
 				})
 				.then(data => {
-					return addStopTimesToTrips()
+					return addStopTimesToTrips();
 				})
 				.then(data => {
 					console.log("data from adding references via addTripsToRoutes(), addStopTimesToStops(), & addStopTimesToTrips()",data);
@@ -121,8 +120,8 @@ function runUpdateStaticFeed(force) {
 						d = new Date(totalTime);
 					console.log("adding references took " + d.getUTCMinutes() + ' mins & ' + d.getUTCSeconds() + ' seconds');
 					deleteJsonFiles(path.join(__dirname, '../../../feed/json/'));
-					return ({updateStaticFeed: true, msg: "References added to collections"})
-				})
+					return ({updateStaticFeed: true, msg: "References added to collections"});
+				});
 			}
 		})
 		.then((data) => {
