@@ -33,7 +33,7 @@ function emptyCheck (mixedvar) {
 		return true;
 	}
 	return false;
-};
+}
 
 
 // Auto backup script

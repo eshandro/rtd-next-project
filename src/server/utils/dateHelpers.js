@@ -24,7 +24,7 @@ let dateHelpers = {
 		// dbTime will be in hhmm format
 		let h = dbTime.substring(0,2);
 		let m = dbTime.substring(2,4);
-		let ampm = h < 12 ? 'AM' : 'PM' 
+		let ampm = h < 12 ? 'AM' : 'PM'; 
 		if (h < 10) h = h.substring(1);
 		if (h > 12) h = h-12;
 		return `${h}:${m} ${ampm}`;

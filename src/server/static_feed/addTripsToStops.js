@@ -16,7 +16,7 @@ function addTripsToStops() {
 		tripsList = tripsList.map(item => item.trip_id);
 		// Creates a Set from arr3 and a value in a Set can only occur once
 		// Then, we use the spread operator to turn it back into an Array from a Set
-		tripList = [... new Set(tripsList)];
+		tripsList = [... new Set(tripsList)];
 		
 		return getTrips(tripsList)
 		.then((trips) => {

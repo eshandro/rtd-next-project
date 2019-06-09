@@ -15,7 +15,7 @@ module.exports = {
 		})
 		.catch((err) => {
 			res.status(500).send(err);
-		})
+		});
 	},
 
 	tripsIdsListByDateAndRouteAndDirection (req,res, next) {
@@ -34,7 +34,7 @@ module.exports = {
 		})
 		.catch((err) => {
 			res.status(500).send(err);
-		})		
+		});		
 
 	},
 
@@ -52,7 +52,7 @@ module.exports = {
 		})
 		.catch((err) => {
 			res.status(500).send(err);
-		})
+		});
 	},
 
 	tripsByDateAndRouteAndDirection (req,res, next) {
@@ -71,7 +71,7 @@ module.exports = {
 		})
 		.catch((err) => {
 			res.status(500).send(err);
-		})		
+		});		
 
 	}
 

@@ -8,7 +8,7 @@ const SearchResults = props => {
 				<li className="results-item" key={index} >{dateHelpers.convertDBTimeTo12(item)}</li>
 			)}
 		</ul>
-	)
-}
+	);
+};
 
 export default SearchResults;

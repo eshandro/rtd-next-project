@@ -21,14 +21,14 @@ function getTripsIdsListByDateAndRouteAndDirection (date, route, direction,servi
 		.then((ids) => {
 			return Trip.find({service_id: {$in: ids},route_id: route, direction_id: direction}, 'trip_id -_id').lean()
 			.then((trips) => {
-				tripsidsList = trips.map((item,index) => item.trip_id)
+				tripsidsList = trips.map((item,index) => item.trip_id);
 				return tripsidsList;		
 			});
 		});
 	} else {
 		return Trip.find({service_id: {$in: serviceIDs},route_id: route, direction_id: direction}, 'trip_id -_id').lean()
 		.then((trips) => {
-			tripsidsList = trips.map((item,index) => item.trip_id)
+			tripsidsList = trips.map((item,index) => item.trip_id);
 			return tripsidsList;		
 		});
 	}

@@ -105,5 +105,5 @@ app.listen(serverConfig.port, (error) => {
 		console.log(`Express server error: ${error}`);
 		throw error;
 	}
-})
+});
 

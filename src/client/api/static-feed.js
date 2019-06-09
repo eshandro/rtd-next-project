@@ -6,14 +6,14 @@ export function getServiceIDs(date) {
 	return fetch(`${staticfeedBaseUrl}services/serviceids_by_date/${date}`)
 		.then(res => res.json())
 		.then(serviceIDs => serviceIDs )
-		.catch((err) =>  err)
+		.catch((err) =>  err);
 }
 
 export function getRoutesList() {
 	return fetch(`${staticfeedBaseUrl}routes/routes_list`)
 		.then(res => res.json())
 		.then(routes =>  routes)
-		.catch(err => err)
+		.catch(err => err);
 }
 
 export function getTrips(date, route, direction, serviceids) {
@@ -22,7 +22,7 @@ export function getTrips(date, route, direction, serviceids) {
 		route,
 		direction,
 		serviceids
-	}
+	};
 	return fetch(`${staticfeedBaseUrl}trips/trips_by_date_route_direction`,{
 		method: 'POST',
 		headers: { 'Content-Type':'application/JSON'},
@@ -30,7 +30,7 @@ export function getTrips(date, route, direction, serviceids) {
 		})
 		.then(res => res.json())
 		.then(trips => trips)
-		.catch(err => err)
+		.catch(err => err);
 }
 
 export function getTripsIds(date, route, direction, serviceids) {
@@ -39,7 +39,7 @@ export function getTripsIds(date, route, direction, serviceids) {
 		route,
 		direction,
 		serviceids
-	}
+	};
 	return fetch(`${staticfeedBaseUrl}trips/tripsidslist_by_date_route_direction`,{
 		method: 'POST',
 		headers: { 'Content-Type':'application/JSON'},
@@ -47,13 +47,13 @@ export function getTripsIds(date, route, direction, serviceids) {
 		})
 		.then(res => res.json())
 		.then(trips => trips)
-		.catch(err => err)
+		.catch(err => err);
 }
 
 export function getStopsByIds(stopids) {
 	let data = {
 		stopids
-	}
+	};
 	return fetch(`${staticfeedBaseUrl}stops/stops_by_stopids`,{
 		method: 'POST',
 		headers: { 'Content-Type': 'application/JSON'},
@@ -61,7 +61,7 @@ export function getStopsByIds(stopids) {
 		})
 		.then(res => res.json())
 		.then(stops => stops)
-		.catch(err => err)
+		.catch(err => err);
 }
 
 export function getStopByNameAndDirection(name,dir) {
@@ -72,7 +72,7 @@ export function getStopByNameAndDirection(name,dir) {
 		})
 		.then(res => res.json())
 		.then(stop => stop)
-		.catch(err => err)
+		.catch(err => err);
 }
 
 export function getStopsByDirection(dir) {
@@ -80,7 +80,7 @@ export function getStopsByDirection(dir) {
 	return fetch(`${staticfeedBaseUrl}stops/stops_by_direction/${dir}`)
 		.then(res => res.json())
 		.then(stops => stops)
-		.catch(err => err)
+		.catch(err => err);
 }
 
 export function getXStopTimesForStop(stopid, tripids, num) {
@@ -88,7 +88,7 @@ export function getXStopTimesForStop(stopid, tripids, num) {
 		stopid,
 		tripids,
 		num
-	}
+	};
 
 	return fetch(`${staticfeedBaseUrl}stoptimes/next_x_stoptimes_for_stop`, {
 		method: 'POST',
@@ -97,5 +97,5 @@ export function getXStopTimesForStop(stopid, tripids, num) {
 		})
 		.then(res => res.json())
 		.then(results => results)
-		.catch(err => err)
+		.catch(err => err);
 }

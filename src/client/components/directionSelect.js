@@ -15,7 +15,7 @@ const DirectionSelect = props => {
 				)}
 			</select>
 		</div>
-	)
-}
+	);
+};
 
 export default DirectionSelect;

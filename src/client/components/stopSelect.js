@@ -15,7 +15,7 @@ const StopSelect = props => {
 				)}
 			</select>
 		</div>
-	)
-}
+	);
+};
 
 export default StopSelect;

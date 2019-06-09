@@ -12,7 +12,7 @@ const DateInput = props => {
 				onChange={props.handleDatePicker} >
 			</DatePicker>
 		</div>
-	)
-}
+	);
+};
 
 export default DateInput;

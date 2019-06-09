@@ -36,8 +36,7 @@ const 	{parser} = require('stream-json'),
 		StopTime = require('../database/models/stop_time'),
 		Calendar = require('../database/models/calendar'),
 		CalendarDates = require('../database/models/calendar_dates'),
-
-		globals = require('../utils/globals')
+		globals = require('../utils/globals'),
 		dbBackup = require('../database/mongodb_backup');
 
 
@@ -111,7 +110,7 @@ function addLightRailData(sourceFile, filterFN, dbFunc, dbModel,list, testKey) {
 
 		let read = fs.createReadStream(globals.extractedFolder + "json/" + sourceFile)
 			.pipe(parser())
-			.pipe(streamArray({objectFilter: filterFN}))
+			.pipe(streamArray({objectFilter: filterFN}));
 		
 		read.on('error', errorHandlerRead);
 
@@ -184,7 +183,7 @@ function filterLightRail() {
 			console.log("CalendarDates collection dropped");
 			t1 = new Date();
 			console.log("start filterLightRail after drops ",t1.toLocaleString("en-US", {timezone: "America/Denver"}));
-			return addLightRailData('routes.json',tripsFilter,createRouteFromJson,Route,false,false)
+			return addLightRailData('routes.json',tripsFilter,createRouteFromJson,Route,false,false);
 		})
 		.then((data) => {
 			if (!data.lightRailDataSuccess) {

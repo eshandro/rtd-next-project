@@ -50,14 +50,14 @@ function getStopsByRouteAndDirection(routeid,dir) {
 				let i = 0;
 				for (; i < len; i++) {
 					for (let item of route.trips[i].stop_times) {
-						if(!stopidsList.includes(item.stop_id)) stopidsList.push(item.stop_id)
+						if(!stopidsList.includes(item.stop_id)) stopidsList.push(item.stop_id);
 					}
 				}
 				console.log("stopidsList ",stopidsList);
 				return stopidsList;
 			})
 			.then(stopids => {
-				return getStopsList(stopids)
+				return getStopsList(stopids);
 			})
 			.then(stops => {
 				// stopidsList is sorted by stop_sequence, but when using that array in the $in select  
@@ -65,7 +65,7 @@ function getStopsByRouteAndDirection(routeid,dir) {
 				// sort stops returned from the DB
 				console.log("stops:");
 				for(let j=0; j<stops.length;j++) {
-					console.log(stops[j].stop_id)
+					console.log(stops[j].stop_id);
 				}
 				let sortObj = {};
 				for (let i=0, len = stopidsList.length; i < len; i++) {
@@ -73,11 +73,11 @@ function getStopsByRouteAndDirection(routeid,dir) {
 				}
 				console.log("sortObj ",sortObj);
 				stops.sort((a,b) => {
-					return sortObj[a.stop_id] - sortObj[b.stop_id]
+					return sortObj[a.stop_id] - sortObj[b.stop_id];
 				});
 				console.log("sorted stops:");
 				for(let k=0; k<stops.length;k++) {
-					console.log(stops[k].stop_id)
+					console.log(stops[k].stop_id);
 				}
 				let uniqueStops = [];
 				let stopsDict = {};
@@ -86,11 +86,11 @@ function getStopsByRouteAndDirection(routeid,dir) {
 						uniqueStops.push(item);
 						stopsDict[item.name] = true;
 					}
-				})
+				});
 				return uniqueStops;
 
 				// return stops;
-			})
+			});
 }
 
 module.exports = getStopsByRouteAndDirection;

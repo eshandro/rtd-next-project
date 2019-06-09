@@ -10,7 +10,7 @@ module.exports = {
 		})
 		.catch((err) => {
 			res.status(500).send(err);
-		})
+		});
 	},
 
 	routesInfoByTripIds(req,res,next) {
@@ -18,11 +18,11 @@ module.exports = {
 
 		getRoutesInfoByTripIds(tripids)
 		.then((routes) => {
-			res.json({ routes })
+			res.json({ routes });
 		})
 		.catch((err) => {
 			res.status(500).send(err);
-		})
+		});
 	}
 
 };

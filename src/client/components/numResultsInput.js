@@ -15,7 +15,7 @@ const NumStopsInput = props => {
 				onChange={props.handleNumResultsInput} >
 			</input>
 		</div>
-	)
-}
+	);
+};
 
 export default NumStopsInput;

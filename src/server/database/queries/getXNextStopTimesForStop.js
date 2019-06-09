@@ -39,8 +39,8 @@ function getXNextStopTimesForStop(stop, tripIds, x = 3) {
 		}
 	})
 	.then((stop) => {
-		times = stop.stop_times.map((item) => item.time);
-		stopTripIds = stop.stop_times.map((item) => item.trip_id);
+		let times = stop.stop_times.map((item) => item.time);
+		let stopTripIds = stop.stop_times.map((item) => item.trip_id);
 		return ({
 			times,
 			stopTripIds

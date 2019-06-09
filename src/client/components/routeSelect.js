@@ -16,7 +16,7 @@ const RouteSelect = (props) => {
 				)}
 			</select>
 		</div>
-	)
+	);
 
 };
 

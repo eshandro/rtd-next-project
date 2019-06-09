@@ -6,7 +6,7 @@ function getLastModified() {
 function updateLastModified(newDate,oldDate) {
 	return FeedDates.findOne({}).then(doc => {
 		if (!doc) {
-			return FeedDates.insert({ date: newDate, lastdate: oldDate });
+			return FeedDates.create({ date: newDate, lastdate: oldDate });
 		} else {
 			return doc.updateOne({ date:newDate, lastdate: oldDate });
 		}
