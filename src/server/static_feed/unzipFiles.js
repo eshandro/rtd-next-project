@@ -10,7 +10,9 @@ const		unzipper = require('unzipper');
  *                                     data: error or path to newly unzipped files
  */
 function unzipFiles (zippedFile,outputPath) {
-
+	console.log('zippedFile', zippedFile);
+	console.log('outputPath', outputPath);
+	
 	return fs.createReadStream(zippedFile)
 		// TODO: "value", May need to add in error handling here. For example, if no file exists. 
 		// 		See downloadFeed for how might be implemented via new Promise

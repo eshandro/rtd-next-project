@@ -1,8 +1,7 @@
 # feed files
 #feed/
 #feed-temp/
-src/testing-files
-old-scripts
+old-scripts/
 dist/
 src/server/database/backups/
 
