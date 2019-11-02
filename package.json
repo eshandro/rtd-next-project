@@ -59,7 +59,7 @@
     "express": "^4.17.1",
     "fs-readfile-promise": "^3.0.0",
     "luxon": "^1.17.1",
-    "mongoose": "^5.6.4",
+    "mongoose": "^5.7.5",
     "node-fetch": "^2.6.0",
     "path-reader": "^1.0.6",
     "react": "^16.8.6",
